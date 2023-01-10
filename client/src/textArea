@@ -1,8 +1,0 @@
-const textArea = () => {
-  return (
-    <div>
-    </div>
-  )
-}
-
-export default textArea;
