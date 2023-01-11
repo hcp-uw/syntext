@@ -5,11 +5,7 @@ const Display = (props) => {
 
   return (
     <div>
-      {props.lines.map((line, i) => {
-        <>
-          line
-        </>
-      })}
+      {props.lines.map((line, i) => <p>{line}</p>)}
     </div>
   )
 } 
@@ -19,7 +15,7 @@ const App = () => {
   const [display, setDisplay] = useState([])
 
   useEffect(() => {
-    x.getEx('short')
+    x.getEx('medium')
       .then(r => {
         setDisplay(r.data)
       })
@@ -28,7 +24,7 @@ const App = () => {
   return (
     <div>
       <p>we are all done with set up!</p>
-      
+      <Display lines={display}/>
     </div>
   );
 }
