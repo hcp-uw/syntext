@@ -1,3 +1,5 @@
+import style from style.css
+
 const App = () => {
   return (
     <div>
@@ -5,5 +7,7 @@ const App = () => {
     </div>
   );
 }
+
+
 
 export default App;
