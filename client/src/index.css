@@ -6,7 +6,7 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-.rectangle {
+/* .rectangle {
   overflow-x: hidden;
   background: #393848;
   width: 85%;
@@ -17,4 +17,4 @@ body {
   transform: translate(-50%, 0);
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-}
+}  */
