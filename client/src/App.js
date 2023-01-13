@@ -1,13 +1,40 @@
-import style from style.css
+const textstyles = {
+  color: "white",
+  fontSize: "12",
+  fontFamily: "Roboto Mono",
+}
+
+const Logo = () => {
+  return(
+    <a><img href="???"/></a>
+  )
+}
+
+const Iconnavbar = () => {
+  return(
+    <ul>
+      <li><a><img href="???profile logo"/></a></li>
+      <li><a><img href="???settings logo"/></a></li>
+      <li><a><img href="???leaderboard logo"/></a></li>
+    </ul>
+  )
+}
 
 const App = () => {
   return (
     <div>
-      <p>hi salma223</p>
+      <h1 style={textstyles} fontSize="25">Synte&gt;&lt;t</h1>
+      <Menu text={textstyles}/>
+      <div className="rectangle" />
     </div>
   );
 }
 
-
-
+const Menu = (props) => {
+  return (
+    <>
+      <h1 style={props.text}>meow</h1>
+    </>
+  )
+}
 export default App;
