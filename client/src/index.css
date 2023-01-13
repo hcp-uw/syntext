@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+body {
+  background-color: #EAD1D0;
+  overflow: hidden;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.rectangle {
+  overflow-x: hidden;
+  background: #393848;
+  width: 85%;
+  height: 80%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 0);
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+}
