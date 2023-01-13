@@ -24,7 +24,6 @@ const App = () => {
   return (
     <div>
       <h1 style={textstyles} fontSize="25">Synte&gt;&lt;t</h1>
-      <Menu text={textstyles}/>
       <div className="rectangle" />
     </div>
   );
