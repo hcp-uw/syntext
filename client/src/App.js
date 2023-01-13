@@ -30,11 +30,6 @@ const App = () => {
   );
 }
 
-const Menu = (props) => {
-  return (
-    <>
-      <h1 style={props.text}>meow</h1>
-    </>
-  )
-}
+
+
 export default App;
