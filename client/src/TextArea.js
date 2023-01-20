@@ -15,7 +15,7 @@ const CreateWords = () => {
 
     letters += "</div>";
 
-    letterWords.push(parse(letters));
+    letterWords.push(parse(letters)); // having to turn the code from a string into JSX is stupid. rethink
   })
 
   console.log(letterWords);
