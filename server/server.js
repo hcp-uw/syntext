@@ -141,21 +141,23 @@ app.get('/devapi/ex/medium', (req, res) => {
 })
 
 app.get('/devapi/ex/long', (req, res) => {
-    res.send({
-        id: 3, 
-        SnippetType:'FOR_LOOP',
-        length: 'LONG',
-        data: [ 'int j = 20;',  
-            'for (int i = 0; i < 10; i++) {',  
-            '\tSystem.out.print(j + “ - ” + i);', 
-            '\tif (i > j)',   
-            '\t\tSystem.out.println(“ < 0”)',  
-            '\telse',  
-            '\t\tSystem.out.println(“ > 0”)',  
-            '\tj -= 1;',  
-            '}' 
-        ]
-    })
+    let idNum = Math.floor(Math.random * snippetData.long.length)
+    res.send(
+        snippetData.long[idNum].data
+        // id: 3, 
+        // SnippetType:'FOR_LOOP',
+        // length: 'LONG',
+        // data: [ 'int j = 20;',  
+        //     'for (int i = 0; i < 10; i++) {',  
+        //     '\tSystem.out.print(j + “ - ” + i);', 
+        //     '\tif (i > j)',   
+        //     '\t\tSystem.out.println(“ < 0”)',  
+        //     '\telse',  
+        //     '\t\tSystem.out.println(“ > 0”)',  
+        //     '\tj -= 1;',  
+        //     '}' 
+        //]
+    )
 })
 
 // app.get('/api', (req, res) => {
