@@ -1,7 +1,9 @@
+import TextArea from './TextArea';
+
 const App = () => {
   return (
     <div>
-      <p>we are all done with set up!</p>
+      <TextArea/>
     </div>
   );
 }
