@@ -4,12 +4,43 @@ const cors = require('cors')
 const app = express()
 app.use(cors())
 
-app.get('/devapi/ex/short', (req, res) => {
-    res.send({
+const snippetData = {
+    short: [
+        {
         id: 1, 
         SnippetType:'PRINT',
         length: 'SHORT',
         data: ['System.out.println("goodbye world");']
+        },
+        {
+        id: 2,
+        SnippetType: 'PRINT',
+        length: 'SHORT',
+        data: ['String myCat = "Matilda";',
+            'System.out.println(myCat.charAt(3));'
+        ] 
+        },
+        {
+        id: 3,
+        SnippetType: 'PRINT',
+        length: 'SHORT',
+        data: ['int sum = myCat.length() - myGod.length();',
+            'System.out.println(sum);'
+        ]
+        }    
+    ],
+    medium: [],
+    long: []
+}
+
+app.get('/devapi/ex/short', (req, res) => {
+    const idNum = Math.floor(Math.random * snippetData.short.length)
+    res.send({
+        snippetData.short[idNum].data
+        // id: 1, 
+        // SnippetType:'PRINT',
+        // length: 'SHORT',
+        // data: ['System.out.println("goodbye world");']
     })
 })
 
