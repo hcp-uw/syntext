@@ -116,7 +116,7 @@ const snippetData = {
 }
 
 app.get('/devapi/ex/short', (req, res) => {
-    let idNum = Math.floor(Math.random * snippetData.short.length)
+    let idNum = Math.floor(Math.random() * snippetData.short.length)
     res.send(
         snippetData.short[idNum].data
         // id: 1, 
@@ -127,7 +127,7 @@ app.get('/devapi/ex/short', (req, res) => {
 })
 
 app.get('/devapi/ex/medium', (req, res) => {
-    let idNum = Math.floor(Math.random * snippetData.medium.length)
+    let idNum = Math.floor(Math.random() * snippetData.medium.length)
     res.send(
         snippetData.medium[idNum].data
         // id: 2, 
@@ -141,7 +141,7 @@ app.get('/devapi/ex/medium', (req, res) => {
 })
 
 app.get('/devapi/ex/long', (req, res) => {
-    let idNum = Math.floor(Math.random * snippetData.long.length)
+    let idNum = Math.floor(Math.random() * snippetData.long.length)
     res.send(
         snippetData.long[idNum].data
         // id: 3, 
