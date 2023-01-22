@@ -1,3 +1,11 @@
 .word {
   padding-right: 0.5vw;
 }
+
+.letter {
+  color: rgb(148, 148, 148);
+}
+
+.typed {
+  color: rgb(0, 0, 0);
+}
