@@ -1,42 +1,48 @@
 import React, { useState } from 'react';
+import stylesheet from './TextArea.css';
 
 const Letter = (props) => {
-  const { c } = props
+  const { character } = props
+
   return (
-    <>{c}</>
+    <>{character}</>
   )
 }
 
 const Word = (props) => {
-  // letters: ['a', 'b', 'c', ...]
-  const { letters } = props
+  const { token } = props
+  const letters = token.split('')
+
   return (
-    <div>
-      {letters.map((letter, i) => {
-        return <Letter c={letter} key={i}/>
-      })}
+    <span className="word">
+      { letters.map((l, i) => {
+        return (
+          <Letter character={l} key={i}/>
+        )
+      }) }
+    </span>
+  )
+}
+
+const Line = (props) => {
+  const { row } = props
+  const tokens = row.split(' ')
+
+  return (
+    <div className="line">
+      { tokens.map((w, i) => {
+        return (
+          <Word token={w} key={i}/>
+        )
+      }) }
     </div>
   )
 }
 
-const CreateWords = () => {
-  const example = 'System.out.println("goodbye world");';
-  const words = example.split(" ");
-  const letterWords = [];
-
-  words.forEach((word, i) => {
-    // for each word, deal with each letter
-  })
-
-  return(
-    <>
-      {letterWords}
-    </>
-  )
-}
-
-const TextArea = () => {
+const TextArea = (props) => {
   const [typed, setTyped] = useState([]);
+  const [currIndex, setIndex] = useState([0, 0])
+  const { data } = props
 
   function handleInput(event) {
     typed.push(event);
@@ -45,7 +51,13 @@ const TextArea = () => {
 
   return(
   <>
-    <CreateWords />
+    <div>
+      { data.map((line, i) => {
+        return (
+          <Line row={line} key={i}/>
+        )
+      }) }
+    </div>
     <input onChange={(e) => {handleInput(e.nativeEvent.data)}} ></input>
   </>
   )
