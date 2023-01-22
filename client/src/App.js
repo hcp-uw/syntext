@@ -1,4 +1,4 @@
-import TextArea from './TextArea';
+import TextArea from './components/TextArea';
 
 const App = () => {
   return (
