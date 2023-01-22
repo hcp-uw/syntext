@@ -41,7 +41,14 @@ const Line = (props) => {
 
 const TextArea = (props) => {
   const [typed, setTyped] = useState([]);
-  const [currIndex, setIndex] = useState([0, 0])
+  const [cursorPosition, setCursorPosition] = useState({
+    lineIndex: 0, 
+    wordIndex: 0, 
+    cursorIndex: 0
+  })
+  const [currWord, setCurrWord] = useState("")
+
+  
   const { data } = props
 
   function handleInput(event) {
