@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import stylesheet from './TextArea.css';
 
 const Letter = (props) => {
   const { character } = props
 
   return (
-    <>{character}</>
+    <span className='letter'>{character}</span>
   )
 }
 
@@ -45,8 +45,15 @@ const TextArea = (props) => {
   const { data } = props
 
   function handleInput(event) {
-    typed.push(event);
+    typed.push(event.nativeEvent.data);
+    event.target.value = '-';
     console.log(typed);
+  }
+
+  function handleEnter(event) {
+    if (event.key === 'Enter') {
+      console.log('enter was pressed');
+    }
   }
 
   return(
@@ -58,7 +65,7 @@ const TextArea = (props) => {
         )
       }) }
     </div>
-    <input onChange={(e) => {handleInput(e.nativeEvent.data)}} ></input>
+    <input onKeyDown={handleEnter} onChange={handleInput} ></input>
   </>
   )
 }
