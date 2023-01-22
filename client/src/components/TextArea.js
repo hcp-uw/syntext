@@ -23,41 +23,16 @@ const CreateWords = () => {
   const example = 'System.out.println("goodbye world");';
   const words = example.split(" ");
   const letterWords = [];
-  const parse = require('html-react-parser');
 
   words.forEach((word, i) => {
-    let letters = "<div class='word'>";
-
-    // for (let j = 0; j < word.length; j++) {
-    //   letters += "<span key='test'>" + word[j] + "</span>";
-    // }
-
-    word.map
-
-
-
-
-
-    letters += "</div>";
-
-
-
-    letterWords.push(parse(letters)); // having to turn the code from a string into JSX is stupid. rethink
+    // for each word, deal with each letter
   })
-
-
-
-  console.log(letterWords);
 
   return(
     <>
       {letterWords}
     </>
   )
-}
-
-const Word = () => {
-
 }
 
 const TextArea = () => {
