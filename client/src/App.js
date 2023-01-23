@@ -6,7 +6,7 @@ const textstyles = {
 
 const App = () => {
   return (
-
+    <div style={textstyles}></div>
   );
 }
 
