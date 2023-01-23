@@ -4,4 +4,12 @@ const Language = () => {
     )
   }
 
+  function rectangle() {
+    const rectangleStyle = {
+      // width: '';
+      // height: '';
+      // backgroundColor
+    }
+  }
+
   export default Language;
