@@ -17,12 +17,5 @@ const Logo = () => {
     window.location.assign('/');
   }
 
-  // function Logo() {
-  //   return (
-  //     <span onClick={handleClick}>
-  //       Synte&gt;&lt;t
-  //     </span>
-  //   )
-  // }
 
 export default Logo;
