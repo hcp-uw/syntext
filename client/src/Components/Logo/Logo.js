@@ -7,11 +7,22 @@ const textstyles = {
 const Logo = () => {
     return(
       <div>
-        <h1 style={textstyles} fontSize="25"><a style="" href="/">Synte&gt;&lt;t</a></h1>
+        <span><h1 style={textstyles} fontSize="25" onClick={handleClick}>Synte&gt;&lt;t</h1></span>
         <div className="rectangle" />
       </div>
     )
   }
 
+  function handleClick() {
+    window.location.assign('/');
+  }
+
+  // function Logo() {
+  //   return (
+  //     <span onClick={handleClick}>
+  //       Synte&gt;&lt;t
+  //     </span>
+  //   )
+  // }
 
 export default Logo;
