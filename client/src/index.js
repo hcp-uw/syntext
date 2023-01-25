@@ -5,7 +5,7 @@ import IconNavBar from './Components/IconNavBar/IconNavBar';
 import Language from './Components/Language/Language';
 import Logo from './Components/Logo/Logo';
 import Methods from './Components/Methods/Methods';
-import Timer from './Component/Timer/Timer'; 
+import Timer from './Components/Timer/Timer'; 
 import App from './App';
 import styles from './index.css';
 
