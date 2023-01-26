@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon devserver.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
   "devDependencies": {
     "express": "^4.18.2",
     "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "json-server": "^0.17.1"
   }
 }
