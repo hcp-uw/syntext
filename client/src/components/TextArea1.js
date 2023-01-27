@@ -75,24 +75,35 @@ export default function TextArea1({ lines }) {
 
     function handleChange(event) {
         const input = event.target.value;
+        const atEndOfLine = wordIndex === currLine.length - 1;
+        const atEndOfWord = letterIndex === input.length - 1;
+        const allowedToOverflow = currentWord.length + 5 > input.length;
 
-        const atEndOfWord = letterIndex === input.length - 1
         let currWordHasMistake = false
         input.split('').forEach( (c, i) => {
             currWordHasMistake =
-                currWordHasMistake || currentWord[i] === c
+                currWordHasMistake || currentWord[i] === c;
         })
 
         if (!atEndOfWord){
-            // regular case...let them keep typing and
-            // update state accordingly
+            if (allowedToOverflow) {
+                // let them type
+                // update update letterIndex, userInput
+            } else {
+                // don't let them type more.
+                // listen for backspace.
+            }
         } else if (currWordHasMistake) {
-            // don't let them type more.
-            // listen for backspace.
-            // update state accordingly
-        } else {
-            // don't let them type more.
-            // listen for space bar
+            // let them type
+            // update userInput and letterIndex
+        } else if (!currWordHasMistake){
+            if (atEndOfLine) {
+                // listen for enter 
+                // update wordIndex, letterIndex, lineIndex, currWord, userInput
+            } else {
+                // listen for space 
+                // update wordIndex, letterIndex, currWord, userInput
+            }
         }
     }
 
