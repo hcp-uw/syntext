@@ -12,12 +12,12 @@ const Word = ({ word, userInput, currentWord, cursor, wordActive }) => {
     const letters = word.split('').map((l, i) => {
         const isCorrect = l === userInput[i] || !wordActive;
         return (
-            <Letter 
-                key={i} 
-                letter={l} 
+            <Letter
+                key={i}
+                letter={l}
                 isCorrect={isCorrect}
                 hasBeenTyped={cursor.letterIndex > i}
-                cursor={cursor} 
+                cursor={cursor}
             />
         );
     });
@@ -31,11 +31,11 @@ const Word = ({ word, userInput, currentWord, cursor, wordActive }) => {
 const Line = ({ line, userInput, currentWord, cursor, lineActive }) => {
     const words = line.split(' ').map((word, index) => {
         return (
-            <Word 
-                key={index} 
-                word={word} 
-                userInput={userInput} 
-                currentWord={currentWord} 
+            <Word
+                key={index}
+                word={word}
+                userInput={userInput}
+                currentWord={currentWord}
                 cursor={cursor}
                 wordActive={cursor.wordIndex === index && lineActive}
             />
@@ -50,15 +50,15 @@ export default function TextArea1({ lines }) {
     // cleared with wordIndex changes
     const [userInput, setUserInput] = useState('');
 
-    // the actual current word. 
+    // the actual current word.
     // updated with wordIndex changes
     const [currentWord, setCurrentWord] = useState('');
 
     // the array of tokens corresponding to the current line
     // updated with lineIndex changes
     const [currLine, setCurrLine] = useState(lines[0].split(" "));
-    
-    // keeps track of the current line. updated when 
+
+    // keeps track of the current line. updated when
     // user presses enter at the very end of a line.
     const [lineIndex, setLineIndex] = useState(0)
 
@@ -69,25 +69,24 @@ export default function TextArea1({ lines }) {
     // updated with userInput (only on success though)
     const [letterIndex, setLetterIndex] = useState(0)
 
-    
     const cursor = { lineIndex, wordIndex, letterIndex}
 
 
     function handleChange(event) {
         const input = event.target.value;
-        
+
         const atEndOfWord = letterIndex === input.length - 1
-        let currWordHasMistake = false 
+        let currWordHasMistake = false
         input.split('').forEach( (c, i) => {
-            currWordHasMistake = 
+            currWordHasMistake =
                 currWordHasMistake || currentWord[i] === c
         })
 
         if (!atEndOfWord){
-            // regular case...let them keep typing and 
-            // update state accordingly    
+            // regular case...let them keep typing and
+            // update state accordingly
         } else if (currWordHasMistake) {
-            // don't let them type more. 
+            // don't let them type more.
             // listen for backspace.
             // update state accordingly
         } else {
@@ -96,14 +95,13 @@ export default function TextArea1({ lines }) {
         }
     }
 
-    
 
     const renderedLines = lines.map((line, index) => {
-        return ( 
-            <Line key={index} 
-                line={line} 
-                userInput={userInput} 
-                currentWord={currentWord} 
+        return (
+            <Line key={index}
+                line={line}
+                userInput={userInput}
+                currentWord={currentWord}
                 cursor={cursor}
                 lineActive={cursor.lineIndex === index}
             />
