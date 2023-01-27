@@ -65,6 +65,7 @@ export default function TextArea1({ lines }) {
     // keeps track of the index of the current word in currLine
     // updated when user moves on to next word
     const [wordIndex, setWordIndex] = useState(0)
+
     // the index of the letter last typed by the user
     // updated with userInput (only on success though)
     const [letterIndex, setLetterIndex] = useState(0)
