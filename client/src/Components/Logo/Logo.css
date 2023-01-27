@@ -1,0 +1,9 @@
+.hoverable:hover {
+    /* content: "Synte- -t"; 
+    text-transform: capitalize; */
+    cursor: pointer; 
+}
+
+/* .hoverable:hover::before {
+    content: "Synte- -t";
+} */
