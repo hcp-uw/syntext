@@ -3,7 +3,7 @@ import styles from "./Logo.css";
 
 
 const textstyles = {
-  color: "white",
+  color: "black",
   fontSize: "12",
   fontFamily: "Roboto Mono",
 }
