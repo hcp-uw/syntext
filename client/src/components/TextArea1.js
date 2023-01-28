@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Letter = ({ letter, isCorrect, cursor, hasBeenTyped }) => {
     const style = {
@@ -52,7 +52,7 @@ export default function TextArea1({ lines }) {
 
     // the actual current word.
     // updated with wordIndex changes
-    const [currentWord, setCurrentWord] = useState('');
+    const [currentWord, setCurrentWord] = useState('int');
 
     // the array of tokens corresponding to the current line
     // updated with lineIndex changes
@@ -72,39 +72,117 @@ export default function TextArea1({ lines }) {
 
     const cursor = { lineIndex, wordIndex, letterIndex}
 
+    function checkIfMistake(input, currentWord, atEndOfWord, atEndOfLine) {
+        let currWordHasMistake = false;
+
+        if () {
+            
+        }
+
+        input.split('').forEach( (c, i) => {
+            currWordHasMistake =
+                currWordHasMistake || currentWord[i] !== c;
+                // if space or enter is pressed do not count it a mistake
+                // if space/enter is the last character, not a mistake....
+        })
+
+        return currWordHasMistake;
+    }
+
+    // const handleKey = event => {
+    //     console.log('User pressed: ', event.key);
+
+    //     if (event.key === 'Enter') {
+    //       event.preventDefault();
+    //     }
+    // };
+
 
     function handleChange(event) {
         const input = event.target.value;
         const atEndOfLine = wordIndex === currLine.length - 1;
-        const atEndOfWord = letterIndex === input.length - 1;
+        const atEndOfWord = currentWord.length === input.length - 1;
+        // user can type 5 characters after the end of current word
         const allowedToOverflow = currentWord.length + 5 > input.length;
 
         let currWordHasMistake = false
         input.split('').forEach( (c, i) => {
             currWordHasMistake =
-                currWordHasMistake || currentWord[i] === c;
+                currWordHasMistake || currentWord[i] !== c;
+                // if space or enter is pressed do not count it a mistake
+                // if space/enter is the last character, not a mistake....
         })
+        console.log('input: ', input)
+        //console.log('userInput: ', userInput)
+        //console.log('currentWord: ', currentWord)
+        //console.log('currentWordHasMistakes: ', currWordHasMistake)
+        //console.log('letterIndex: ', letterIndex)
+        //console.log('overflow permission: ', allowedToOverflow)
+
 
         if (!atEndOfWord){
             if (allowedToOverflow) {
-                // let them type
-                // update update letterIndex, userInput
+                console.log("not atEndOfWord & allowed to overflow")
+                // let them type: setUserInput(input): setUserInput(input)
+                setUserInput(input);
+
+                // update letterIndex, userInput
+                setLetterIndex(input.length - 1);
+
             } else {
-                // don't let them type more.
+                console.log("not atEndOfWord & no overflow")
+                // don't let them type: setUserInput(input) more.
                 // listen for backspace.
+                checkForBackspace(input);
             }
         } else if (currWordHasMistake) {
+            console.log('at end of word and curr word has mistake')
             // let them type
             // update userInput and letterIndex
+            setUserInput(input)
+            setLetterIndex(input.length - 1)
         } else if (!currWordHasMistake){
             if (atEndOfLine) {
-                // listen for enter 
-                // update wordIndex, letterIndex, lineIndex, currWord, userInput
+                console.log("no mistakes but at the end of the line and word")
+                // listen for enter
+                // update wordIndex, letterIndex, lineIndex, currWord, userInput, currLine
+
             } else {
-                // listen for space 
+                console.log("no mistakes but at the end of the word")
+                // listen for space
+                 if (checkForSpace(input)) {
+                    // update wordIndex, letterIndex, currWord, userInput
+                    setUserInput("");
+                    setLetterIndex(-1);
+                    setCurrentWord(currLine[wordIndex]);
+                    setWordIndex((index) => { return index + 1 });
+                 }
                 // update wordIndex, letterIndex, currWord, userInput
             }
         }
+    }
+
+    function checkForBackspace(input) {
+        // listen for backspace
+        console.log('backspace');
+
+        if (input.length - 1 === userInput.length) {
+            // handle state accodingly
+            setUserInput(input);
+            setLetterIndex(input.length - 1);
+        }
+    }
+
+    function checkForSpace(input) {
+        // listen for backspace
+        console.log(input[input.length - 1]);
+        console.log("checking for space space");
+
+        if (input[input.length - 1] === " ") {
+            console.log("space was pressed");
+            return true
+        }
+        return false;
     }
 
 
@@ -122,7 +200,7 @@ export default function TextArea1({ lines }) {
 
     return (
         <div>
-            <textarea value={userInput} onChange={handleChange} />
+            <input value={userInput} onKeyDown={handleKey} onChange={handleChange}/>
             {renderedLines}
         </div>
     );
