@@ -40,7 +40,7 @@ root.render(
         <Row>
           <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 40}}>1</Col>
           <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 40}}>public static void main (String[] args) &#123;</Col>
-          <Col md={{offset: 1}} style={{paddingTop: 50}}>timer</Col>
+          <Col md={{offset: 1}} style={{paddingTop: 50}}><Timer /></Col>
         </Row>
 
         <Row>
@@ -97,12 +97,6 @@ root.render(
       </Container>
 
     </body>
-    
-
-    {/* <Logo />
-    <Language />
-    <Methods />
-    <GameMode /> */}
   </>
   
 );
