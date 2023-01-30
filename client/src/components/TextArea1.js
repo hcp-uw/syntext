@@ -2,25 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow} from '../inputValidation'
 
 const Letter = (props) => {
-    const { letterActual, 
-            letterTyped, 
-            isCorrect, 
-            cursor, 
-            hasBeenTyped, 
-            inActiveWord 
+    const { letterActual,
+            letterTyped,
+            isCorrect,
+            hasBeenTyped,
+            inActiveWord
     } = props
-    
-    const letterDisplayed = (hasBeenTyped && inActiveWord) ? 
-        letterTyped : 
-        letterActual
-    
-        let className = '';
 
-    if (inActiveWord && hasBeenTyped)
-        className = isCorrect ? 'correct' : 'incorrect'
-    
+    const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
 
-    return ( 
+    let className = '';
+    if (inActiveWord && hasBeenTyped) className = isCorrect ? 'correct' : 'incorrect'
+
+    return (
         <span className={className}>
             {letterDisplayed}
         </span>
@@ -29,7 +23,7 @@ const Letter = (props) => {
 
 const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineIndex }) => {
     let className = '';
-    const letters = (wordActive && userInput.length > word.length) ? 
+    const letters = (wordActive && userInput.length > word.length) ?
         userInput.split('').map((l, i) => {
             const isCorrect = (i >= word.length) ? false : (l === word[i]);
             return (
@@ -39,7 +33,7 @@ const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineInd
                     letterTyped={userInput[i]}
                     isCorrect={isCorrect}
                     hasBeenTyped={cursor.letterIndex > i - 1 &&
-                                cursor.lineIndex >= lineIndex && 
+                                cursor.lineIndex >= lineIndex &&
                                 cursor.wordIndex >= index
                     }
                     cursor={cursor}
@@ -56,7 +50,7 @@ const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineInd
                     letterTyped={userInput[i]}
                     isCorrect={isCorrect}
                     hasBeenTyped={cursor.letterIndex > i - 1 &&
-                        cursor.lineIndex >= lineIndex && 
+                        cursor.lineIndex >= lineIndex &&
                         cursor.wordIndex >= index
                     }
                     cursor={cursor}
@@ -121,7 +115,7 @@ export default function TextArea1({ lines }) {
             setLetterIndex(userInput.length - 1)
         } else {
             setLetterIndex(userInput.length - 1)
-        } 
+        }
     }, [userInput, currentWord])
 
     const DEBUG = (hasMistake, allowedToOverflow) => {
@@ -136,10 +130,10 @@ export default function TextArea1({ lines }) {
 
     // handles special keys seperately
     const handleSpecialKey = event => {
-        if (atEndOfWord(currentWord, userInput) && 
+        if (atEndOfWord(currentWord, userInput) &&
             !atEndOfLine(wordIndex, currLine) &&
             event.key === ' ' &&
-            !currWordHasMistake(currentWord, userInput)) { 
+            !currWordHasMistake(currentWord, userInput)) {
             setCurrentWord(currLine[wordIndex + 1]);
             setWordIndex((wIndex) => { return wIndex + 1 });
             setLetterIndex(-1);
