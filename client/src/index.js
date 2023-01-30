@@ -24,8 +24,8 @@ root.render(
         <Row>
           <Navbar>
             <Container fluid>
-              <Navbar.Brand style={{fontSize: "2.5em"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
-              <Navbar.Text>profile</Navbar.Text>
+              <Navbar.Brand style={{fontSize: "2.5em", color: "white"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
+              <Navbar.Text><IconNavBar/></Navbar.Text>
             </Container>
           </Navbar>
           {/* <Stack direction="horizontal" gap={2}>
@@ -40,6 +40,7 @@ root.render(
           <Col md={{ span: 3, offset: 2}}>Random Ahh Test</Col>
           <Col sm={2}>Col 2</Col>
           <Col sm={2}>Col 3</Col>
+          <IconNavBar/>
         </Row>
         <Row>
         </Row>
