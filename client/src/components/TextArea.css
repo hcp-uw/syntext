@@ -12,7 +12,7 @@
 }
 
 .active {
-   background-color: lightblue; 
+   background-color: lightblue;
 }
 
 /* @font-face {
@@ -27,9 +27,5 @@ body {
 }
 
 .word {
-<<<<<<< HEAD
-  padding-right: 1.2vw;
-=======
   padding-right: 0.4em;
->>>>>>> 840adbe133070fca520eef1c4ab0eb52081d937b
 }
