@@ -11,7 +11,7 @@ next, switch to the server directory with `cd ../server` and run `npm run dev`
 
 
 ### front-end:
-open up the browser and visit this [url](http://localhost:3001) 
+open up the browser and visit this [url](http://localhost:3000) 
 
 right click to inspect and open up the console
 
