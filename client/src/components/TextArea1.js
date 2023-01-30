@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow} from '../inputValidation'
 
+
+
 const Letter = (props) => {
-    const { letterActual,
+    const{ letterActual,
             letterTyped,
             isCorrect,
             hasBeenTyped,
-            inActiveWord
+            inActiveWord,
+            cursor,
+            index,
+            cursorIsVisible
     } = props
 
     const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
@@ -14,50 +19,55 @@ const Letter = (props) => {
     let className = '';
     if (inActiveWord && hasBeenTyped) className = isCorrect ? 'correct' : 'incorrect'
 
-    return (
-        <span className={className}>
-            {letterDisplayed}
-        </span>
-    );
+    return cursorIsVisible && inActiveWord ? 
+        (<div className={`letter ${className} cursor`}>{letterDisplayed}</div>):   
+        (<div className={`letter ${className}`}>{letterDisplayed}</div>) 
 }
 
-const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineIndex }) => {
+const Word = (props) => {
+    const { 
+            word, 
+            index, 
+            cursor, 
+            userInput, 
+            lineIndex,
+            wordActive,
+            currentWord,
+            cursorIsVisible, 
+            setCursorIsVisible 
+    
+    } = props
+
+
     let className = '';
-    const letters = (wordActive && userInput.length > word.length) ?
-        userInput.split('').map((l, i) => {
-            const isCorrect = (i >= word.length) ? false : (l === word[i]);
-            return (
-                <Letter
-                    key={i}
-                    letterActual={l}
-                    letterTyped={userInput[i]}
-                    isCorrect={isCorrect}
-                    hasBeenTyped={cursor.letterIndex > i - 1 &&
-                                cursor.lineIndex >= lineIndex &&
-                                cursor.wordIndex >= index
-                    }
-                    cursor={cursor}
-                    inActiveWord={wordActive}
-                />
-            );
-        })
-        : word.split('').map((l, i) => {
-            const isCorrect = l === userInput[i] || !wordActive || i > cursor.letterIndex;
-            return (
-                <Letter
-                    key={i}
-                    letterActual={l}
-                    letterTyped={userInput[i]}
-                    isCorrect={isCorrect}
-                    hasBeenTyped={cursor.letterIndex > i - 1 &&
-                        cursor.lineIndex >= lineIndex &&
-                        cursor.wordIndex >= index
-                    }
-                    cursor={cursor}
-                    inActiveWord={wordActive}
-                />
-            );
-    });
+    const lettersMapper = (wordActive && userInput.length > word.length) ?
+        userInput.split('')
+        : word.split('')
+    const  correct = (wordActive && userInput.length > word.length) ?
+    (l, i) => (i >= word.length) ? false : (l === word[i]) :
+    (l, i) => l === userInput[i] || !wordActive || i > cursor.letterIndex
+
+    const letters = lettersMapper.map((l, i) => {
+        const isCorrect = correct(l, i)
+        return (
+            <Letter
+                key={i}
+                letterActual={l}
+                letterTyped={userInput[i]}
+                isCorrect={isCorrect}
+                hasBeenTyped={cursor.letterIndex > i - 1 &&
+                            cursor.lineIndex >= lineIndex &&
+                            cursor.wordIndex >= index
+                }
+                cursor={cursor}
+                index={i}
+                cursorIsVisible={i  === cursor.letterIndex &&  cursorIsVisible} 
+                inActiveWord={wordActive}
+            />
+        );
+    })
+
+    
 
     className = (index < cursor.wordIndex && lineIndex <= cursor.lineIndex) ?
         className = 'visited' :
@@ -69,7 +79,18 @@ const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineInd
 }
 
 const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) => {
+    const [cursorIsVisible, setCursorIsVisible] = useState(true);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          setCursorIsVisible(prevState => !prevState);
+        }, 500);
+        return () => clearInterval(intervalId);
+    }, []);
+    
+    
     const words = line.split(' ').map((word, index) => {
+
         return (
             <Word
                 key={index}
@@ -80,7 +101,11 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
                 currentWord={currentWord}
                 cursor={cursor}
                 wordActive={cursor.wordIndex === index && lineActive}
+                cursorIsVisible={cursorIsVisible}
+                setCursorIsVisible={setCursorIsVisible}
             />
+               
+            
         );
     });
     let className = '';
@@ -89,6 +114,7 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
 }
 
 export default function TextArea1({ lines }) {
+    
     // what the user has typed so far for the current word
     // cleared with wordIndex changes
     const [userInput, setUserInput] = useState('');
