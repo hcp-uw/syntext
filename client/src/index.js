@@ -24,8 +24,8 @@ root.render(
         <Row>
           <Navbar>
             <Container fluid>
-              <Navbar.Brand style={{fontSize: "2.5em", color: "white"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
-              <Navbar.Text><IconNavBar/></Navbar.Text>
+              <Navbar.Brand style={{fontSize: "3em", color: "rgba(125, 97, 95, 1)"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
+              <Navbar.Text style={{paddingRight: 20, color: "white"}}>pfp</Navbar.Text>
             </Container>
           </Navbar>
           {/* <Stack direction="horizontal" gap={2}>
@@ -36,24 +36,66 @@ root.render(
           </Stack> */}
           
         </Row>
+
         <Row>
-          <Col md={{ span: 3, offset: 2}}>Random Ahh Test</Col>
-          <Col sm={2}>Col 2</Col>
-          <Col sm={2}>Col 3</Col>
-          <IconNavBar/>
+          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 40}}>1</Col>
+          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 40}}>public static void main (String[] args) &#123;</Col>
+          <Col md={{offset: 1}} style={{paddingTop: 50}}>timer</Col>
         </Row>
+
         <Row>
+          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>2</Col>
+          <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>Scanner console = new Scanner(System.in);</Col>
         </Row>
+
         <Row>
-          <Language />
-          <Methods />
+          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>3</Col>
+          <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>int numPrints = console.nextInt();</Col>
+        </Row>
+
+        <Row>
+          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>4</Col>
+          <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}> hello guys</Col>
+        </Row>
+
+        <Row>
+          <Col style={{paddingTop: 200}}>.</Col>
+        </Row>
+
+        <Row>
+          <Col>
+          <div style={{
+            color: "rgba(75, 75, 75, 1)",
+            display: 'flex',
+            paddingTop: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            }}>
+            ctrl + n to skip
+            </div>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col>
+          <div style={{
+            color: "rgba(75, 75, 75, 1)",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            }}>
+            ctrl + r to restart
+            </div>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}>language</Col>
+          <Col md={{offset: 3, span: 3}} style={{paddingTop: 20}}><Methods /></Col>
+          <Col md={{offset: 2, span: 2}} style={{paddingTop: 20}}>mode</Col>
         </Row>
       </Container>
-      <Container>
-        <Row>
-          <Col><GameMode/></Col>
-        </Row>
-      </Container>
+
     </body>
     
 
