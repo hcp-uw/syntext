@@ -11,9 +11,9 @@
   color: red;
 }
 
-.active {
+/* .active {
    background-color: lightblue;
-}
+} */
 
 /* @font-face {
   font-family: cascadia-mono;
@@ -28,4 +28,16 @@ body {
 
 .word {
   padding-right: 0.4em;
+}
+
+.letter {
+  display: inline-block
+}
+
+.letter.correct.cursor {
+  box-shadow: 1px 0px 0px 0px black;
+}
+
+.letter.incorrect.cursor {
+  box-shadow: 1px 0px 0px 0px black;
 }
