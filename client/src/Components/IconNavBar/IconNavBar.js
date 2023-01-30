@@ -1,6 +1,6 @@
 const Iconnavbar = () => {
     return(
-      <img src="./pfp icon.png" alt="pfp"></img>
+      <img src="./pfpicon.png"></img>
     )
   }
 

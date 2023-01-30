@@ -25,7 +25,7 @@ root.render(
           <Navbar>
             <Container fluid>
               <Navbar.Brand style={{fontSize: "3em", color: "rgba(125, 97, 95, 1)"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
-              <Navbar.Text style={{paddingRight: 20, color: "white"}}>pfp</Navbar.Text>
+              <Navbar.Text style={{paddingRight: 20, color: "white"}}><IconNavBar /></Navbar.Text>
             </Container>
           </Navbar>
           {/* <Stack direction="horizontal" gap={2}>
