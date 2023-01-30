@@ -5,6 +5,7 @@ import IconNavBar from './Components/IconNavBar/IconNavBar';
 import Language from './Components/Language/Language';
 import Logo from './Components/Logo/Logo';
 import Methods from './Components/Methods/Methods';
+import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
 import App from './App';
 import styles from './index.css';
@@ -38,23 +39,23 @@ root.render(
         </Row>
 
         <Row>
-          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 40}}>1</Col>
-          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 40}}>public static void main (String[] args) &#123;</Col>
-          <Col md={{offset: 1}} style={{paddingTop: 50}}><Timer /></Col>
+          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 40}}>1</Col>
+          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 40, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
+          <Col md={{offset: 1}} style={{paddingTop: 50, paddingLeft: "12%"}}><Timer /></Col>
         </Row>
 
         <Row>
-          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>2</Col>
+          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>2</Col>
           <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>Scanner console = new Scanner(System.in);</Col>
         </Row>
 
         <Row>
-          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>3</Col>
+          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>3</Col>
           <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>int numPrints = console.nextInt();</Col>
         </Row>
 
         <Row>
-          <Col md={{span: 1, offset: 1}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>4</Col>
+          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>4</Col>
           <Col style={{fontSize: "1.8em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}> hello guys</Col>
         </Row>
 
@@ -92,7 +93,8 @@ root.render(
         <Row>
           <Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}>language</Col>
           <Col md={{offset: 3, span: 3}} style={{paddingTop: 20}}><Methods /></Col>
-          <Col md={{offset: 2, span: 2}} style={{paddingTop: 20}}>mode</Col>
+          <Col md={{offset: 0, span: 1}} style={{paddingTop: 20}}>mode</Col>
+          <Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}><RestartButton /></Col>
         </Row>
       </Container>
 

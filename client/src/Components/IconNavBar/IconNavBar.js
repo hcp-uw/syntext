@@ -1,6 +1,8 @@
+import pfp from "./pfpicon.png";
+
 const Iconnavbar = () => {
     return(
-      <img src="./pfpicon.png"></img>
+      <img src={pfp}></img>
     )
   }
 
