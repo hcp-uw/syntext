@@ -12,7 +12,7 @@
 }
 
 .active {
-  /* background-color: lightblue; */
+   background-color: lightblue; 
 }
 
 /* @font-face {
@@ -29,5 +29,3 @@ body {
 .word {
   padding-right: 1.2vw;
 }
-
-/* ../../public/ */
