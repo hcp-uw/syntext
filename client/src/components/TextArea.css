@@ -1,11 +1,33 @@
-.word {
-  padding-right: 0.5vw;
+.correct {
+  color: black;
 }
 
-.letter {
+.visited {
+  color: black;
+}
+
+.incorrect {
+  text-decoration: underline red;
+  color: red;
+}
+
+.active {
+  /* background-color: lightblue; */
+}
+
+/* @font-face {
+  font-family: cascadia-mono;
+  src: url('../../public/fonts/CascadiaMono-Regular.ttf') format("truetype");
+} */
+
+body {
+  font-family: Consolas, monospace;
   color: rgb(148, 148, 148);
+  white-space: pre;
 }
 
-.typed {
-  color: rgb(0, 0, 0);
+.word {
+  padding-right: 1.2vw;
 }
+
+/* ../../public/ */

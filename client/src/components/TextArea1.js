@@ -1,38 +1,90 @@
 import React, { useState, useEffect } from 'react';
 
-const Letter = ({ letter, isCorrect, cursor, hasBeenTyped }) => {
-    const style = {
-        textDecoration: (!isCorrect && hasBeenTyped) ? 'underline red' : null
-    };
+// correct
+// incorrect
+// visited
 
-    return <span style={style}>{letter}</span>;
+
+const Letter = (props) => {
+    const { letterActual, 
+            letterTyped, 
+            isCorrect, 
+            cursor, 
+            hasBeenTyped, 
+            inActiveWord 
+    } = props
+    
+    const letterDisplayed = (hasBeenTyped && inActiveWord) ? 
+        letterTyped : letterActual
+    let className = '';
+
+    if (inActiveWord && hasBeenTyped){
+        className = isCorrect ? 'correct' : 'incorrect'
+    }
+
+    
+    
+    return ( 
+        <span className={className}>
+            {letterDisplayed}
+        </span>
+    );
 }
 
-const Word = ({ word, userInput, currentWord, cursor, wordActive }) => {
-    const letters = word.split('').map((l, i) => {
-        const isCorrect = l === userInput[i] || !wordActive;
-        return (
-            <Letter
-                key={i}
-                letter={l}
-                isCorrect={isCorrect}
-                hasBeenTyped={cursor.letterIndex > i}
-                cursor={cursor}
-            />
-        );
+const Word = ({ word, userInput, currentWord, cursor, wordActive, index, lineIndex }) => {
+    let className = '';
+    const letters = (wordActive && userInput.length > word.length) ? 
+        userInput.split('').map((l, i) => {
+            const isCorrect = (i >= word.length) ? false : (l === word[i]);
+            return (
+                <Letter
+                    key={i}
+                    letterActual={l}
+                    letterTyped={userInput[i]}
+                    isCorrect={isCorrect}
+                    hasBeenTyped={cursor.letterIndex > i - 1 &&
+                                cursor.lineIndex >= lineIndex && 
+                                cursor.wordIndex >= index
+                    }
+                    cursor={cursor}
+                    inActiveWord={wordActive}
+                />
+            );
+        })
+        : word.split('').map((l, i) => {
+            const isCorrect = l === userInput[i] || !wordActive || i > cursor.letterIndex;
+            return (
+                <Letter
+                    key={i}
+                    letterActual={l}
+                    letterTyped={userInput[i]}
+                    isCorrect={isCorrect}
+                    hasBeenTyped={cursor.letterIndex > i - 1 &&
+                        cursor.lineIndex >= lineIndex && 
+                        cursor.wordIndex >= index
+                    }
+                    cursor={cursor}
+                    inActiveWord={wordActive}
+                />
+            );
     });
 
-    const style = {
-        backgroundColor: wordActive  ? "lightblue" : null
-    };
-    return <span style={style}>{letters}</span>;
+    
+    className = (index < cursor.wordIndex && lineIndex <= cursor.lineIndex) ?
+        className = 'visited' :
+        className = ''
+    if (wordActive) className = 'active'
+
+    return <span className={"word " + className}>{letters}</span>;
 }
 
-const Line = ({ line, userInput, currentWord, cursor, lineActive }) => {
+const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) => {
     const words = line.split(' ').map((word, index) => {
         return (
             <Word
                 key={index}
+                lineIndex={lineIndex}
+                index={index}
                 word={word}
                 userInput={userInput}
                 currentWord={currentWord}
@@ -41,8 +93,9 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive }) => {
             />
         );
     });
-
-    return <div>{words}</div>;
+    let className = '';
+    if (lineIndex < cursor.lineIndex) className = 'visited';
+    return <div className={className}>{words}</div>;
 }
 
 export default function TextArea1({ lines }) {
@@ -72,11 +125,36 @@ export default function TextArea1({ lines }) {
 
     const cursor = { lineIndex, wordIndex, letterIndex}
 
+    useEffect(() => {
+        console.log("userInput.length: ", userInput.length);
+        if (!atEndOfWord(currentWord, userInput)) {
+            console.log('setting letter index');
+            setLetterIndex(userInput.length - 1)
+        } else {
+            setLetterIndex(userInput.length - 1)
+        } 
+        
+        
+    }, [userInput])
+
+
+
+
+    const DEBUG = (hasMistake, allowedToOverflow) => {
+        console.table({'userInput': userInput,
+        'currentWord: ': currentWord,
+        'currentWordHasMistakes: ': hasMistake,
+        'letterIndex: ': letterIndex,
+        'overflow permission: ': allowedToOverflow,
+        'atEndOfWord': atEndOfWord(currentWord, userInput)
+        })
+    }
+ 
     function checkIfMistake(input, currentWord, atEndOfWord, atEndOfLine) {
         let currWordHasMistake = false;
 
-        if () {
-            
+        if (atEndOfWord && input[input.length - 1] === " ") {
+            console.log('working')
         }
 
         input.split('').forEach( (c, i) => {
@@ -89,106 +167,91 @@ export default function TextArea1({ lines }) {
         return currWordHasMistake;
     }
 
-    // const handleKey = event => {
-    //     console.log('User pressed: ', event.key);
+    // handles special keys seperately
+    const handleSpecialKey = event => {
+        if (atEndOfWord(currentWord, userInput) && 
+            !atEndOfLine(wordIndex, currLine) &&
+            event.key === ' ' &&
+            !currWordHasMistake(currentWord, userInput)) { // Checks for Space
 
-    //     if (event.key === 'Enter') {
-    //       event.preventDefault();
-    //     }
-    // };
+            // update wordIndex, letterIndex, currWord, userInput
+            setCurrentWord(currLine[wordIndex + 1]);
+            setWordIndex((wIndex) => { return wIndex + 1 });
+            setLetterIndex(-1);
+            setUserInput('');
+            
+            event.preventDefault();
+        } else if (atEndOfWord(currentWord, userInput) &&
+            atEndOfLine(wordIndex, currLine) &&
+            !currWordHasMistake(currentWord, userInput) &&
+            event.key === 'Enter') { // Checks for Enter
+
+            // update wordIndex, letterIndex, lineIndex, currWord, userInput, currLine
+            setCurrLine(lines[lineIndex + 1].split(" "));
 
 
+            setLineIndex((cLine) => { return cLine + 1 });
+            setCurrentWord((lines[lineIndex + 1].split(" "))[0]);
+            setWordIndex(0);
+            setUserInput('');
+
+            // lines[0].split(" ")
+
+            event.preventDefault();
+        }
+    }
+
+    // handles all characters that are displayed
     function handleChange(event) {
-        const input = event.target.value;
-        const atEndOfLine = wordIndex === currLine.length - 1;
-        const atEndOfWord = currentWord.length === input.length - 1;
-        // user can type 5 characters after the end of current word
-        const allowedToOverflow = currentWord.length + 5 > input.length;
+        console.log('handleChange called')
+        if (allowedToOverflow(currentWord, event.target.value)) 
+            setUserInput(event.target.value);
+            
+        
+        
 
-        let currWordHasMistake = false
-        input.split('').forEach( (c, i) => {
-            currWordHasMistake =
-                currWordHasMistake || currentWord[i] !== c;
-                // if space or enter is pressed do not count it a mistake
-                // if space/enter is the last character, not a mistake....
-        })
-        console.log('input: ', input)
-        //console.log('userInput: ', userInput)
-        //console.log('currentWord: ', currentWord)
-        //console.log('currentWordHasMistakes: ', currWordHasMistake)
-        //console.log('letterIndex: ', letterIndex)
-        //console.log('overflow permission: ', allowedToOverflow)
-
-
-        if (!atEndOfWord){
-            if (allowedToOverflow) {
-                console.log("not atEndOfWord & allowed to overflow")
-                // let them type: setUserInput(input): setUserInput(input)
-                setUserInput(input);
-
-                // update letterIndex, userInput
-                setLetterIndex(input.length - 1);
-
-            } else {
-                console.log("not atEndOfWord & no overflow")
-                // don't let them type: setUserInput(input) more.
-                // listen for backspace.
-                checkForBackspace(input);
-            }
-        } else if (currWordHasMistake) {
-            console.log('at end of word and curr word has mistake')
-            // let them type
-            // update userInput and letterIndex
-            setUserInput(input)
-            setLetterIndex(input.length - 1)
-        } else if (!currWordHasMistake){
-            if (atEndOfLine) {
-                console.log("no mistakes but at the end of the line and word")
-                // listen for enter
-                // update wordIndex, letterIndex, lineIndex, currWord, userInput, currLine
-
-            } else {
-                console.log("no mistakes but at the end of the word")
-                // listen for space
-                 if (checkForSpace(input)) {
-                    // update wordIndex, letterIndex, currWord, userInput
-                    setUserInput("");
-                    setLetterIndex(-1);
-                    setCurrentWord(currLine[wordIndex]);
-                    setWordIndex((index) => { return index + 1 });
-                 }
-                // update wordIndex, letterIndex, currWord, userInput
-            }
-        }
+        // if (!atEndOfWord(currentWord, userInput)){
+        //     if (allowedToOverflow(currentWord, userInput)) {
+        //         // let them type: setUserInput(input): setUserInput(input)
+        //         // update letterIndex, userInput
+        //     } else {
+        //         // don't let them type: setUserInput(input) more.
+        //         // listen for backspace.
+        //     }
+        // } else if (currWordHasMistake(currentWord, userInput)) {
+        //     // let them type
+        //     // update userInput and letterIndex
+        // } else if (!currWordHasMistake(currentWord, userInput)){
+        //     if (atEndOfLine(currentWord, currLine)) {
+        //         // listen for enter
+        //         // update wordIndex, letterIndex, lineIndex, currWord, userInput, currLine
+        //     } else {
+        //         // listen for space
+        //         // update wordIndex, letterIndex, currWord, userInput
+        //     }
+        // }
     }
 
-    function checkForBackspace(input) {
-        // listen for backspace
-        console.log('backspace');
+    const atEndOfLine = (wIndex, cLine) => wIndex === cLine.length - 1;
 
-        if (input.length - 1 === userInput.length) {
-            // handle state accodingly
-            setUserInput(input);
-            setLetterIndex(input.length - 1);
-        }
+    const atEndOfWord = (cWord, uInput) => cWord.length === uInput.length;
+
+    const currWordHasMistake = (cWord, uInput) => {
+        let res = false;
+        uInput.split('').forEach( (c, i) => res = (res) || (cWord[i] !== c));
+        return res;   
     }
+    
+    const allowedToOverflow = (cWord, uInput) => cWord.length + 6 > uInput.length;
 
-    function checkForSpace(input) {
-        // listen for backspace
-        console.log(input[input.length - 1]);
-        console.log("checking for space space");
+    DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
 
-        if (input[input.length - 1] === " ") {
-            console.log("space was pressed");
-            return true
-        }
-        return false;
-    }
 
 
     const renderedLines = lines.map((line, index) => {
         return (
             <Line key={index}
+                lineIndex={index}
                 line={line}
                 userInput={userInput}
                 currentWord={currentWord}
@@ -200,8 +263,9 @@ export default function TextArea1({ lines }) {
 
     return (
         <div>
-            <input value={userInput} onKeyDown={handleKey} onChange={handleChange}/>
+            <input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
             {renderedLines}
+            <br></br>
         </div>
     );
 }
