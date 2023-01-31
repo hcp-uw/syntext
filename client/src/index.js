@@ -25,8 +25,8 @@ root.render(
         <Row>
           <Navbar>
             <Container fluid>
-              <Navbar.Brand style={{fontSize: "3em", color: "rgba(125, 97, 95, 1)"}} href="/">Synte&gt;&lt;t</Navbar.Brand>
-              <Navbar.Text style={{paddingRight: 20, color: "white"}}><IconNavBar /></Navbar.Text>
+              <Navbar.Brand style={{fontSize: "3.3em", color: "rgba(125, 97, 95, 1)", paddingLeft: 12}} href="/">Synte&gt;&lt;t</Navbar.Brand>
+              <Navbar.Text style={{color: "white"}}><IconNavBar /></Navbar.Text>
             </Container>
           </Navbar>
           {/* <Stack direction="horizontal" gap={2}>
@@ -39,9 +39,10 @@ root.render(
         </Row>
 
         <Row>
-          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 40}}>1</Col>
-          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 40, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
-          <Col md={{offset: 1}} style={{paddingTop: 50, paddingLeft: "12%"}}><Timer /></Col>
+          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 120}}>1</Col>
+          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 120, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
+          <Col md={{offset: 1}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingTop: 40, paddingLeft: "12%"}}>0:20</Col>
+          
         </Row>
 
         <Row>
@@ -60,7 +61,11 @@ root.render(
         </Row>
 
         <Row>
-          <Col style={{paddingTop: 200}}>.</Col>
+          <Col> <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 20}}><RestartButton /></div></Col>
+        </Row>
+
+        <Row>
+          <Col style={{paddingTop: 100}}>.</Col>
         </Row>
 
         <Row>
@@ -93,8 +98,7 @@ root.render(
         <Row>
           <Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}>language</Col>
           <Col md={{offset: 3, span: 3}} style={{paddingTop: 20}}><Methods /></Col>
-          <Col md={{offset: 0, span: 1}} style={{paddingTop: 20}}>mode</Col>
-          <Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}><RestartButton /></Col>
+          <Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
         </Row>
       </Container>
 
