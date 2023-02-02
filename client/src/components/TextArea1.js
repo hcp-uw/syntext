@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow} from '../inputValidation'
-
+import Cursor from './Cursor';
 
 
 const Letter = (props) => {
@@ -19,9 +19,7 @@ const Letter = (props) => {
     let className = '';
     if (inActiveWord && hasBeenTyped) className = isCorrect ? 'correct' : 'incorrect'
 
-    return cursorIsVisible && inActiveWord ? 
-        (<div className={`letter ${className} cursor`}>{letterDisplayed}</div>):   
-        (<div className={`letter ${className}`}>{letterDisplayed}</div>) 
+    return (<div className={`letter ${className}`}>{letterDisplayed}</div>)
 }
 
 const Word = (props) => {
@@ -87,8 +85,8 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
         }, 500);
         return () => clearInterval(intervalId);
     }, []);
-    
-    
+
+
     const words = line.split(' ').map((word, index) => {
 
         return (
@@ -203,6 +201,7 @@ export default function TextArea1({ lines }) {
         <div>
             <input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
             {renderedLines}
+            <Cursor letterIndex={letterIndex} activeWord={document.querySelector('.active')}/>
             <br></br>
         </div>
     );

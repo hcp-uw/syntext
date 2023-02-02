@@ -1,0 +1,7 @@
+.cursor {
+  height: 1.5em;
+  width: 0.2em;
+  border-radius: 20% 20%;
+  background-color: black;
+  position: absolute;
+}
