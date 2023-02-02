@@ -35,6 +35,15 @@ body {
   user-select: none;
 }
 
+input {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 0;
+  left: 0;
+  opacity: 0%;
+}
+
 .letter.correct.cursor {
   box-shadow: 1px 0px 0px 0px black;
 }
