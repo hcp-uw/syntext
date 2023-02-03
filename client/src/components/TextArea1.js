@@ -19,23 +19,20 @@ const Letter = (props) => {
 	let className = '';
 	if (inActiveWord && hasBeenTyped) className = isCorrect ? 'correct' : 'incorrect'
 
-	return cursorIsVisible && inActiveWord ? 
-		(<div className={`letter ${className} cursor`}>{letterDisplayed}</div>):   
-		(<div className={`letter ${className}`}>{letterDisplayed}</div>) 
+	return (<div className={`letter ${className}`}>{letterDisplayed}</div>);
 }
 
 const Word = (props) => {
-	const { 
-			word, 
-			index, 
-			cursor, 
-			userInput, 
+	const {
+			word,
+			index,
+			cursor,
+			userInput,
 			lineIndex,
 			wordActive,
 			currentWord,
-			cursorIsVisible, 
-			setCursorIsVisible 
-	
+			cursorIsVisible,
+			setCursorIsVisible
 	} = props
 
 
@@ -61,13 +58,11 @@ const Word = (props) => {
 				}
 				cursor={cursor}
 				index={i}
-				cursorIsVisible={i  === cursor.letterIndex &&  cursorIsVisible} 
+				cursorIsVisible={i  === cursor.letterIndex &&  cursorIsVisible}
 				inActiveWord={wordActive}
 			/>
 		);
 	})
-
-	
 
 	className = (index < cursor.wordIndex && lineIndex <= cursor.lineIndex) ?
 		className = 'visited' :
@@ -88,8 +83,7 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
 	// 	}, 500);
 	// 	return () => clearInterval(intervalId);
 	// }, []);
-	
-	
+
 	const words = line.split(' ').map((word, index) => {
 
 		return (
@@ -105,8 +99,6 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
 				cursorIsVisible={cursorIsVisible}
 				setCursorIsVisible={setCursorIsVisible}
 			/>
-			   
-			
 		);
 	});
 	let className = '';
@@ -115,7 +107,7 @@ const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) =
 }
 
 export default function TextArea1({ lines }) {
-	
+
 	// what the user has typed so far for the current word
 	// cleared with wordIndex changes
 	const [userInput, setUserInput] = useState('');
@@ -169,7 +161,7 @@ export default function TextArea1({ lines }) {
 		} else if (atEndOfWord(currentWord, userInput) &&
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currentWord, userInput) &&
-			event.key === 'Enter') { 
+			event.key === 'Enter') {
 			setCurrLine(lines[lineIndex + 1].split(" "));
 			setLineIndex((cLine) => { return cLine + 1 });
 			setCurrentWord((lines[lineIndex + 1].split(" "))[0]);
@@ -184,9 +176,8 @@ export default function TextArea1({ lines }) {
 
 	// handles all characters that are displayed
 	function handleChange(event) {
-		if (allowedToOverflow(currentWord, event.target.value)) 
+		if (allowedToOverflow(currentWord, event.target.value))
 			setUserInput(event.target.value);
-		
 	}
 
 	DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
@@ -209,6 +200,7 @@ export default function TextArea1({ lines }) {
 			<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
 			{renderedLines}
 			<br></br>
+
 		</div>
 	);
 }

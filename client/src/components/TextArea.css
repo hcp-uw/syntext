@@ -44,11 +44,3 @@ input {
   left: 0;
   opacity: 0%;
 }
-
-.letter.correct.cursor {
-  box-shadow: 1px 0px 0px 0px black;
-}
-
-.letter.incorrect.cursor {
-  box-shadow: 1px 0px 0px 0px black;
-}
