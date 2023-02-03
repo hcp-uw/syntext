@@ -28,6 +28,7 @@ body {
 
 .word {
   padding-right: 0.4em;
+  tab-size: 3;
 }
 
 .letter {
