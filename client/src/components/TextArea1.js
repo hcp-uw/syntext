@@ -201,7 +201,7 @@ export default function TextArea1({ lines }) {
         <div>
             <input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
             {renderedLines}
-            <Cursor letterIndex={letterIndex} activeWord={document.querySelector('.active')}/>
+            <Cursor letterIndex={letterIndex} wordIndex={wordIndex} activeWord={document.querySelector('.active')}/>
             <br></br>
         </div>
     );

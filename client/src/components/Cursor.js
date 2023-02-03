@@ -2,7 +2,7 @@ import stylesheet from "./Cursor.css"
 import React, { useState, useEffect } from 'react';
 
 const Cursor = (props) => {
-  const { activeWord, letterIndex } = props;
+  const { activeWord, letterIndex , wordIndex } = props;
 
   console.log(activeWord)
 
@@ -14,7 +14,7 @@ const Cursor = (props) => {
         console.log(letter)
       }
     }
-  }, [letterIndex])
+  }, [letterIndex, wordIndex])
 
   // const letter = activeWord.querySelector(".letter")
 
