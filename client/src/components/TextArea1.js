@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow} from '../inputValidation'
-
+import Cursor from './Cursor';
 
 
 const Letter = (props) => {
@@ -79,6 +79,7 @@ const Word = (props) => {
 }
 
 const Line = ({ line, userInput, currentWord, cursor, lineActive, lineIndex }) => {
+
 	const [cursorIsVisible, setCursorIsVisible] = useState(true);
 
 	// useEffect(() => {
