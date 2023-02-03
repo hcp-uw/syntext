@@ -200,7 +200,9 @@ export default function TextArea1({ lines }) {
 			<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
 			{renderedLines}
 			<br></br>
-
+			<Cursor letterIndex={letterIndex} wordIndex={wordIndex}/>
 		</div>
 	);
 }
+
+// activeWord, letterIndex, wordIndex
