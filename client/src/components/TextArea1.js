@@ -11,15 +11,17 @@ const Letter = (props) => {
 			inActiveWord,
 			cursor,
 			index,
-			cursorIsVisible
 	} = props
 
 	const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
-
+		// if (inActiveWord) {
+		// console.log('index', index)
+		// console.log('positioning', cursor.letterIndex  + 1 === index)}
 	let className = '';
-	if (inActiveWord && hasBeenTyped) className = isCorrect ? 'correct' : 'incorrect'
+	if (inActiveWord && hasBeenTyped) className = isCorrect ? ' correct' : ' incorrect';
+	if (inActiveWord && cursor.letterIndex  === index) className += ' cursorPos';
 
-	return (<div className={`letter ${className}`}>{letterDisplayed}</div>);
+	return (<div className={`letter${className}`}>{letterDisplayed}</div>);
 }
 
 const Word = (props) => {
@@ -143,7 +145,8 @@ export default function TextArea1({ lines }) {
 		'currentWordHasMistakes: ': hasMistake,
 		'letterIndex: ': letterIndex,
 		'overflow permission: ': allowedToOverflow,
-		'atEndOfWord': atEndOfWord(currentWord, userInput)
+		'atEndOfWord': atEndOfWord(currentWord, userInput),
+		'cursor': cursor
 		})
 	}
 
@@ -180,7 +183,7 @@ export default function TextArea1({ lines }) {
 			setUserInput(event.target.value);
 	}
 
-	//DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
+	DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
 
 	const renderedLines = lines.map((line, index) => {
 		return (

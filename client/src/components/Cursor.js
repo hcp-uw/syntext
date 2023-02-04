@@ -6,41 +6,38 @@ const Cursor = (props) => {
 
   useEffect(() => {
     return () => {
-      let letter;
       let activeWord = document.querySelector('.active');
-
-      if (document.querySelector('.incorrect')) { // Check if there are incorrects
-        let incorrectCount = activeWord.querySelectorAll("div.incorrect");
-        letter = activeWord.querySelectorAll('div')[incorrectCount.length];
-      } else if (activeWord !== null) { // If no incorrects, find the right letter
-        letter = activeWord.querySelector("div:not(.correct)");
-      }
+      let letter = document.querySelector('.cursorPos');
 
       console.log(activeWord);
+      // console.log(letter)
+
       if (letter !== null) {
         moveCursor(letter.getBoundingClientRect());
       } else if (letter === null) {
-        moveCursor(null);
+        console.log(activeWord.querySelector('div'))
+        moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
       }
     }
   }, [letterIndex, wordIndex])
 
-  function moveCursor (position) {
-    console.log(position);
+  function moveCursor (position, check) {
+    //console.log(position);
     let cursorEl = document.querySelector('.cursor');
 
-    if (position !== null) {
+    if (!check) {
+      cursorEl.style.left = (position.left + 8) + 'px';
+      cursorEl.style.top = (position.top - 2.5) + 'px';
+    } else if (check) {
+      console.log('moving right')
+      // console.log((parseInt(cursorEl.style.left[0]) + 1).toString());
       cursorEl.style.left = (position.left - 1) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
-    } else if (position === null) {
-
+      // console.log(cursorEl.style.left);
     }
 
     //.style.x = position.x;
   }
-
-  // const letter = activeWord.querySelector(".letter")
-
 
   return <div className={"cursor"}></div>
 }
