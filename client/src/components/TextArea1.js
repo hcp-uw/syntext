@@ -180,7 +180,7 @@ export default function TextArea1({ lines }) {
 			setUserInput(event.target.value);
 	}
 
-	DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
+	//DEBUG(currWordHasMistake(currentWord, userInput), allowedToOverflow(currentWord, userInput));
 
 	const renderedLines = lines.map((line, index) => {
 		return (
@@ -204,5 +204,3 @@ export default function TextArea1({ lines }) {
 		</div>
 	);
 }
-
-// activeWord, letterIndex, wordIndex
