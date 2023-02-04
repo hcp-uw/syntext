@@ -1,7 +1,9 @@
 .cursor {
   height: 1.5em;
-  width: 0.2em;
-  border-radius: 20% 20%;
+  width: 0.15em;
+  /* border-radius: 20% 20%; */
   background-color: black;
   position: absolute;
+  left: 0;
+  top: 0;
 }
