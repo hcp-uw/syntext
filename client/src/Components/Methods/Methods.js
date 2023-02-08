@@ -15,10 +15,18 @@ const Methods = () => {
           {`
             .btn-custom {
               background-color: #BC8785;
-              color: #E5CDCD;
+              color: white;
+              border-radius: 18px;
+              border-top-right-radius: 0px !important;
+              border-bottom-right-radius: 0px !important;
+              border-right-color: #E5CDCD;
+              margin-right: 1px;
             }
-            .btn-custom2 {
-              background-color: #E231CD;
+
+            .btn-sides {
+              background-color: #BC8785;
+              color: #E5CDCD;
+              border-radius: 18px;
             }
           `}
         </style>
@@ -27,8 +35,8 @@ const Methods = () => {
           <Dropdown>
             <DropdownButton 
                 title="methods" 
-                drop="up"
-                variant="custom2"
+                drop="up" 
+                variant="custom"
                 className="rounded-start"
               >methods</DropdownButton>
           </Dropdown>
@@ -38,6 +46,9 @@ const Methods = () => {
             <ToggleButton variant="custom" id="tbg-radio-3" value={3}>long</ToggleButton>
           </ToggleButtonGroup>
           
+          <Button variant="sides">short</Button>
+          <Button variant="sides">medium</Button>
+          <Button variant="sides">long</Button>
         </ButtonGroup>
       </div>
       </>
