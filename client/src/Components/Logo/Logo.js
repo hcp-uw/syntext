@@ -12,23 +12,22 @@ const textstyles = {
 const Logo = () => {
     return(
       <div className="hoverable">
-        <span><h1 style={textstyles} fontSize="25" onClick={handleClick}>Synte&gt;&lt;t</h1></span>
+        <span><h1 style={textstyles} fontSize="25" onClick={handleClick} onMouseEnter={showText()} onMouseLeave={hideText()}>{this.state.text}</h1></span>
       </div>
       //onMouseOver={changedText} onMouseLeave={normalText}
     )
   }
 
+  function showText() {
+    this.setState({text : "Synte><t"}) 
+  } 
+  function hideText() {
+    this.setState({text : "Synte- -t"}) 
+  } 
+  
   function handleClick() {
     window.location.assign('/');
   }
-
- 
-  // function normalText() {
-  //   this.setState({text : "Syntext"}) 
-  // } 
-  // function changedText() {
-  //   this.setState({text : "Synte- -t"}) 
-  // } 
 
 
 export default Logo;

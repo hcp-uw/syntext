@@ -13,7 +13,18 @@ const Methods = () => {
           {`
             .btn-custom {
               background-color: #BC8785;
+              color: white;
+              border-radius: 18px;
+              border-top-right-radius: 0px !important;
+              border-bottom-right-radius: 0px !important;
+              border-right-color: #E5CDCD;
+              margin-right: 1px;
+            }
+
+            .btn-sides {
+              background-color: #BC8785;
               color: #E5CDCD;
+              border-radius: 18px;
             }
           `}
         </style>
@@ -22,15 +33,15 @@ const Methods = () => {
           <Dropdown>
             <DropdownButton 
                 title="methods" 
-                drop="up"
+                drop="up" 
                 variant="custom"
                 className="rounded-start"
               >methods</DropdownButton>
           </Dropdown>
           
-          <Button variant="custom">short</Button>
-          <Button variant="custom">medium</Button>
-          <Button variant="custom">long</Button>
+          <Button variant="sides">short</Button>
+          <Button variant="sides">medium</Button>
+          <Button variant="sides">long</Button>
         </ButtonGroup>
       </div>
       </>
