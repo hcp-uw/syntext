@@ -41,14 +41,11 @@ const Methods = () => {
               >methods</DropdownButton>
           </Dropdown>
           <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-            <ToggleButton variant="custom" id="tbg-radio-1" value={1}>short</ToggleButton>
-            <ToggleButton variant="custom" id="tbg-radio-2" value={2}>medium</ToggleButton>
-            <ToggleButton variant="custom" id="tbg-radio-3" value={3}>long</ToggleButton>
+            <ToggleButton variant="sides" id="tbg-radio-1" value={1}>short</ToggleButton>
+            <ToggleButton variant="sides" id="tbg-radio-2" value={2}>medium</ToggleButton>
+            <ToggleButton variant="sides" id="tbg-radio-3" value={3}>long</ToggleButton>
           </ToggleButtonGroup>
           
-          <Button variant="sides">short</Button>
-          <Button variant="sides">medium</Button>
-          <Button variant="sides">long</Button>
         </ButtonGroup>
       </div>
       </>
