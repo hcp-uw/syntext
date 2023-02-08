@@ -8,7 +8,7 @@ import Methods from './Components/Methods/Methods';
 import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
 import App from './App';
-import styles from './index.css';
+import './index.css';
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -20,7 +20,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <body style={styles}>
+    <body>
       <Container fluid>
         <Row>
           <Navbar>
@@ -38,12 +38,13 @@ root.render(
           
         </Row>
 
-        <Row>
-          <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 120}}>1</Col>
-          <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 120, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
-          <Col md={{offset: 1}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingTop: 40, paddingLeft: "12%"}}>0:20</Col>
-          
-        </Row>
+        {/* <Container> */}
+          <Row>
+            <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 120}}>1</Col>
+            <Col md={{span: 7}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 120, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
+            <Col md={{offset: 1}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingTop: 40, paddingLeft: "12%"}}>0:20</Col>
+          </Row>
+        {/* </Container> */}
 
         <Row>
           <Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>2</Col>
