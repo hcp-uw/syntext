@@ -69,6 +69,9 @@ root.render(
           <Col style={{paddingTop: 100}}>.</Col>
         </Row>
 
+        <Container 
+          style={{position: "sticky"}}
+          className="fixed-bottom">
         <Row>
           <Col>
           <div style={{
@@ -101,6 +104,7 @@ root.render(
           <Col md={{offset: 2, span: 3}} style={{paddingTop: 20, paddingLeft: 50}}><Methods /></Col>
           <Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
         </Row>
+      </Container>
       </Container>
 
     </body>
