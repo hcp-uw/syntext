@@ -1,5 +1,4 @@
-import TextArea from './components/TextArea';
-import TextArea1 from './components/TextArea1'
+import TextArea from './components/TextArea.js'
 
 const App = () => {
 	const example =  {
@@ -20,7 +19,7 @@ const App = () => {
 
 	return (
 		<div>
-			<TextArea1 lines={example.data}/>
+			<TextArea lines={example.data}/>
 		</div>
 	);
 }
