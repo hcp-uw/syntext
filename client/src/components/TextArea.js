@@ -200,7 +200,7 @@ export default function TextArea1({ lines }) {
 	});
 
 	return (
-		<div>
+		<div className={`center`}>
 			<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
 			{renderedLines}
 			<br></br>

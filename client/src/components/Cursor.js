@@ -9,34 +9,34 @@ const Cursor = (props) => {
       let activeWord = document.querySelector('.active');
       let letter = document.querySelector('.cursorPos');
 
-      console.log(activeWord);
-      // console.log(letter)
-
       if (letter !== null) {
         moveCursor(letter.getBoundingClientRect());
       } else if (letter === null) {
-        console.log(activeWord.querySelector('div'))
         moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
       }
     }
   }, [letterIndex, wordIndex])
 
   function moveCursor (position, check) {
-    //console.log(position);
     let cursorEl = document.querySelector('.cursor');
+    resetCursorBlinkAnimation(cursorEl);
 
-    if (!check) {
+    if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') { // We are after a tab character
+      cursorEl.style.left = (position.left + 25) + 'px';
+      cursorEl.style.top = (position.top - 2.5) + 'px';
+    } else if (!check) { // Normal letter
       cursorEl.style.left = (position.left + 8) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
-    } else if (check) {
-      console.log('moving right')
-      // console.log((parseInt(cursorEl.style.left[0]) + 1).toString());
+    } else { // New Line
       cursorEl.style.left = (position.left - 1) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
-      // console.log(cursorEl.style.left);
     }
+  }
 
-    //.style.x = position.x;
+  function resetCursorBlinkAnimation(cursor) {
+    cursor.style.animation = 'none';
+    cursor.focus();
+    cursor.style.animation = null;
   }
 
   return <div className={"cursor"}></div>

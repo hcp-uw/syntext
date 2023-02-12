@@ -1,9 +1,22 @@
 .cursor {
-  height: 1.5em;
-  width: 0.15em;
-  /* border-radius: 20% 20%; */
+  height: 1.4em;
+  width: 1.5px;
+  /* border-radius: 10% 10%; */
   background-color: black;
   position: absolute;
+  padding-top: 0.1em;
   left: 0;
   top: 0;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.05s;
+  animation: cursor-blink 1.75s steps(3) infinite;
+}
+
+@keyframes cursor-blink {
+  0% {
+    visibility: visible;
+  }
+
+  30% {
+    visibility: hidden;
+  }
 }

@@ -1,3 +1,38 @@
+/* @font-face {
+  font-family: cascadia-mono;
+  src: url('../../public/fonts/CascadiaMono-Regular.ttf') format("truetype");
+} */
+
+body {
+  font-family: Consolas, monospace;
+  color: rgb(148, 148, 148);
+  white-space: pre;
+}
+
+input {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 0;
+  left: 0;
+  opacity: 0%;
+}
+
+.word {
+  padding-right: 0.4em;
+  tab-size: 3;
+}
+
+.letter {
+  display: inline-block;
+  user-select: none;
+}
+
+.center {
+  padding-left: 35%;
+  padding-top: 5%;
+}
+
 .correct {
   color: black;
 }
@@ -13,34 +48,4 @@
 
 .active {
    background-color: lightblue;
-}
-
-/* @font-face {
-  font-family: cascadia-mono;
-  src: url('../../public/fonts/CascadiaMono-Regular.ttf') format("truetype");
-} */
-
-body {
-  font-family: Consolas, monospace;
-  color: rgb(148, 148, 148);
-  white-space: pre;
-}
-
-.word {
-  padding-right: 0.4em;
-  tab-size: 3;
-}
-
-.letter {
-  display: inline-block;
-  user-select: none;
-}
-
-input {
-  position: absolute;
-  width: 90%;
-  height: 90%;
-  top: 0;
-  left: 0;
-  opacity: 0%;
 }
