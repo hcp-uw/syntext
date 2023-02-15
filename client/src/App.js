@@ -31,7 +31,6 @@ const App = () => {
 				<Col md={{offset: 9}}>profile</Col>
 			</Stack> */}
 			
-			</Row>
 
 			{/* <Container> */}
 			<Row>
