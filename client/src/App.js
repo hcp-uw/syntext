@@ -9,7 +9,7 @@ import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
 import './index.css';
 
-import NewNavBar from './Components/NewNavBar/NewNavBar.js';
+import NewNavBar from './Components/NewNavBar/NewNavBar';
 
 import GameOptions from "./Components/GameOptions/GameOptions";
 
@@ -66,7 +66,6 @@ const App = () => {
 			</Row>
 
 			<GameOptions/>
-			</Container>
 		</body>
 		</>
 	)

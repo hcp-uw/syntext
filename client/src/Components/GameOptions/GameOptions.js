@@ -1,17 +1,9 @@
-import Language from '../Language/Language.js'
 import Methods from '../Methods/Methods.js'
-import GameMode from '../GameMode/GameMode.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import GameMode from './Components/GameMode/GameMode';
-import IconNavBar from './Components/IconNavBar/IconNavBar';
-import Language from './Components/Language/Language';
-import Logo from './Components/Logo/Logo';
-import Methods from './Components/Methods/Methods';
-import RestartButton from './Components/RestartButton/RestartButton';
-import Timer from './Components/Timer/Timer'; 
-import './index.css';
+import GameMode from '../GameMode/GameMode.js';
+import '../../index.css'
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -23,6 +15,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 const GameOptions = () => {
 	return(
 		<>
+		<Container fluid>
 			<body></body>
 			style={{position: "sticky"}}
 			<Row>
@@ -57,6 +50,7 @@ const GameOptions = () => {
 			<Col md={{offset: 2, span: 3}} style={{paddingTop: 20, paddingLeft: 50}}><Methods /></Col>
 			<Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
 			</Row>
+		</Container>
         </>
     )
 }
