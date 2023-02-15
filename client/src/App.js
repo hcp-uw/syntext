@@ -9,6 +9,8 @@ import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
 import './index.css';
 
+import GameOptions from "./Components/GameOptions/GameOptions";
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -69,44 +71,8 @@ const App = () => {
 			<Col style={{paddingTop: 100}}>.</Col>
 			</Row>
 
-			<Container 
-			style={{position: "sticky"}}
-			className="fixed-bottom">
-			<Row>
-			<Col>
-			<div style={{
-				color: "rgba(75, 75, 75, 1)",
-				display: 'flex',
-				paddingTop: 40,
-				alignItems: 'center',
-				justifyContent: 'center',
-				}}>
-				ctrl + n to skip
-				</div>
-			</Col>
-			</Row>
-
-			<Row>
-			<Col>
-			<div style={{
-				color: "rgba(75, 75, 75, 1)",
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				}}>
-				ctrl + r to restart
-				</div>
-			</Col>
-			</Row>
-
-			<Row>
-			<Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}>language</Col>
-			<Col md={{offset: 2, span: 3}} style={{paddingTop: 20, paddingLeft: 50}}><Methods /></Col>
-			<Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
-			</Row>
-		</Container>
-		</Container>
-
+			<GameOptions/>
+			</Container>
 		</body>
 		</>
 	)
