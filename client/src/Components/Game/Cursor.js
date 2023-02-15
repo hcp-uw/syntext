@@ -22,10 +22,10 @@ const Cursor = (props) => {
     resetCursorBlinkAnimation(cursorEl);
 
     if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') { // We are after a tab character
-      cursorEl.style.left = (position.left + 25) + 'px';
+      cursorEl.style.left = (position.left + 60) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else if (!check) { // Normal letter
-      cursorEl.style.left = (position.left + 8) + 'px';
+      cursorEl.style.left = (position.left + 20) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else { // New Line
       cursorEl.style.left = (position.left - 1) + 'px';
