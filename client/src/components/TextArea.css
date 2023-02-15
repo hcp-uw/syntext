@@ -28,10 +28,10 @@ input {
   user-select: none;
 }
 
-.center {
+/* .center {
   padding-left: 35%;
   padding-top: 5%;
-}
+} */
 
 .correct {
   color: black;

@@ -33,9 +33,7 @@ const Word = (props) => {
 			userInput,
 			lineIndex,
 			wordActive,
-			currentWord,
-			cursorIsVisible,
-			setCursorIsVisible
+			cursorIsVisible
 	} = props
 
 
@@ -172,9 +170,11 @@ export default function TextArea1({ lines }) {
 			setWordIndex(0);
 			setUserInput('');
 			event.preventDefault();
-		} else if (event.key == 'Tab') {
-		 	event.preventDefault();
-			setUserInput(userInput.concat('	'));
+		} else if (event.key === 'Tab') {
+			if (currentWord[letterIndex + 1] === '	') {
+				setUserInput(userInput.concat('	'));
+			}
+			event.preventDefault();
 		}
 	}
 
