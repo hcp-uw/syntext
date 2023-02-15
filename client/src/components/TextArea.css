@@ -28,11 +28,6 @@ input {
   user-select: none;
 }
 
-/* .center {
-  padding-left: 35%;
-  padding-top: 5%;
-} */
-
 .correct {
   color: black;
 }
@@ -46,6 +41,6 @@ input {
   color: red;
 }
 
-.active {
-   background-color: lightblue;
-}
+/* .active {
+  background-color: lightblue;
+} */
