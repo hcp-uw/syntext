@@ -9,6 +9,8 @@ import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
 import './index.css';
 
+import NewNavBar from './Components/NewNavBar/NewNavBar.js';
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -20,15 +22,8 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 const App = () => {
 	return(
 		<>
-			<body>
-		<Container fluid>
-			<Row>
-			<Navbar>
-				<Container fluid>
-				<Navbar.Brand className="logo" style={{fontSize: "2.5em", color: "rgba(125, 97, 95, 1)", paddingLeft: 12}} href="/">Synte&gt;&lt;t</Navbar.Brand>
-				<Navbar.Text style={{color: "white"}}><IconNavBar /></Navbar.Text>
-				</Container>
-			</Navbar>
+		<body>
+		<NewNavBar />
 			{/* <Stack direction="horizontal" gap={2}>
 				<Col md="auto">
 				<div className='ms-auto logo' style={{padding: 10}}><Logo /></div>
@@ -104,7 +99,6 @@ const App = () => {
 			<Col md={{offset: 2, span: 3}} style={{paddingTop: 20, paddingLeft: 50}}><Methods /></Col>
 			<Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
 			</Row>
-		</Container>
 		</Container>
 
 		</body>
