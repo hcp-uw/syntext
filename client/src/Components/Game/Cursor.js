@@ -21,10 +21,11 @@ const Cursor = (props) => {
     let cursorEl = document.querySelector('.cursor');
     resetCursorBlinkAnimation(cursorEl);
 
-    if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') { // We are after a tab character
+    // Tab Character
+    if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') {
       cursorEl.style.left = (position.left + 60) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
-    } else if (!check) { // Normal letter
+    } else if (!check) { // Normal letterS
       cursorEl.style.left = (position.left + 20) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else { // New Line
