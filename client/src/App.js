@@ -22,6 +22,26 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import './index.css';
 
 const App = () => {
+
+	const example =  {
+		id: 1,
+		SnippetType:'FOR_LOOP',
+		length: 'LONG',
+		data: ['int j = 20;',
+						'for (int i = 0; i < 10; i++) {',
+						'	System.out.print(j + " - " + i);',
+						'	if (i > j)',
+						'		System.out.println(" < 0")',
+						'	else',
+						'		System.out.println(" > 0")',
+						'	j -= 1;',
+						'}'
+				]
+	}
+
+
+
+
 	return(
 		<>
 		<NewNavBar />
@@ -33,14 +53,14 @@ const App = () => {
 			</Stack> */}
 			
 			
-			<TextArea/>
+			<TextArea lines={example.data}/>
 
 			<Row>
-			<Col> <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 20}}><RestartButton /></div></Col>
+			<Col> <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 0}}><RestartButton /></div></Col>
 			</Row>
 
 			<Row>
-			<Col style={{paddingTop: 100}}>.</Col>
+			<Col style={{paddingTop: 0}}>.</Col>
 			</Row>
 
 			<GameOptions/>
