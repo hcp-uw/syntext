@@ -28,6 +28,12 @@ const Methods = () => {
               color: #E5CDCD;
               border-radius: 18px;
             }
+
+            .toggled-button {
+              color: white;
+              
+            }
+            
           `}
         </style>
       <div class="Methods">
