@@ -2,6 +2,8 @@ import IconNavBar from "../IconNavBar/IconNavBar";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Navbar from 'react-bootstrap/Navbar';
+import '../../index.css';
+import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 const NewNavBar = () => {
     return(
