@@ -36,7 +36,7 @@ const Methods = () => {
             
           `}
         </style>
-      <div class="Methods">
+      <div className="Methods">
         <ButtonGroup >
           <Dropdown>
             <DropdownButton 

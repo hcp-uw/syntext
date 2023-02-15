@@ -7,8 +7,8 @@ import Logo from './Components/Logo/Logo';
 import Methods from './Components/Methods/Methods';
 import RestartButton from './Components/RestartButton/RestartButton';
 import Timer from './Components/Timer/Timer'; 
-import './index.css';
 
+import TextArea from './Components/Game/TextArea';
 import NewNavBar from './Components/NewNavBar/NewNavBar';
 
 import GameOptions from "./Components/GameOptions/GameOptions";
@@ -19,12 +19,11 @@ import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import Navbar from 'react-bootstrap/Navbar';
 import "bootstrap/dist/css/bootstrap-grid.min.css";
-
+import './index.css';
 
 const App = () => {
 	return(
 		<>
-		<body>
 		<NewNavBar />
 			{/* <Stack direction="horizontal" gap={2}>
 				<Col md="auto">
@@ -33,29 +32,8 @@ const App = () => {
 				<Col md={{offset: 9}}>profile</Col>
 			</Stack> */}
 			
-
-			{/* <Container> */}
-			<Row>
-				<Col md={{span: 1, offset: 0}} style={{fontSize: "1.8em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110, paddingTop: 120}}>1</Col>
-				<Col md={{span: 7}} style={{fontSize: "1.6em", color: "rgba(125, 97, 95, 1)", paddingLeft: 90, paddingTop: 120, whiteSpace: "no-wrap"}}>public static void main (String[] args) &#123;</Col>
-				<Col md={{offset: 1}} style={{fontSize: "1.8em", color: "rgba(125, 97, 95, 1)", paddingTop: 40, paddingLeft: "12%"}}>0:20</Col>
-			</Row>
-			{/* </Container> */}
-
-			<Row>
-			<Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>2</Col>
-			<Col style={{fontSize: "1.6em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>Scanner console = new Scanner(System.in);</Col>
-			</Row>
-
-			<Row>
-			<Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>3</Col>
-			<Col style={{fontSize: "1.6em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}>int numPrints = console.nextInt();</Col>
-			</Row>
-
-			<Row>
-			<Col md={{span: 1, offset: 0}} style={{fontSize: "2em", color: "rgba(180, 148, 141, 1)", paddingLeft: 110}}>4</Col>
-			<Col style={{fontSize: "1.6em", color: "rgba(209, 145, 143, 1)", paddingLeft: 150}}> hello guys</Col>
-			</Row>
+			
+			<TextArea/>
 
 			<Row>
 			<Col> <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 20}}><RestartButton /></div></Col>
@@ -67,7 +45,6 @@ const App = () => {
 
 			<GameOptions/>
 			
-		</body>
 		</>
 	)
   }
