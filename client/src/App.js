@@ -64,8 +64,9 @@ const App = () => {
 			<Row>
 			<Col style={{paddingTop: 100}}>.</Col>
 			</Row>
-
-			<GameOptions/>
+			<Row>
+				<Col><GameOptions/></Col>
+			</Row>
 		</body>
 		</>
 	)

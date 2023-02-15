@@ -16,11 +16,10 @@ const GameOptions = () => {
 	return(
 		<>
 		<Container fluid>
-			<body></body>
 			style={{position: "sticky"}}
 			<Row>
 			<Col>
-			<div style={{
+			<div className="test" style={{
 				color: "rgba(75, 75, 75, 1)",
 				display: 'flex',
 				paddingTop: 40,
