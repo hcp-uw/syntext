@@ -15,7 +15,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 const GameOptions = () => {
 	return(
 		<>
-		<Container fluid>
+		<Container>
 			style={{position: "sticky"}}
 			<Row>
 			<Col>
@@ -54,4 +54,4 @@ const GameOptions = () => {
     )
 }
 
-export default GameMode;
+export default GameOptions;

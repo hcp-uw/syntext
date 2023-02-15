@@ -67,6 +67,7 @@ const App = () => {
 			<Row>
 				<Col><GameOptions/></Col>
 			</Row>
+			
 		</body>
 		</>
 	)
