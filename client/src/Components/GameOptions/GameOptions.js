@@ -15,41 +15,12 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 const GameOptions = () => {
 	return(
 		<>
-		<Container>
-			style={{position: "sticky"}}
 			<Row>
-			<Col>
-			<div className="test" style={{
-				color: "rgba(75, 75, 75, 1)",
-				display: 'flex',
-				paddingTop: 40,
-				alignItems: 'center',
-				justifyContent: 'center',
-				}}>
-				ctrl + n to skip
-				</div>
-			</Col>
+			<Col md={{offset: 1, span: 1}} style={{paddingTop: 0}}>language</Col>
+			<Col md={{offset: 2, span: 3}} style={{paddingTop: 0, paddingLeft: 50}}><Methods /></Col>
+			<Col md={{offset: 2, span: 1}} style={{paddingTop: 0}}>mode</Col>
 			</Row>
-
-			<Row>
-			<Col>
-			<div style={{
-				color: "rgba(75, 75, 75, 1)",
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				}}>
-				ctrl + r to restart
-				</div>
-			</Col>
-			</Row>
-
-			<Row>
-			<Col md={{offset: 1, span: 1}} style={{paddingTop: 20}}>language</Col>
-			<Col md={{offset: 2, span: 3}} style={{paddingTop: 20, paddingLeft: 50}}><Methods /></Col>
-			<Col md={{offset: 2, span: 1}} style={{paddingTop: 20}}>mode</Col>
-			</Row>
-		</Container>
+		
         </>
     )
 }
