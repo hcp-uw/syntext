@@ -202,7 +202,7 @@ export default function TextArea({ lines }) {
 	return (
 		<div className={'text-area-container'}>	
 			<div className={`center`}>
-				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
+				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange} autoCorrect={'off'} autoCapitalize={'off'}></input>
 				{renderedLines}
 				<br></br>
 				<Cursor letterIndex={letterIndex} wordIndex={wordIndex}/>
