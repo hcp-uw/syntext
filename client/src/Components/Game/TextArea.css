@@ -1,0 +1,57 @@
+/* @font-face {
+  font-family: cascadia-mono;
+  src: url('../../public/fonts/CascadiaMono-Regular.ttf') format("truetype");
+} */
+
+.text-area-container {
+  width: 100%;
+  height: 30%;
+  margin-left: 10%;
+}
+
+.text-area-container .center {
+  height:30%
+}
+
+body {
+  font-family: Consolas, monospace;
+  color: rgb(148, 148, 148);
+  white-space: pre;
+}
+
+input {
+  position: absolute;
+  width: 90%;
+  height: 40%;
+  top: 20%;
+  left: 0;
+  opacity: 0%;
+}
+
+.word {
+  padding-right: 1em;
+  tab-size: 3;
+}
+
+.letter {
+  display: inline-block;
+  user-select: none;
+  font-size:34px;
+}
+
+.correct {
+  color: black;
+}
+
+.visited {
+  color: black;
+}
+
+.incorrect {
+  text-decoration: underline red;
+  color: red;
+}
+
+/* .active {
+  background-color: lightblue;
+} */
