@@ -31,9 +31,9 @@ const App = () => {
 						'for (int i = 0; i < 10; i++) {',
 						'	System.out.print(j + " - " + i);',
 						'	if (i > j)',
-						'		System.out.println(" < 0")',
+						'		System.out.println(" < 0");',
 						'	else',
-						'		System.out.println(" > 0")',
+						'		System.out.println(" > 0");',
 						'	j -= 1;',
 						'}'
 				]
