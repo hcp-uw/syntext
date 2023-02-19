@@ -6,11 +6,7 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-.logo {
-  padding-left: 15%;
-  
-  transform: translate(50%, 0);
-}
+
 
 /* .rectangle {
   overflow-x: hidden;

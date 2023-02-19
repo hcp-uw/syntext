@@ -1,6 +1,5 @@
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -11,32 +10,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 const Methods = () => {
     return(
       <>
-        <style type="text/css">
-          {`
-            .btn-custom {
-              background-color: #BC8785;
-              color: white;
-              border-radius: 18px;
-              border-top-right-radius: 0px !important;
-              border-bottom-right-radius: 0px !important;
-              border-right-color: #E5CDCD;
-              margin-right: 1px;
-            }
-
-            .btn-sides {
-              background-color: #BC8785;
-              color: #E5CDCD;
-              border-radius: 18px;
-            }
-
-            .toggled-button {
-              color: white;
-              
-            }
-            
-          `}
-        </style>
-      <div className="Methods">
+        
+      <div className="methods-container">
         <ButtonGroup >
           <Dropdown>
             <DropdownButton 

@@ -1,0 +1,29 @@
+.methods-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+}
+
+.methods-container .btn-custom {
+    background-color: #BC8785;
+    color: white;
+    border-radius: 18px;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-right-color: #E5CDCD;
+    margin-right: 1px;
+}
+
+.methods-container .btn-sides {
+    background-color: #BC8785;
+    color: #E5CDCD;
+    border-radius: 18px;
+}
+
+.methods-container .toggled-button {
+    color: white;
+    
+}
+            
+

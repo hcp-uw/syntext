@@ -4,39 +4,33 @@
 } */
 
 .text-area-container {
-  width: 100%;
-  height: 30%;
-  margin-left: 10%;
-}
-
-.text-area-container .center {
-  height:30%
-}
-
-body {
+  position: relative;
   font-family: Consolas, monospace;
+  font-size: 150%;
   color: rgb(148, 148, 148);
   white-space: pre;
+  margin-left: 5%;
 }
 
-input {
-  position: absolute;
+.text-area-container input {
+  position:absolute;
   width: 90%;
-  height: 40%;
-  top: 20%;
-  left: 0;
+  height: 100%;
   opacity: 0%;
 }
 
+.line {
+  padding-bottom: 5px;
+}
+
 .word {
-  padding-right: 1em;
+  padding-right: 0.4em;
   tab-size: 3;
 }
 
 .letter {
   display: inline-block;
   user-select: none;
-  font-size:34px;
 }
 
 .correct {

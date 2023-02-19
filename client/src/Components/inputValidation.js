@@ -1,4 +1,7 @@
-const atEndOfLine = (wIndex, cLine) => wIndex === cLine.length - 1;
+const atEndOfLine = (wIndex, cLine) => {
+    console.log('wIndex.current: ', wIndex.current,'cline.length', cLine)
+    return wIndex.current  === cLine.current.length - 1;
+}
 
 const atEndOfWord = (cWord, uInput) => cWord.length === uInput.length;
 
