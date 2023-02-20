@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow } from '../inputValidation'
 import Cursor from '../Cursor/Cursor';
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import stylesheet from './TextArea.css'
 
 
 const Letter = (props) => {
-	const { 
+	const {
 			letterActual,
 			letterTyped,
 			isCorrect,
@@ -19,7 +18,7 @@ const Letter = (props) => {
 	} = props
 
 	const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
-	
+
 	let className = '';
 	if (inActiveWord && hasBeenTyped) className = isCorrect ? ' correct' : ' incorrect';
 	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';

@@ -1,1 +1,1 @@
-### NPM I BOOTSTRAP, REACT-BOOTSTRAP
+### npm i bootstrap react-bootstrap
