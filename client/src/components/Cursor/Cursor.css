@@ -1,10 +1,11 @@
 .cursor {
-  height: 1.4em;
+  height: 1.6em;
   width: 1.5px;
   /* border-radius: 10% 10%; */
   background-color: black;
   position: absolute;
-  padding-top: 0.1em;
+  margin-top: 0.5em;
+  margin-left: 0.25em;
   left: 0;
   top: 0;
   transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.05s;

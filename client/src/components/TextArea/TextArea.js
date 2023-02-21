@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow } from '../inputValidation'
 import Cursor from '../Cursor/Cursor';
-import Col from "react-bootstrap/Col";
 import stylesheet from './TextArea.css'
 
 
 const Letter = (props) => {
-	const {
+	const { 
 			letterActual,
 			letterTyped,
 			isCorrect,
@@ -18,7 +17,7 @@ const Letter = (props) => {
 	} = props
 
 	const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
-
+	
 	let className = '';
 	if (inActiveWord && hasBeenTyped) className = isCorrect ? ' correct' : ' incorrect';
 	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';
@@ -153,20 +152,23 @@ export default function TextArea(props) {
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
-			if (currWord[letterIndex.current + 1] === '	') {
+			console.log('currWord letterIndex:', currWord[(letterIndex.current)])
+			if (currWord[letterIndex.current] === '\t') {
+				console.log('tab was pressed')
 				setUserInput(userInput.concat('\t'));
 			}
 			event.preventDefault();
 		} 
 		// Backspace key handler
 		else if (event.key === 'Backspace') {
-			letterIndex.current -= 2;
-			setUserInput(userInput.substring(0, userInput.length - 1));
-
+			if (letterIndex.current >= 1) {
+				letterIndex.current -= 2;
+				setUserInput(userInput.substring(0, userInput.length - 1));
+			}
 			event.preventDefault();
 		}
 	}
-
+	
 	// handles all characters that are displayed
 	function handleChange(event) {
 		if (allowedToOverflow(currWord, event.target.value))
@@ -189,11 +191,13 @@ export default function TextArea(props) {
 	});
 
 	return (
-
-		<div className={'text-area-container'}>
-			<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
-			{renderedLines}
-			<Cursor letterIndex={letterIndex} currWord={currWord}/>
-		</div>
+		<>
+			<Cursor userInput={userInput} currWord={currWord}/>
+			<div className={'text-area-container'}>
+				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
+				{renderedLines}
+				
+			</div>
+		</>
 	);
 }
