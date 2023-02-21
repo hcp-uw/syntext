@@ -33,10 +33,10 @@ const Cursor = (props) => {
       cursorEl.style.left = (position.left + 34) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else if (!check) { // Normal letter
-      cursorEl.style.left = (position.left + 8) + 'px';
+      cursorEl.style.left = (position.left + 10) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else { // New Line
-      cursorEl.style.left = (position.left - 1) + 'px';
+      cursorEl.style.left = (position.left - 4) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     }
   }
