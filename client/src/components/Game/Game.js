@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import TextArea from '../TextArea/TextArea';
 import RestartButton from "../RestartButton/RestartButton";
 import GameOptions from '../GameOptions/GameOptions';
+import GameSummary from '../GameSummary/GameSummary';
 
 const Game = ({ lines }) => {
     // what the user has typed so far for the current word
@@ -25,8 +26,9 @@ const Game = ({ lines }) => {
 	const letterIndex = useRef(-1)
 
     return (
+		<>
 		<div className="game-container">
-			<TextArea
+			{/* <TextArea
 				lines={lines} 
 				userInput={userInput}
 				setUserInput={setUserInput}
@@ -50,8 +52,10 @@ const Game = ({ lines }) => {
 				wordIndex={wordIndex}
 				letterIndex={letterIndex}
 			/>
-			<GameOptions/>
+			<GameOptions/> */}
 		</div>
+		<GameSummary/>
+		</>
     );
 }
 

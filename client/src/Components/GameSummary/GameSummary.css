@@ -1,0 +1,9 @@
+.game-summary {
+  position: absolute;
+  width: 60%;
+  height: 75%;
+  top: 12.5%;
+  left: 20%;
+  border-radius: 2.5%/4%;
+  background-color: #967d7c;
+}

@@ -1,7 +1,11 @@
+import stylesheet from './GameSummary.css';
+
 const GameSummary = () => {
   return (
     <>
-      <div>meow</div>
+      <div className='game-summary'>
+        
+      </div>
     </>
   )
 }
