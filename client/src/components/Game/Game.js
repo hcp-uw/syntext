@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import TextArea from '../TextArea/TextArea';
 import RestartButton from "../RestartButton/RestartButton";
 import GameOptions from '../GameOptions/GameOptions';
-import GameRecorder from "../../services/GameRecorder";
+import Timer from "../Timer/Timer";
 
 const Game = ({ lines }) => {
     // what the user has typed so far for the current word
@@ -27,23 +27,19 @@ const Game = ({ lines }) => {
 
 	const [recording, setRecording] = useState(false);
 	
-	const [time, setTime] = useState(0);
-	console.log('time', time);
-	useEffect(() => {
-		let interval = null;
-  
-		if (recording) {
-			interval = setInterval(() => {
-				setTime((time) => time + 1);
-			}, 1000);
-		} else {
-			clearInterval(interval);
-		}
-		return () => {
-		clearInterval(interval);
-		};
-	}, [recording, time])
+	const time = useRef(0);
 
+	const numDel = useRef(0);
+
+	const data = useRef([[]]);
+	
+	
+	const tickTime = () => {
+		time.current++;
+		data.current[time.current] = [`sec ${time.current}`]
+		console.log('data', data.current)
+		return time.current;
+	} 
 
 	const startGame = () => {
 		setRecording(true);
@@ -57,14 +53,19 @@ const Game = ({ lines }) => {
         wordIndex.current = 0;
         letterIndex.current = -1;
 		setRecording(false);
-		setTime(0);
+		time.current = 0;
+		data.current = [];
 	}
 
-	console.log('recording', recording);
+
 
     return (
 		<div className="game-container">
+			<Timer recording={recording} tickTime={tickTime}/>
 			<TextArea
+				time={time}
+				data={data}
+				numDel={numDel}
 				recording={recording}
 				startGame={startGame}
 				lines={lines} 
@@ -79,7 +80,7 @@ const Game = ({ lines }) => {
 			/>
 			<RestartButton restartGame={restartGame}/>
 			<GameOptions/>
-			<div>{time}</div>
+			
 		</div>
     );
 }

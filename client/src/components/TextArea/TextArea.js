@@ -15,11 +15,11 @@ const Letter = (props) => {
 			cursor,
 			index
 	} = props
-
-	const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
 	
+	const letterDisplayed = (hasBeenTyped && inActiveWord && letterTyped !== undefined) ? letterTyped : letterActual
+	if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
 	let className = '';
-	if (inActiveWord && hasBeenTyped) className = isCorrect ? ' correct' : ' incorrect';
+	if (inActiveWord && hasBeenTyped && letterTyped !== undefined) className = isCorrect ? ' correct' : ' incorrect';
 	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';
 
 	return (<div className={`letter${className}`}>{letterDisplayed}</div>);
@@ -40,11 +40,11 @@ const Word = (props) => {
 		userInput.split('')
 		: word.split('')
 	const  correct = (wordActive && userInput.length > word.length) ?
-	(l, i) => (i >= word.length) ? false : (l === word[i]) :
-	(l, i) => l === userInput[i] || !wordActive || i > cursor.letterIndex.current
+	(l, i) => (i >= word.length) ? false : (l === word[i]) ://overflow
+	(l, i) => l === userInput[i] || !wordActive || i > cursor.letterIndex.current //inactive or default
 
 	const letters = lettersMapper.map((l, i) => {
-		const isCorrect = correct(l, i)
+		const isCorrect = correct(l, i) 
 		return (
 			<Letter
 				key={i}
@@ -94,6 +94,9 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 
 export default function TextArea(props) {
 	const { 
+		data,
+		time,
+		numDel,
 		recording,
 		startGame,
 		lines,
@@ -121,7 +124,8 @@ export default function TextArea(props) {
 		'overflow permission: ': allowedToOverflow,
 		'atEndOfWord': atEndOfWord(currWord, userInput),
 		'cursor': cursor,
-		'atEndOfLine': atEndOfLine(wordIndex, currLine)
+		'atEndOfLine': atEndOfLine(wordIndex, currLine),
+		'numDel': numDel.current
 		})
 	}
 
@@ -166,6 +170,7 @@ export default function TextArea(props) {
 			if (letterIndex.current >= 1) {
 				letterIndex.current -= 2;
 				setUserInput(userInput.substring(0, userInput.length - 1));
+				numDel.current++;
 			}
 			event.preventDefault();
 		}
@@ -174,6 +179,7 @@ export default function TextArea(props) {
 	// handles all characters that are displayed
 	function handleChange(event) {
 		if (!recording) startGame();
+		else data.current[time.current].push(event.target.value.charAt(event.target.value.length - 1))
 		if (allowedToOverflow(currWord, event.target.value))
 			setUserInput(event.target.value);
 	}
