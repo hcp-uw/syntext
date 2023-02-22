@@ -5,24 +5,22 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
-<<<<<<< HEAD
-    "dev": "nodemon devserver.js"
-=======
-    "dev": "nodemon server"
->>>>>>> 2f1874ce32d980b0b8820cd8df6c0d3909b385f1
+    "start": "nodemon server",
+    "dev": "nodemon devserver.js",
+    "localDBinit": "node ./local-db-scripts/create-tables && node ./local-db-scripts/clear-tables && node ./local-db-scripts/fill-tables"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "express": "^4.18.2",
     "nodemon": "^2.0.20"
-<<<<<<< HEAD
   },
   "dependencies": {
-    "json-server": "^0.17.1"
-=======
->>>>>>> 2f1874ce32d980b0b8820cd8df6c0d3909b385f1
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "jwt-token": "^1.0.9",
+    "mysql2": "^3.1.2"
   }
 }

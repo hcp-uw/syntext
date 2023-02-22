@@ -1,0 +1,7 @@
+snippet := 
+{
+    id : INT,
+    type : String,
+    length : String,
+    data : int[]
+}

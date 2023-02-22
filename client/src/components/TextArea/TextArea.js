@@ -94,6 +94,8 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 
 export default function TextArea(props) {
 	const { 
+		recording,
+		startGame,
 		lines,
 		userInput,
 		setUserInput,
@@ -107,7 +109,7 @@ export default function TextArea(props) {
 	const cursor = { lineIndex, wordIndex, letterIndex }
 
 	useEffect(() => {
-		console.log('useEffect called')
+		//console.log('useEffect called')
 		letterIndex.current = userInput.length;
 	}, [userInput, currWord])
 
@@ -125,7 +127,7 @@ export default function TextArea(props) {
 
 	// handles special keys seperately
 	const handleSpecialKey = event => {
-		console.log(event.key)
+		//console.log(event.key)
 		// Space key handler
 		if (atEndOfWord(currWord, userInput) && 
 			!atEndOfLine(wordIndex, currLine) &&
@@ -152,9 +154,9 @@ export default function TextArea(props) {
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
-			console.log('currWord letterIndex:', currWord[(letterIndex.current)])
+			//console.log('currWord letterIndex:', currWord[(letterIndex.current)])
 			if (currWord[letterIndex.current] === '\t') {
-				console.log('tab was pressed')
+				//console.log('tab was pressed')
 				setUserInput(userInput.concat('\t'));
 			}
 			event.preventDefault();
@@ -171,6 +173,7 @@ export default function TextArea(props) {
 	
 	// handles all characters that are displayed
 	function handleChange(event) {
+		if (!recording) startGame();
 		if (allowedToOverflow(currWord, event.target.value))
 			setUserInput(event.target.value);
 	}

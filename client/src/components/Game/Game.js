@@ -1,8 +1,9 @@
-import React, {useState, useRef } from "react";
+import React, {useState, useRef, useEffect } from "react";
 import ReactDOM from 'react-dom/client';
 import TextArea from '../TextArea/TextArea';
 import RestartButton from "../RestartButton/RestartButton";
 import GameOptions from '../GameOptions/GameOptions';
+import GameRecorder from "../../services/GameRecorder";
 
 const Game = ({ lines }) => {
     // what the user has typed so far for the current word
@@ -24,9 +25,48 @@ const Game = ({ lines }) => {
 	// updated with userInput (only on success though)
 	const letterIndex = useRef(-1)
 
+	const [recording, setRecording] = useState(false);
+	
+	const [time, setTime] = useState(0);
+	console.log('time', time);
+	useEffect(() => {
+		let interval = null;
+  
+		if (recording) {
+			interval = setInterval(() => {
+				setTime((time) => time + 1);
+			}, 1000);
+		} else {
+			clearInterval(interval);
+		}
+		return () => {
+		clearInterval(interval);
+		};
+	}, [recording, time])
+
+
+	const startGame = () => {
+		setRecording(true);
+	}
+
+	const restartGame = () => {
+		setUserInput('')
+        setCurrWord(lines[0].split(' ')[0])
+        currLine.current = lines[0].split(" ")
+        lineIndex.current = 0;
+        wordIndex.current = 0;
+        letterIndex.current = -1;
+		setRecording(false);
+		setTime(0);
+	}
+
+	console.log('recording', recording);
+
     return (
 		<div className="game-container">
 			<TextArea
+				recording={recording}
+				startGame={startGame}
 				lines={lines} 
 				userInput={userInput}
 				setUserInput={setUserInput}
@@ -37,20 +77,9 @@ const Game = ({ lines }) => {
 				wordIndex={wordIndex}
 				letterIndex={letterIndex}
 			/>
-			<RestartButton 
-				initialLine={lines[0].split(" ")}
-				initialWord={lines[0].split(' ')[0]}
-				lines={lines} 
-				userInput={userInput}
-				setUserInput={setUserInput}
-				currWord={currWord}
-				setCurrWord={setCurrWord}
-				currLine={currLine}
-				lineIndex={lineIndex}
-				wordIndex={wordIndex}
-				letterIndex={letterIndex}
-			/>
+			<RestartButton restartGame={restartGame}/>
 			<GameOptions/>
+			<div>{time}</div>
 		</div>
     );
 }
