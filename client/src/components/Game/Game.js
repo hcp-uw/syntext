@@ -36,8 +36,8 @@ const Game = ({ lines }) => {
 	
 	const tickTime = () => {
 		time.current++;
-		data.current[time.current] = [`sec ${time.current}`]
-		console.log('data', data.current)
+		data.current[time.current] = []
+		//console.log('data', data.current)
 		return time.current;
 	} 
 
@@ -52,9 +52,10 @@ const Game = ({ lines }) => {
         lineIndex.current = 0;
         wordIndex.current = 0;
         letterIndex.current = -1;
+		numDel.current = 0;
 		setRecording(false);
 		time.current = 0;
-		data.current = [];
+		data.current = [[]];
 	}
 
 

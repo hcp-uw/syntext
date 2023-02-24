@@ -11,11 +11,16 @@ const currWordHasMistake = (cWord, uInput) => {
     return res;
 }
 
+const isMistake = (c, currWord, letterIndex) => {
+    return c !== currWord[letterIndex]
+}
+
 const allowedToOverflow = (cWord, uInput) => cWord.length + 6 > uInput.length;
 
 module.exports = {
     atEndOfLine,
     atEndOfWord,
     currWordHasMistake,
-    allowedToOverflow
+    allowedToOverflow,
+    isMistake
 }

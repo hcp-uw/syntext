@@ -13,8 +13,8 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import './index.css';
 
 const App = () => {
-
-	const exdata = ['hello {', '\tgoodbye', '}']
+	console.log()
+	//const exdata = ['My name is Haley and I am a nice person', 'That is simply the truth', 'Nobody can deny it']
 
 	const example =  {
 		id: 1,
@@ -30,7 +30,7 @@ const App = () => {
 						'	j -= 1;',
 						'}'
 				]
-		// data: exdata
+		//  data: exdata
 	}
 
 

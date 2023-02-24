@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow } from '../inputValidation'
+import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow, isMistake } from '../inputValidation'
 import Cursor from '../Cursor/Cursor';
 import stylesheet from './TextArea.css'
 
@@ -17,7 +17,7 @@ const Letter = (props) => {
 	} = props
 	
 	const letterDisplayed = (hasBeenTyped && inActiveWord && letterTyped !== undefined) ? letterTyped : letterActual
-	if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
+	//if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
 	let className = '';
 	if (inActiveWord && hasBeenTyped && letterTyped !== undefined) className = isCorrect ? ' correct' : ' incorrect';
 	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';
@@ -120,14 +120,16 @@ export default function TextArea(props) {
 		console.table({'userInput': userInput,
 		'currWord: ': currWord,
 		'currWordHasMistakes: ': hasMistake,
-		'letterIndex: ': letterIndex,
+		'letterIndex: ': letterIndex.current,
 		'overflow permission: ': allowedToOverflow,
 		'atEndOfWord': atEndOfWord(currWord, userInput),
 		'cursor': cursor,
 		'atEndOfLine': atEndOfLine(wordIndex, currLine),
-		'numDel': numDel.current
+		'numDel': numDel.current,
 		})
 	}
+
+	console.log(data.current)
 
 	// handles special keys seperately
 	const handleSpecialKey = event => {
@@ -175,13 +177,17 @@ export default function TextArea(props) {
 			event.preventDefault();
 		}
 	}
-	
+	console.log('data', data.current)
 	// handles all characters that are displayed
 	function handleChange(event) {
 		if (!recording) startGame();
-		else data.current[time.current].push(event.target.value.charAt(event.target.value.length - 1))
+		
+		const keyTyped = event.target.value.charAt(event.target.value.length - 1)
+
+		if (!currWordHasMistake(currWord, userInput)) {data.current[time.current].push(keyTyped); console.log('test')}
+		
 		if (allowedToOverflow(currWord, event.target.value))
-			setUserInput(event.target.value);
+				setUserInput(event.target.value);
 	}
 
 	DEBUG(currWordHasMistake(currWord, userInput), allowedToOverflow(currWord, userInput));

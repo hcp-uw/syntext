@@ -5,20 +5,20 @@ const Cursor = (props) => {
   const { userInput, currWord } = props;
 
   useEffect(() => {
-    console.log('inside cursor effect')
+    //console.log('inside cursor effect')
     
     return () => {
       let activeWord = document.querySelector('.active');
       let letter = document.querySelector('.cursorPos');
 
-      console.log('activeWord: ', activeWord);
-      console.log('letter: ', letter);
+      //console.log('activeWord: ', activeWord);
+      //console.log('letter: ', letter);
 
       if (activeWord === null) {
         return;
       } else if (letter !== null) {
         moveCursor(letter.getBoundingClientRect());
-        console.log('letter position: ', letter.getBoundingClientRect());
+        //console.log('letter position: ', letter.getBoundingClientRect());
       } else if (letter === null) {
         moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
       }
