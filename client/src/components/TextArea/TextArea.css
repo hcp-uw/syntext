@@ -19,6 +19,11 @@
   opacity: 0%;
 }
 
+.line-number {
+  margin-right: 4%;
+  color:rgb(156, 86, 86);
+}
+
 .line {
   padding-bottom: 5px;
 }

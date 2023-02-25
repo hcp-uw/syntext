@@ -89,10 +89,17 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 	});
 	let className = '';
 	if (lineIndex < cursor.lineIndex.current) className = 'visited';
-	return <div className={className}>{words}</div>;
+	return (
+		<div className="line-container">
+			<span className="line-number">{lineIndex + 1}</span>
+			<span className={className}>{words}</span>
+		</div>
+	);
 }
 
 export default function TextArea(props) {
+	
+	
 	const { 
 		data,
 		time,
