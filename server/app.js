@@ -1,6 +1,7 @@
 const express = require('express')
 const readSnippetRouter = require('./controllers/readSnippets')
 const editSnippetRouter = require('./controllers/editSnippets')
+const cors = require('cors');
 
 // const serverURL = 'http://localhost:3001'
 // const routerURL = '/api/read'
@@ -8,14 +9,9 @@ const editSnippetRouter = require('./controllers/editSnippets')
 // const parameterURL = '?length=LONG'
 
 const app = express()
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+app.use(cors());
 app.use('/api/read', readSnippetRouter)
 app.use('/api/edit', editSnippetRouter)
-
 
 module.exports = app;
 

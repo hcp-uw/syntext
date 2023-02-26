@@ -4,10 +4,10 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import style from "./Methods.css"
+import style from "./SnippetOptions.css"
 import 'bootstrap/dist/css/bootstrap.css';
 
-const Methods = ({ selectedType, setSelectedType, selectedLength, setSelectedLength }) => {
+const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSelectedLength }) => {
   
 
   const handleLengthChange = (value) => {
@@ -37,7 +37,7 @@ const Methods = ({ selectedType, setSelectedType, selectedLength, setSelectedLen
 
   return(
     <>
-      <div className="methods-container">
+      <div className="snippet-options-container">
         <ButtonGroup>
           <Dropdown>
             <DropdownButton 
@@ -69,4 +69,4 @@ const Methods = ({ selectedType, setSelectedType, selectedLength, setSelectedLen
   )
 }
 
-export default Methods;
+export default SnippetOptions;

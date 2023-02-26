@@ -1,8 +1,7 @@
-import Methods from '../Methods/Methods.js'
+import SnippetOptions from '../SnippetOptions/SnippetOptions.js'
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import GameMode from '../GameMode/GameMode.js';
 import '../../index.css'
 import getSnippet from '../../services/snippetService.js'
 import Container from "react-bootstrap/Container";
@@ -34,7 +33,7 @@ const GameOptions = (props) => {
 
 	return(
 		<div className="game-options-container">
-				<Methods
+				<SnippetOptions
 					selectedType={selectedType} 
 					setSelectedType={setSelectedType} 
 					selectedLength={selectedLength} 
