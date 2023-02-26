@@ -2,32 +2,27 @@
 export const Data = [
   {
     id: 1,
-    year: 2016,
-    userGain: 80000,
-    userLost: 823
+    time: 0,
+    wpm: 70
   },
   {
     id: 2,
-    year: 2017,
-    userGain: 45677,
-    userLost: 345
+    time: 1,
+    wpm: 50
   },
   {
     id: 3,
-    year: 2018,
-    userGain: 78888,
-    userLost: 555
+    time: 2,
+    wpm: 60
   },
   {
     id: 4,
-    year: 2019,
-    userGain: 90000,
-    userLost: 4555
+    time: 3,
+    wpm: 65
   },
   {
     id: 5,
-    year: 2020,
-    userGain: 4300,
-    userLost: 234
+    time: 4,
+    wpm: 30
   }
 ];
