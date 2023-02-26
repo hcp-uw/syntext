@@ -5,9 +5,14 @@ import RestartButton from "../RestartButton/RestartButton";
 import GameOptions from '../GameOptions/GameOptions';
 import Timer from "../Timer/Timer";
 
-const Game = ({ lines }) => {
+const Game = ({defaultSnippet}) => {
     // what the user has typed so far for the current word
 	// cleared with wordIndex changes
+	const [lines, setLines] = useState(defaultSnippet);
+
+	console.log('lines', lines)
+	console.log('defaultSnippet',defaultSnippet)
+
 	const [userInput, setUserInput] = useState('');
 	// the actual current word.
 	// updated with wordIndex changes
@@ -32,6 +37,15 @@ const Game = ({ lines }) => {
 	const numDel = useRef(0);
 
 	const data = useRef([[]]);
+
+	const [selectedLength, setSelectedLength] = useState(1);
+
+  	const [selectedType, setSelectedType] = useState('snippet type');
+	
+	useEffect(() => {
+		currLine.current = lines[0].split(" ")
+		setCurrWord(lines[0].split(' ')[0])
+	}, [lines])
 	
 	
 	const tickTime = () => {
@@ -69,7 +83,7 @@ const Game = ({ lines }) => {
 				numDel={numDel}
 				recording={recording}
 				startGame={startGame}
-				lines={lines} 
+				lines={(lines)} 
 				userInput={userInput}
 				setUserInput={setUserInput}
 				currWord={currWord}
@@ -80,7 +94,14 @@ const Game = ({ lines }) => {
 				letterIndex={letterIndex}
 			/>
 			<RestartButton restartGame={restartGame}/>
-			<GameOptions/>
+			<GameOptions 
+				restartGame={() => restartGame()}
+				setLines={setLines}
+				selectedLength={selectedLength}
+				setSelectedLength={setSelectedLength}
+				selectedType={selectedType}
+				setSelectedType={setSelectedType}
+			/>
 			
 		</div>
     );

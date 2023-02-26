@@ -16,7 +16,8 @@ const App = () => {
 	console.log()
 	//const exdata = ['My name is Haley and I am a nice person', 'That is simply the truth', 'Nobody can deny it']
 
-	const example =  {
+	
+	const defaultSnippet =  {
 		id: 1,
 		SnippetType:'FOR_LOOP',
 		length: 'LONG',
@@ -39,7 +40,7 @@ const App = () => {
 	return(
 		<div className="app-container">
 			<NewNavBar/>
-			<Game lines={example.data}/>
+			<Game defaultSnippet={defaultSnippet.data}/>
 		</div>
 	)
   }
