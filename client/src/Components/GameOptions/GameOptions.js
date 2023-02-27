@@ -38,6 +38,7 @@ const GameOptions = (props) => {
 
 	return(
 		<div className="game-options-container">
+			<Row>
 				<SnippetOptions
 					selectedType={selectedType} 
 					setSelectedType={setSelectedType} 
@@ -51,7 +52,7 @@ const GameOptions = (props) => {
 					onClick={onNewSnippetClick}>new snippet 
 					<img  />
 					</Button>
-				
+			</Row>
         </div>
     )
 }

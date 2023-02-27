@@ -26,7 +26,7 @@ const getSnippetData = () => {
         {
             id: 4, 
             type:'FOR_LOOP',
-            length: 'MED',
+            length: 'MEDIUM',
             data: ['for (int i = 0; i < 10; i++) {',
                     '\tSystem.out.println(i);',
                     '}'    
@@ -35,7 +35,7 @@ const getSnippetData = () => {
         {
             id: 5, 
             type:'FOR_LOOP',
-            length: 'MED',  
+            length: 'MEDIUM',  
             data: ['for (int i = 0; i < rows; i++) {',
                     '\tfor (int j = 0; j < columns; j++) {',
                     '\t\tSystem.out.print("[" + i + "," + j + "] ");',
@@ -46,7 +46,7 @@ const getSnippetData = () => {
         {
             id: 6, 
             type:'CONDITIONAL',
-            length: 'MED',
+            length: 'MEDIUM',
             data: ['if (hours > 8) {',
                     '\treturn (rate * 8) + ((hours - 8) * (rate * 1.5));',
                     '}',
