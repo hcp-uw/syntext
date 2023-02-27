@@ -13,9 +13,14 @@ const currWordHasMistake = (cWord, uInput) => {
 
 const allowedToOverflow = (cWord, uInput) => cWord.length + 6 > uInput.length;
 
+const atEndOfGame = (lineIndex, lines) => {
+    return (lines.length === lineIndex + 1);
+}
+
 module.exports = {
     atEndOfLine,
     atEndOfWord,
     currWordHasMistake,
-    allowedToOverflow
+    allowedToOverflow,
+    atEndOfGame
 }

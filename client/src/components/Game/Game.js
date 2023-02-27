@@ -6,7 +6,7 @@ import GameOptions from '../GameOptions/GameOptions';
 import GameSummary from '../GameSummary/GameSummary';
 
 const Game = ({ lines }) => {
-    // what the user has typed so far for the current word
+  // what the user has typed so far for the current word
 	// cleared with wordIndex changes
 	const [userInput, setUserInput] = useState('');
 	// the actual current word.
@@ -25,11 +25,12 @@ const Game = ({ lines }) => {
 	// updated with userInput (only on success though)
 	const letterIndex = useRef(-1)
 
-    return (
-		<>
+	const [gameFinished, setGameFinished] = useState(false);
+
+	return (!gameFinished) ? (
 		<div className="game-container">
-			{/* <TextArea
-				lines={lines} 
+			<TextArea
+				lines={lines}
 				userInput={userInput}
 				setUserInput={setUserInput}
 				currWord={currWord}
@@ -38,11 +39,13 @@ const Game = ({ lines }) => {
 				lineIndex={lineIndex}
 				wordIndex={wordIndex}
 				letterIndex={letterIndex}
+				setGameFinished={setGameFinished}
+				// restartGame={restartGame}
 			/>
-			<RestartButton 
+			<RestartButton
 				initialLine={lines[0].split(" ")}
 				initialWord={lines[0].split(' ')[0]}
-				lines={lines} 
+				lines={lines}
 				userInput={userInput}
 				setUserInput={setUserInput}
 				currWord={currWord}
@@ -52,11 +55,14 @@ const Game = ({ lines }) => {
 				wordIndex={wordIndex}
 				letterIndex={letterIndex}
 			/>
-			<GameOptions/> */}
 		</div>
-		<GameSummary/>
-		</>
-    );
+  	) :
+		(
+			<div className="game-container">
+				<GameSummary gameFinished={gameFinished}/>
+				<GameOptions/>
+			</div>
+		);
 }
 
 export default Game;

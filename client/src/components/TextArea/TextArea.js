@@ -4,9 +4,8 @@ import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow } from 
 import Cursor from '../Cursor/Cursor';
 import stylesheet from './TextArea.css'
 
-
 const Letter = (props) => {
-	const { 
+	const {
 			letterActual,
 			letterTyped,
 			isCorrect,
@@ -17,7 +16,7 @@ const Letter = (props) => {
 	} = props
 
 	const letterDisplayed = (hasBeenTyped && inActiveWord) ? letterTyped : letterActual
-	
+
 	let className = '';
 	if (inActiveWord && hasBeenTyped) className = isCorrect ? ' correct' : ' incorrect';
 	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';
@@ -103,6 +102,7 @@ export default function TextArea(props) {
 		lineIndex,
 		wordIndex,
 		letterIndex,
+		setGameFinished
 	} = props;
 	const cursor = { lineIndex, wordIndex, letterIndex }
 
@@ -138,17 +138,27 @@ export default function TextArea(props) {
 			event.preventDefault();
 		}
 		// Enter key handler
-		else if (atEndOfWord(currWord, userInput) && 
+		else if (atEndOfWord(currWord, userInput) &&
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
 			event.key === 'Enter') {
-			currLine.current = (lines[lineIndex.current + 1].split(" "));
-			lineIndex.current++; 
-			setCurrWord((lines[lineIndex.current].split(" "))[0]);
-			wordIndex.current = 0;
-			letterIndex.current = -1;
-			setUserInput('');
-			event.preventDefault();
+
+				console.log('lines length ', lines.length)
+				console.log('line index ', lineIndex)
+				if (lines.length === lineIndex.current + 1) {
+					// restartGame();
+					setGameFinished(true);
+
+					console.log('inside!!!!!!!')
+				} else {
+					currLine.current = (lines[lineIndex.current + 1].split(" "));
+					lineIndex.current++;
+					setCurrWord((lines[lineIndex.current].split(" "))[0]);
+					wordIndex.current = 0;
+					letterIndex.current = -1;
+					setUserInput('');
+				}
+				event.preventDefault();
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
