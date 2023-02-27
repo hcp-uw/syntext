@@ -38,21 +38,26 @@ const GameOptions = (props) => {
 
 	return(
 		<div className="game-options-container">
+			<Container fluid>
 			<Row>
-				<SnippetOptions
-					selectedType={selectedType} 
-					setSelectedType={setSelectedType} 
-					selectedLength={selectedLength} 
-					setSelectedLength={setSelectedLength}
-				/>
-				<Button 
-					variant="newSnippet" 
-					id="newSnippetButton" 
-					value="newSnippet" 
-					onClick={onNewSnippetClick}>new snippet 
-					<img  />
+				<Col md={{span: 2, offset: 5}}>
+					<SnippetOptions
+						selectedType={selectedType} 
+						setSelectedType={setSelectedType} 
+						selectedLength={selectedLength} 
+						setSelectedLength={setSelectedLength}
+					/>
+				</Col>
+				<Col md={{offset: 2}}>
+					<Button 
+						variant="newSnippet" 
+						id="newSnippetButton" 
+						value="newSnippet" 
+						onClick={onNewSnippetClick}>new snippet 
 					</Button>
+				</Col>
 			</Row>
+			</Container>
         </div>
     )
 }

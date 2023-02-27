@@ -27,11 +27,13 @@ const Timer = ({ tickTime, recording }) => {
   const minute = Math.floor(time/60);
   const second = (time%60 > 9) ? time%60 : `0${time%60}`;
   return(
-    <Col md={{span: 1, offset: 9}}>
+    <Container fluid>
+    <Col xs={{span: 1, offset: 9}} sm={{span: 1, offset: 9}} md={{span: 1, offset: 10}}>
       <div className="timer-container" style={{style}}>
         <span className="time">{`${minute}:${second}`}</span>
       </div>
     </Col>
+    </Container>
   )
 }
 
