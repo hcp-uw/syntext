@@ -1,0 +1,20 @@
+.game-options-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+}
+
+.game-options-container .btn-newSnippet {
+    background-color: #BC8785;
+    color: white;
+    border-radius: 5px;
+    border-right-color: #E5CDCD;
+    margin-right: 1px;
+}
+
+.game-options-container .btn-newSnippet {
+    background-color: #BC8785;
+    color: #E5CDCD;
+    border-radius: 18px;
+}
