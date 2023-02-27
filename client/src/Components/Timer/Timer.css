@@ -1,7 +1,11 @@
-.timer {
+.timer-container {
     width: fit-content;
     max-height: fit-content;
     padding: 5% 5% 5% 5%;
     border-radius: 25%;
-    background-color: #BC8785;
+    background-color: #c48483;
+}
+
+.time {
+    color: white;
 }

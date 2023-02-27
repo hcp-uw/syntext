@@ -7,7 +7,7 @@
   position: relative;
   font-family: Consolas, monospace;
   font-size: 150%;
-  color: rgb(148, 148, 148);
+  color: #D1918F;
   white-space: pre;
   margin-left: 5%;
 }
@@ -21,7 +21,7 @@
 
 .line-number {
   margin-right: 4%;
-  color:rgb(156, 86, 86);
+  color:#B4948D;
 }
 
 .line {
@@ -39,11 +39,11 @@
 }
 
 .correct {
-  color: black;
+  color: #7D615F;
 }
 
 .visited {
-  color: black;
+  color: #7D615F;
 }
 
 .incorrect {

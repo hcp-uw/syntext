@@ -9,6 +9,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import Navbar from 'react-bootstrap/Navbar';
+
+import Button from 'react-bootstrap/Button';
+import next from './nextArrow';
+import "./GameOptions.css"
+
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 const GameOptions = (props) => {
@@ -39,7 +44,13 @@ const GameOptions = (props) => {
 					selectedLength={selectedLength} 
 					setSelectedLength={setSelectedLength}
 				/>
-				<button onClick={onNewSnippetClick}>new snippet</button>
+				<Button 
+					variant="newSnippet" 
+					id="newSnippetButton" 
+					value="newSnippet" 
+					onClick={onNewSnippetClick}>new snippet 
+					<img  />
+					</Button>
 				
         </div>
     )
