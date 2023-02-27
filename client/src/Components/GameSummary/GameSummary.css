@@ -17,13 +17,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70vw;
-  height: 50vh;
+  /* width: 70vw;
+  height: 50vh; */
   margin: auto;
 }
 
 .chart-container canvas {
-  height: 100px;
+  height: 25vh !important;
+  width: 50vw !important;
 }
 
 .scoreboard {

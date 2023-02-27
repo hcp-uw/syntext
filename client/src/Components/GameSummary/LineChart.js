@@ -21,7 +21,9 @@ function LineChart({ chartData }) {
                 font: { size: 18 }
               }},
             x: { ticks: { color: 'black' } }
-          }
+          },
+          responsive: true,
+          maintainAspectRatio: false
         }}
       />
     </div>
