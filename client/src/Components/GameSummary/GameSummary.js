@@ -24,6 +24,10 @@ export default function GameSummary() {
   return (
     <div className="game-summary">
       <LineChart chartData={chartData} />
+      <div className='scoreboard'>
+        <h2 id='wpm'>wpm:<span>999</span></h2>
+        <h2 id='acc'>acc:<span>100%</span></h2>
+      </div>
     </div>
   );
 }

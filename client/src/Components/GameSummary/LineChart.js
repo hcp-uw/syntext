@@ -11,7 +11,15 @@ function LineChart({ chartData }) {
             legend: { display: false }
           },
           scales: {
-            y: { ticks: { color: 'black' } },
+            y: {
+              ticks: {
+                color: 'black'
+              },
+              title: {
+                display: true,
+                text: 'words per minute',
+                font: { size: 18 }
+              }},
             x: { ticks: { color: 'black' } }
           }
         }}
