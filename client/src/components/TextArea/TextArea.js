@@ -4,7 +4,6 @@ import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow, isMist
 import Cursor from '../Cursor/Cursor';
 import stylesheet from './TextArea.css'
 
-
 const Letter = (props) => {
 	const { 
 			letterActual,
@@ -101,7 +100,7 @@ export default function TextArea(props) {
 
 
 	const { 
-		data,
+		dataTyped,
 		time,
 		numDel,
 		recording,
@@ -127,18 +126,18 @@ export default function TextArea(props) {
 
 	const DEBUG = (hasMistake, allowedToOverflow) => {
 		console.table({'userInput': userInput,
-		'currWord: ': currWord,
-		'currWordHasMistakes: ': hasMistake,
-		'letterIndex: ': letterIndex.current,
-		'overflow permission: ': allowedToOverflow,
-		'atEndOfWord': atEndOfWord(currWord, userInput),
-		'cursor': cursor,
-		'atEndOfLine': atEndOfLine(wordIndex, currLine),
-		'numDel': numDel.current,
+			'currWord: ': currWord,
+			'currWordHasMistakes: ': hasMistake,
+			'letterIndex: ': letterIndex.current,
+			'overflow permission: ': allowedToOverflow,
+			'atEndOfWord': atEndOfWord(currWord, userInput),
+			'cursor': cursor,
+			'atEndOfLine': atEndOfLine(wordIndex, currLine),
+			'numDel': numDel.current,
 		})
 	}
 
-	console.log(data.current)
+	console.log(dataTyped.current)
 
 	// handles special keys seperately
 	const handleSpecialKey = event => {
@@ -193,14 +192,14 @@ export default function TextArea(props) {
 			event.preventDefault();
 		}
 	}
-	console.log('data', data.current)
+
 	// handles all characters that are displayed
 	function handleChange(event) {
 		if (!recording) startGame();
 		
 		const keyTyped = event.target.value.charAt(event.target.value.length - 1)
 
-		if (!currWordHasMistake(currWord, userInput)) {data.current[time.current].push(keyTyped); console.log('test')}
+		if (!currWordHasMistake(currWord, userInput)) {dataTyped.current[time.current].push(keyTyped); console.log('test')}
 		
 		if (allowedToOverflow(currWord, event.target.value))
 				setUserInput(event.target.value);
