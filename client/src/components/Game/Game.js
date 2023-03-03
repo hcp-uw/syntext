@@ -36,8 +36,8 @@ const Game = ({defaultSnippet}) => {
 
 	const numDel = useRef(0);
 
-	const data = useRef([[]]);
-	console.log(data)
+	const dataTyped = useRef([[]]);
+
 	const [selectedLength, setSelectedLength] = useState(1);
 
   const [selectedType, setSelectedType] = useState('snippet type');
@@ -49,7 +49,7 @@ const Game = ({defaultSnippet}) => {
 
 	const tickTime = () => {
 		time.current++;
-		data.current[time.current] = []
+		dataTyped.current[time.current] = []
 		//console.log('data', data.current)
 		return time.current;
 	}
@@ -68,7 +68,7 @@ const Game = ({defaultSnippet}) => {
 		numDel.current = 0;
 		setRecording(false);
 		time.current = 0;
-		data.current = [[]];
+		dataTyped.current = [[]];
 	}
 
 
@@ -78,7 +78,7 @@ const Game = ({defaultSnippet}) => {
 			<Timer recording={recording} tickTime={tickTime}/>
 			<TextArea
 				time={time}
-				data={data}
+				dataTyped={dataTyped}
 				numDel={numDel}
 				recording={recording}
 				startGame={startGame}
