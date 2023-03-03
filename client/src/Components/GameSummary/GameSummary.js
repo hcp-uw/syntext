@@ -5,6 +5,10 @@ import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import LineChart from "./LineChart";
 
+// Character array: [[i, n, t], [i, =, 1, ;, m, e], [o, w]]
+// Error array: [0, 1, 5]
+
+
 export default function GameSummary() {
   const [chartData, setChartData] = useState({
     labels: Data.map((data) => data.time),

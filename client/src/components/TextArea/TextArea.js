@@ -98,8 +98,8 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 }
 
 export default function TextArea(props) {
-	
-	
+
+
 	const { 
 		data,
 		time,
@@ -115,6 +115,8 @@ export default function TextArea(props) {
 		lineIndex,
 		wordIndex,
 		letterIndex,
+		GameFinished,
+		setGameFinished
 	} = props;
 	const cursor = { lineIndex, wordIndex, letterIndex }
 
@@ -157,13 +159,20 @@ export default function TextArea(props) {
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
 			event.key === 'Enter') {
-			currLine.current = (lines[lineIndex.current + 1].split(" "));
-			lineIndex.current++; 
-			setCurrWord((lines[lineIndex.current].split(" "))[0]);
-			wordIndex.current = 0;
-			letterIndex.current = -1;
-			setUserInput('');
-			event.preventDefault();
+				console.log('lines length ', lines.length)
+				console.log('line index ', lineIndex)
+				if (lines.length === lineIndex.current + 1) {
+					// restartGame();
+					setGameFinished(true);
+				} else {
+					currLine.current = (lines[lineIndex.current + 1].split(" "));
+					lineIndex.current++;
+					setCurrWord((lines[lineIndex.current].split(" "))[0]);
+					wordIndex.current = 0;
+					letterIndex.current = -1;
+					setUserInput('');
+				}
+				event.preventDefault();
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
