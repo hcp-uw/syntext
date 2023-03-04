@@ -1,0 +1,2 @@
+
+GET http://localhost:3001/api/read/get/length?length=LONG

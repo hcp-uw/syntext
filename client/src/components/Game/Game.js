@@ -1,13 +1,16 @@
-import React, {useState, useRef } from "react";
+import React, {useState, useRef, useEffect } from "react";
 import ReactDOM from 'react-dom/client';
 import TextArea from '../TextArea/TextArea';
 import RestartButton from "../RestartButton/RestartButton";
 import GameOptions from '../GameOptions/GameOptions';
 import GameSummary from '../GameSummary/GameSummary';
+import Timer from "../Timer/Timer";
 
-const Game = ({ lines }) => {
-  // what the user has typed so far for the current word
+const Game = ({defaultSnippet}) => {
+    // what the user has typed so far for the current word
 	// cleared with wordIndex changes
+	const [lines, setLines] = useState(defaultSnippet);
+
 	const [userInput, setUserInput] = useState('');
 	// the actual current word.
 	// updated with wordIndex changes
@@ -25,12 +28,61 @@ const Game = ({ lines }) => {
 	// updated with userInput (only on success though)
 	const letterIndex = useRef(-1)
 
+	const [recording, setRecording] = useState(false);
+
 	const [gameFinished, setGameFinished] = useState(false);
 
-	return (!gameFinished) ? (
+	const time = useRef(0);
+
+	const numDel = useRef(0);
+
+	const dataTyped = useRef([[]]);
+
+	const [selectedLength, setSelectedLength] = useState(1);
+
+  const [selectedType, setSelectedType] = useState('snippet type');
+
+	useEffect(() => {
+		currLine.current = lines[0].split(" ")
+		setCurrWord(lines[0].split(' ')[0])
+	}, [lines])
+
+	const tickTime = () => {
+		time.current++;
+		dataTyped.current[time.current] = []
+		//console.log('data', data.current)
+		return time.current;
+	}
+
+	const startGame = () => {
+		setRecording(true);
+	}
+
+	const restartGame = () => {
+		setUserInput('')
+        setCurrWord(lines[0].split(' ')[0])
+        currLine.current = lines[0].split(" ")
+        lineIndex.current = 0;
+        wordIndex.current = 0;
+        letterIndex.current = -1;
+		numDel.current = 0;
+		setRecording(false);
+		time.current = 0;
+		dataTyped.current = [[]];
+	}
+
+
+
+    return (!gameFinished) ? (
 		<div className="game-container">
+			<Timer recording={recording} tickTime={tickTime}/>
 			<TextArea
-				lines={lines}
+				time={time}
+				dataTyped={dataTyped}
+				numDel={numDel}
+				recording={recording}
+				startGame={startGame}
+				lines={lines} 
 				userInput={userInput}
 				setUserInput={setUserInput}
 				currWord={currWord}
@@ -40,23 +92,18 @@ const Game = ({ lines }) => {
 				wordIndex={wordIndex}
 				letterIndex={letterIndex}
 				setGameFinished={setGameFinished}
-				// restartGame={restartGame}
 			/>
-			<RestartButton
-				initialLine={lines[0].split(" ")}
-				initialWord={lines[0].split(' ')[0]}
-				lines={lines}
-				userInput={userInput}
-				setUserInput={setUserInput}
-				currWord={currWord}
-				setCurrWord={setCurrWord}
-				currLine={currLine}
-				lineIndex={lineIndex}
-				wordIndex={wordIndex}
-				letterIndex={letterIndex}
+			<RestartButton restartGame={restartGame}/>
+			<GameOptions 
+				restartGame={() => restartGame()}
+				setLines={setLines}
+				selectedLength={selectedLength}
+				setSelectedLength={setSelectedLength}
+				selectedType={selectedType}
+				setSelectedType={setSelectedType}
 			/>
 		</div>
-  	) :
+    ) :
 		(
 			<div className="game-container">
 				<GameSummary gameFinished={gameFinished}/>
