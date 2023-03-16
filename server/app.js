@@ -13,5 +13,9 @@ app.use(cors());
 app.use('/api/read', readSnippetRouter)
 app.use('/api/edit', editSnippetRouter)
 
+app.get('/test', (req, res) => {
+    res.send("hello");
+})
+
 module.exports = app;
 

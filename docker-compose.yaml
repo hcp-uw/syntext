@@ -1,0 +1,19 @@
+version: "4.17"
+services:
+  server:
+    # path to folder
+    build: ./server
+    environment:
+      - PORT=3001
+    # names container
+    container_name: server_container
+    ports: 
+      - '3001:3001'
+    
+  client:
+    build: ./client
+    container_name: client_container
+    ports: 
+      - '3000:3000'
+    stdin_open: true
+    tty: true
