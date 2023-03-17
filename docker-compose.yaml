@@ -17,3 +17,11 @@ services:
       - '3000:3000'
     stdin_open: true
     tty: true
+
+  database:
+    ports:
+      - '13306:3306'
+    container_name: db_container
+    environment:
+      - MYSQL_ROOT_PASSWORD=Password
+    image: 'mysql/mysql-server:latest'
