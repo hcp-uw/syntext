@@ -1,27 +1,55 @@
 version: "4.17"
 services:
+  database:
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backend
+    ports:
+      - '13306:3306'
+    container_name: db_container
+    image: 'mysql/mysql-server:latest'
   server:
+    depends_on:
+      - database
     # path to folder
     build: ./server
+    restart: unless-stopped
+    env_file: ./.env
     environment:
-      - PORT=3001
+      - MYSQL_HOST=$MYSQL_HOST
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - DB_PORT=3306
     # names container
     container_name: server_container
     ports: 
       - '3001:3001'
+    networks:
+      - backend
+      - frontend
     
   client:
+    depends_on:
+      - server
     build: ./client
     container_name: client_container
     ports: 
       - '3000:3000'
-    stdin_open: true
-    tty: true
+    networks:
+      - frontend
+    # stdin_open: true
+    # tty: true
 
-  database:
-    ports:
-      - '13306:3306'
-    container_name: db_container
-    environment:
-      - MYSQL_ROOT_PASSWORD=Password
-    image: 'mysql/mysql-server:latest'
+volumes: 
+  db:
+
+networks:
+  backend:
+  frontend:
