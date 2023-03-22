@@ -5,7 +5,7 @@ import Cursor from '../Cursor/Cursor';
 import stylesheet from './TextArea.css'
 
 const Letter = (props) => {
-	const { 
+	const {
 			letterActual,
 			letterTyped,
 			isCorrect,
@@ -14,7 +14,7 @@ const Letter = (props) => {
 			cursor,
 			index
 	} = props
-	
+
 	const letterDisplayed = (hasBeenTyped && inActiveWord && letterTyped !== undefined) ? letterTyped : letterActual
 	//if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
 	let className = '';
@@ -97,9 +97,7 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 }
 
 export default function TextArea(props) {
-
-
-	const { 
+	const {
 		dataTyped,
 		time,
 		numDel,
@@ -114,8 +112,9 @@ export default function TextArea(props) {
 		lineIndex,
 		wordIndex,
 		letterIndex,
-		GameFinished,
-		setGameFinished
+		setGameFinished,
+		typingStatus,
+		setTypingStatus
 	} = props;
 	const cursor = { lineIndex, wordIndex, letterIndex }
 
@@ -134,7 +133,7 @@ export default function TextArea(props) {
 			'cursor': cursor,
 			'atEndOfLine': atEndOfLine(wordIndex, currLine),
 			'numDel': numDel.current,
-		})
+		});
 	}
 
 	console.log(dataTyped.current)
@@ -158,20 +157,17 @@ export default function TextArea(props) {
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
 			event.key === 'Enter') {
-				console.log('lines length ', lines.length)
-				console.log('line index ', lineIndex)
-				if (lines.length === lineIndex.current + 1) {
-					// restartGame();
-					setGameFinished(true);
-				} else {
-					currLine.current = (lines[lineIndex.current + 1].split(" "));
-					lineIndex.current++;
-					setCurrWord((lines[lineIndex.current].split(" "))[0]);
-					wordIndex.current = 0;
-					letterIndex.current = -1;
-					setUserInput('');
-				}
+			if (lines.length === lineIndex.current + 1) {
+				setGameFinished(true);
 				event.preventDefault();
+			}
+			currLine.current = (lines[lineIndex.current + 1].split(" "));
+			lineIndex.current++; 
+			setCurrWord((lines[lineIndex.current].split(" "))[0]);
+			wordIndex.current = 0;
+			letterIndex.current = -1;
+			setUserInput('');
+			event.preventDefault();
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
@@ -222,12 +218,11 @@ export default function TextArea(props) {
 
 	return (
 		<>
-			<Cursor userInput={userInput} currWord={currWord}/>
-			<div className={'text-area-container'}>
-				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange}></input>
+			<div className={'text-area-container'} >
+				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange} onFocus={() => setTypingStatus(true)} onBlur={() => setTypingStatus(false)}></input>
 				{renderedLines}
-				
 			</div>
+			<Cursor userInput={userInput} currWord={currWord} typingStatus={typingStatus} />
 		</>
 	);
 }
