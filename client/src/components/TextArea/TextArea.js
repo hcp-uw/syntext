@@ -4,6 +4,7 @@ import { atEndOfLine, atEndOfWord, currWordHasMistake, allowedToOverflow, isMist
 import Cursor from '../Cursor/Cursor';
 import stylesheet from './TextArea.css'
 
+
 const Letter = (props) => {
 	const {
 			letterActual,
@@ -15,11 +16,19 @@ const Letter = (props) => {
 			index
 	} = props
 
-	const letterDisplayed = (hasBeenTyped && inActiveWord && letterTyped !== undefined) ? letterTyped : letterActual
+	const letterDisplayed = (
+		hasBeenTyped && 
+		inActiveWord && 
+		letterTyped !== undefined
+	) ? letterTyped : letterActual
+
 	//if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
+	
 	let className = '';
-	if (inActiveWord && hasBeenTyped && letterTyped !== undefined) className = isCorrect ? ' correct' : ' incorrect';
-	if (inActiveWord && cursor.letterIndex.current  === index) className += ' cursorPos';
+	if (inActiveWord && hasBeenTyped && letterTyped !== undefined) 
+		className = isCorrect ? ' correct' : ' incorrect';
+	if (inActiveWord && cursor.letterIndex.current  === index) 
+		className += ' cursorPos';
 
 	return (<div className={`letter${className}`}>{letterDisplayed}</div>);
 }
@@ -35,10 +44,15 @@ const Word = (props) => {
 	} = props
 
 	let className = '';
-	const lettersMapper = (wordActive && userInput.length > word.length) ?
-		userInput.split('')
-		: word.split('')
-	const  correct = (wordActive && userInput.length > word.length) ?
+	const lettersMapper = (
+		wordActive && 
+		userInput.length > word.length
+	) ? userInput.split('') : word.split('');
+
+	const correct = (
+		wordActive && 
+		userInput.length > word.length
+	) ?
 	(l, i) => (i >= word.length) ? false : (l === word[i]) ://overflow
 	(l, i) => l === userInput[i] || !wordActive || i > cursor.letterIndex.current //inactive or default
 
@@ -98,7 +112,7 @@ const Line = ({ line, userInput, currWord, cursor, lineActive, lineIndex }) => {
 
 export default function TextArea(props) {
 	const {
-		dataTyped,
+		// dataTyped,
 		time,
 		numDel,
 		recording,
@@ -114,10 +128,12 @@ export default function TextArea(props) {
 		letterIndex,
 		setGameFinished,
 		typingStatus,
-		setTypingStatus
+		setTypingStatus,
+		typingProgress,
+		typingTarget
 	} = props;
 	const cursor = { lineIndex, wordIndex, letterIndex }
-
+	console.table('props', props)
 	useEffect(() => {
 		//console.log('useEffect called')
 		letterIndex.current = userInput.length;
@@ -133,10 +149,10 @@ export default function TextArea(props) {
 			'cursor': cursor,
 			'atEndOfLine': atEndOfLine(wordIndex, currLine),
 			'numDel': numDel.current,
+			'typingProgress': typingProgress
 		});
 	}
 
-	console.log(dataTyped.current)
 
 	// handles special keys seperately
 	const handleSpecialKey = event => {
@@ -150,6 +166,7 @@ export default function TextArea(props) {
 			wordIndex.current++;
 			letterIndex.current = (-1);
 			setUserInput('');
+			typingProgress.current += ' ';
 			event.preventDefault();
 		}
 		// Enter key handler
@@ -167,6 +184,7 @@ export default function TextArea(props) {
 			wordIndex.current = 0;
 			letterIndex.current = -1;
 			setUserInput('');
+			typingProgress.current += '\n';
 			event.preventDefault();
 		}
 		// Tab key handler
@@ -175,6 +193,7 @@ export default function TextArea(props) {
 			if (currWord[letterIndex.current] === '\t') {
 				//console.log('tab was pressed')
 				setUserInput(userInput.concat('\t'));
+				typingProgress.current += '\t';
 			}
 			event.preventDefault();
 		} 
@@ -195,7 +214,11 @@ export default function TextArea(props) {
 		
 		const keyTyped = event.target.value.charAt(event.target.value.length - 1)
 
-		if (!currWordHasMistake(currWord, userInput)) {dataTyped.current[time.current].push(keyTyped); console.log('test')}
+		if (!currWordHasMistake(currWord, userInput) && 
+			typingTarget.charAt(typingProgress.current.length) === keyTyped) {
+			typingProgress.current += keyTyped
+			console.log('added ' + keyTyped)
+		}
 		
 		if (allowedToOverflow(currWord, event.target.value))
 				setUserInput(event.target.value);
@@ -219,10 +242,20 @@ export default function TextArea(props) {
 	return (
 		<>
 			<div className={'text-area-container'} >
-				<input value={userInput} onKeyDown={handleSpecialKey} onChange={handleChange} onFocus={() => setTypingStatus(true)} onBlur={() => setTypingStatus(false)}></input>
+				<input value={userInput} 
+					onKeyDown={handleSpecialKey} 
+					onChange={handleChange} 
+					onFocus={() => setTypingStatus(true)} 
+					onBlur={() => setTypingStatus(false)}
+				/>
 				{renderedLines}
+				<Cursor 
+					userInput={userInput} 
+					currWord={currWord} 
+					typingStatus={typingStatus} 
+				/>
 			</div>
-			<Cursor userInput={userInput} currWord={currWord} typingStatus={typingStatus} />
+			
 		</>
 	);
 }

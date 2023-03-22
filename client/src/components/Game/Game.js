@@ -38,7 +38,13 @@ const Game = ({defaultSnippet}) => {
 
 	const numDel = useRef(0);
 
-	const dataTyped = useRef([[]]);
+	const dataTyped = useRef([]);
+
+	const typingTarget = lines.join('\n');
+
+	const typingProgress = useRef('');
+
+	const snapshot = useRef(['']);
 
 	const [selectedLength, setSelectedLength] = useState(1);
 
@@ -49,16 +55,24 @@ const Game = ({defaultSnippet}) => {
 		setCurrWord(lines[0].split(' ')[0])
 	}, [lines])
 
+	
 	const tickTime = () => {
+		snapshot.current[time.current + 1] = typingProgress.current
+		dataTyped.current[time.current] = snapshot.current[time.current + 1].length - snapshot.current[time.current].length;
 		time.current++;
-		dataTyped.current[time.current] = []
-		//console.log('data', data.current)
 		return time.current;
 	}
 
+	
 	const startGame = () => {
 		setRecording(true);
 	}
+
+	console.log('data: ', dataTyped.current)
+	console.log('snap: ', snapshot.current)
+	console.log('target: ' + typingTarget.length + '\n' + typingTarget)
+	console.log('progress: ' + typingProgress.current.length + '\n' + typingProgress.current)
+
 
 	const restartGame = () => {
 		setUserInput('')
@@ -71,6 +85,8 @@ const Game = ({defaultSnippet}) => {
 		setRecording(false);
 		time.current = 0;
 		dataTyped.current = [[]];
+		typingProgress.current = ''
+		snapshot.current = ['']
 	}
 
 
@@ -80,7 +96,7 @@ const Game = ({defaultSnippet}) => {
 			<Timer recording={recording} tickTime={tickTime}/>
 			<TextArea
 				time={time}
-				dataTyped={dataTyped}
+				// dataTyped={dataTyped}
 				numDel={numDel}
 				recording={recording}
 				startGame={startGame}
@@ -96,6 +112,8 @@ const Game = ({defaultSnippet}) => {
 				setGameFinished={setGameFinished}
 				typingStatus={typingStatus}
 				setTypingStatus={setTypingStatus}
+				typingProgress={typingProgress}
+				typingTarget={typingTarget}
 			/>
 			<RestartButton restartGame={restartGame}/>
 			<GameOptions
@@ -110,7 +128,7 @@ const Game = ({defaultSnippet}) => {
     ) :
 		(
 			<div className="game-container">
-				<GameSummary gameFinished={gameFinished}/>
+				<GameSummary gameFinished={gameFinished} dataTyped={dataTyped}/>
 				<GameOptions/>
 			</div>
 		);
