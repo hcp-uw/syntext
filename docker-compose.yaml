@@ -1,34 +1,26 @@
 version: "4.17"
 services:
   database:
-    restart: unless-stopped
-    env_file: ./.env
-    environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_DATABASE
+    container_name: db_container
+    image: mysql:latest
+    ports:
+      - "3307:3306"
     volumes:
-      - db:/var/lib/mysql
+      - /path-persistent-volumen:/var/lib/mysql/
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     networks:
       - backend
-    ports:
-      - '13306:3306'
-    container_name: db_container
-    image: 'mysql/mysql-server:latest'
+    
+    
+  
   server:
+    container_name: server_container
     depends_on:
       - database
-    # path to folder
     build: ./server
     restart: unless-stopped
     env_file: ./.env
-    environment:
-      - MYSQL_HOST=$MYSQL_HOST
-      - MYSQL_USER=$MYSQL_USER
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_DATABASE
-      - DB_PORT=3306
-    # names container
-    container_name: server_container
     ports: 
       - '3001:3001'
     networks:
@@ -36,19 +28,19 @@ services:
       - frontend
     
   client:
+    container_name: client_container
     depends_on:
       - server
     build: ./client
-    container_name: client_container
     ports: 
       - '3000:3000'
     networks:
       - frontend
-    # stdin_open: true
-    # tty: true
+    stdin_open: true
+    tty: true
 
-volumes: 
-  db:
+# volumes: 
+#   db:
 
 networks:
   backend:
