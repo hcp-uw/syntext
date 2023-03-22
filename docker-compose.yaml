@@ -18,6 +18,8 @@ services:
     container_name: server_container
     depends_on:
       - database
+    volumes:
+      - ./server:/usr/src/app
     build: ./server
     restart: unless-stopped
     env_file: ./.env
@@ -32,6 +34,8 @@ services:
     depends_on:
       - server
     build: ./client
+    volumes:
+      - ./client/src:/usr/src/app
     ports: 
       - '3000:3000'
     networks:
@@ -39,8 +43,10 @@ services:
     stdin_open: true
     tty: true
 
-# volumes: 
-#   db:
+volumes: 
+  database:
+  server:
+  client:
 
 networks:
   backend:
