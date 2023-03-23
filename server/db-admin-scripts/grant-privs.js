@@ -3,14 +3,11 @@ const config = require('../utils/config')
 
 
 const pool = mysql.createPool({
-    host: config.MYSQL_HOST, 
+    host: config.MYSQL_HOST,
     user: config.MYSQL_USER,
     password: config.MYSQL_ROOT_PASSWORD,
     database: 'mysql'
 }).promise()
-
-
-
 
 const grantPrivs = async (user, host) => {
     try {
@@ -29,7 +26,7 @@ const grantPrivs = async (user, host) => {
 
 
 const user = process.argv[2];
-const host = process.argv[4];
+const host = process.argv[3];
 
 grantPrivs(user, host)
     .then(() => {

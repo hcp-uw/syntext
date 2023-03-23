@@ -1,3 +1,14 @@
+const mysql = require('mysql2');
+const config = require('../utils/config')
+const {toAscii} = require('../db/betweenASCIIValues')
+
+const pool = mysql.createPool({
+    host: config.MYSQL_HOST,
+    user: config.MYSQL_USER,
+    password: config.MYSQL_ROOT_PASSWORD,
+    database: 'mysql'
+}).promise()
+
 const createUser = async (user, pw, host) => {
     try {
         const connection = await pool.getConnection();

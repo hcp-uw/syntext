@@ -249,10 +249,10 @@ export default function TextArea(props) {
 					onBlur={() => setTypingStatus(false)}
 				/>
 				{renderedLines}
-				<Cursor 
-					userInput={userInput} 
-					currWord={currWord} 
-					typingStatus={typingStatus} 
+				<Cursor
+					userInput={userInput}
+					currWord={currWord}
+					typingStatus={typingStatus}
 				/>
 			</div>
 			

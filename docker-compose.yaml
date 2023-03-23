@@ -11,9 +11,8 @@ services:
     restart: always
     networks:
       - backend
-    
-    
-  
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
   server:
     container_name: server_container
     depends_on:
@@ -28,7 +27,7 @@ services:
     networks:
       - backend
       - frontend
-    
+
   client:
     container_name: client_container
     depends_on:
