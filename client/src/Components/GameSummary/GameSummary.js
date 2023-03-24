@@ -4,6 +4,7 @@ import { Data } from "./Data";
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
 import LineChart from "./LineChart";
+const smoothen = require('./smoothen')
 
 // Character array: [[i, n, t], [i, =, 1, ;, m, e], [o, w]]
 // Error array: [0, 1, 5]

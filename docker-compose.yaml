@@ -2,6 +2,9 @@ version: "4.17"
 services:
   database:
     container_name: db_container
+    enviornment: 
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
     image: mysql:latest
     ports:
       - "3307:3306"
@@ -11,8 +14,9 @@ services:
     restart: always
     networks:
       - backend
-    environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+    
+    
+  
   server:
     container_name: server_container
     depends_on:
@@ -27,7 +31,7 @@ services:
     networks:
       - backend
       - frontend
-
+    
   client:
     container_name: client_container
     depends_on:
@@ -46,6 +50,7 @@ volumes:
   database:
   server:
   client:
+
 
 networks:
   backend:
