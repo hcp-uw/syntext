@@ -242,7 +242,8 @@ export default function TextArea(props) {
 	return (
 		<>
 			<div className={'text-area-container'} >
-				<input value={userInput} 
+				<input className="user-input" 
+					value={userInput} 
 					onKeyDown={handleSpecialKey} 
 					onChange={handleChange} 
 					onFocus={() => setTypingStatus(true)} 
