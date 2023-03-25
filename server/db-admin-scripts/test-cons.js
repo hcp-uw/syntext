@@ -6,15 +6,15 @@ const pw = process.argv[3];
 const host = process.argv[4];
 const database = process.argv[5];
 
-const p2 = mysql.createPool({
+const p = mysql.createPool({
     host: host,
     user: user,
     password: pw,
     database: database
-})
+}).promise()
 
 try{
-    p1.getConnection()
+    p.getConnection()
 } catch (err) {
     console.log(err)
 }

@@ -3,7 +3,7 @@ const config = require('../utils/config')
 const {toAscii} = require('../db/betweenASCIIValues')
 
 const pool = mysql.createPool({
-    host: config.MYSQL_HOST,
+    host: "localhost",
     user: config.MYSQL_USER,
     password: config.MYSQL_ROOT_PASSWORD,
     database: 'mysql'
