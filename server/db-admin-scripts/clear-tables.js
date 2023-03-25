@@ -9,6 +9,15 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
+console.table(
+    {
+        host: config.MYSQL_HOST, 
+        user: config.MYSQL_USER,
+        password: config.MYSQL_ROOT_PASSWORD,
+        database: config.MYSQL_DATABASE
+    }
+)
+
 const clearRecordTable = async () => {
     try {
         const connection = await pool.getConnection();

@@ -3,8 +3,8 @@ const config = require('../utils/config')
 const {toAscii} = require('../db/betweenASCIIValues')
 
 const pool = mysql.createPool({
-    host: "localhost",
-    user: config.MYSQL_USER,
+    host: config.MYSQL_HOST,
+    user: 'root',
     password: config.MYSQL_ROOT_PASSWORD,
     database: 'mysql'
 }).promise()
@@ -23,6 +23,8 @@ const createUser = async (user, pw, host) => {
         console.error(error);
     }
 };
+
+// TODO: need to resolve host to IP using docker DNS somehow
 
 const user = process.argv[2];
 const pw = process.argv[3];
