@@ -55,7 +55,7 @@ const Game = ({defaultSnippet}) => {
 		setCurrWord(lines[0].split(' ')[0])
 	}, [lines])
 
-	
+	// i like testing git commits
 	const tickTime = () => {
 		snapshot.current[time.current + 1] = typingProgress.current
 		dataTyped.current[time.current] = snapshot.current[time.current + 1].length - snapshot.current[time.current].length;
