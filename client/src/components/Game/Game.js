@@ -63,7 +63,7 @@ const Game = ({defaultSnippet}) => {
 		return time.current;
 	}
 
-	
+	// test
 	const startGame = () => {
 		setRecording(true);
 	}
