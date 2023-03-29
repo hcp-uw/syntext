@@ -12,8 +12,8 @@ services:
     image: mysql:latest
     ports:
       - "3307:3306"
-    # volumes:
-    #   - /path-persistent-volumen:/var/lib/mysql/
+    volumes:
+      - /path-persistent-volumen:/var/lib/mysql/
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     networks:
@@ -46,8 +46,8 @@ services:
     stdin_open: true
     tty: true
 
-# volumes: 
-#   database:
+volumes: 
+  database:
 
 
 networks:

@@ -4,7 +4,6 @@ const config = require('../utils/config.js')
 const {toAscii, toChar} = require('./betweenASCIIValues')
 
 
-
 const pool = mysql.createPool({
     host: config.MYSQL_HOST, 
     user: config.MYSQL_USER,
@@ -13,6 +12,12 @@ const pool = mysql.createPool({
 }).promise()
 
 const getSnippetByLengthAndType = async (length, type) => {
+    console.table({
+        host: config.MYSQL_HOST, 
+        user: config.MYSQL_USER,
+        password: config.MYSQL_ROOT_PASSWORD,
+        database: config.MYSQL_DATABASE
+    })
     return filteredResult = getSnippetByType(type).then(result => {
         console.log(result)
         return result.filter(snippet => snippet.length === length)
