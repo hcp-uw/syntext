@@ -2,7 +2,7 @@ import stylesheet from "./Cursor.css"
 import React, { useState, useEffect } from 'react';
 
 const Cursor = (props) => {
-  const { userInput, currWord, typingStatus } = props;
+  const { userInput, currWord, typingStatus, setTypingStatus} = props;
 
   useEffect(()=> {
     console.log("typing status: ", typingStatus)
@@ -22,6 +22,10 @@ const Cursor = (props) => {
       }
     }
   }, [userInput, currWord])
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setTypingStatus(false))
+  })
 
   function moveCursor (position, newLineCheck) {
     let cursorEl = document.querySelector('.cursor');

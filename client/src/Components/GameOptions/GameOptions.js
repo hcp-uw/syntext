@@ -40,7 +40,7 @@ const GameOptions = (props) => {
 		<div className="game-options-container">
 			<Container fluid>
 			<Row>
-				<Col md={{span: 2, offset: 5}}>
+				<Col md={{span: 2, offset: 5}} sm xs='auto'>
 					<SnippetOptions
 						selectedType={selectedType} 
 						setSelectedType={setSelectedType} 
@@ -48,7 +48,7 @@ const GameOptions = (props) => {
 						setSelectedLength={setSelectedLength}
 					/>
 				</Col>
-				<Col md={{offset: 2}}>
+				<Col xs sm='auto' md={{offset: 2}}>
 					<Button 
 						variant="newSnippet" 
 						id="newSnippetButton" 
