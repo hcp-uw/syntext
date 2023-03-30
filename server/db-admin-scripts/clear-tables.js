@@ -9,6 +9,7 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
+
 console.table(
     {
         host: config.MYSQL_HOST, 

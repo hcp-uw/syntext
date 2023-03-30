@@ -177,15 +177,16 @@ export default function TextArea(props) {
 			if (lines.length === lineIndex.current + 1) {
 				setGameFinished(true);
 				event.preventDefault();
+			} else {
+				currLine.current = (lines[lineIndex.current + 1].split(" "));
+				lineIndex.current++; 
+				setCurrWord((lines[lineIndex.current].split(" "))[0]);
+				wordIndex.current = 0;
+				letterIndex.current = -1;
+				setUserInput('');
+				typingProgress.current += '\n';
+				event.preventDefault();
 			}
-			currLine.current = (lines[lineIndex.current + 1].split(" "));
-			lineIndex.current++; 
-			setCurrWord((lines[lineIndex.current].split(" "))[0]);
-			wordIndex.current = 0;
-			letterIndex.current = -1;
-			setUserInput('');
-			typingProgress.current += '\n';
-			event.preventDefault();
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
