@@ -242,11 +242,11 @@ export default function TextArea(props) {
 	return (
 		<>
 			<div className={'text-area-container'} >
-				<input className="user-input" 
-					value={userInput} 
-					onKeyDown={handleSpecialKey} 
-					onChange={handleChange} 
-					onFocus={() => setTypingStatus(true)} 
+				<input className="user-input"
+					value={userInput}
+					onKeyDown={handleSpecialKey}
+					onChange={handleChange}
+					onClick={() => setTypingStatus(true)}
 					onBlur={() => setTypingStatus(false)}
 				/>
 				{renderedLines}
@@ -254,9 +254,9 @@ export default function TextArea(props) {
 					userInput={userInput}
 					currWord={currWord}
 					typingStatus={typingStatus}
+					setTypingStatus={setTypingStatus}
 				/>
 			</div>
-			
 		</>
 	);
 }
