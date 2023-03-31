@@ -2,20 +2,24 @@ const express = require('express')
 const readSnippetRouter = require('./controllers/readSnippets')
 const editSnippetRouter = require('./controllers/editSnippets')
 const cors = require('cors');
+const { unknownEndpoint, errorHandler } = require('./utils/middleware');
 
-// const serverURL = 'http://localhost:3001'
-// const routerURL = '/api/read'
-// const endpointURL = '/get/length'
-// const parameterURL = '?length=LONG'
+const app = express();
 
-const app = express()
+// cors
 app.use(cors());
-app.use('/api/read', readSnippetRouter)
-app.use('/api/edit', editSnippetRouter)
 
-app.get('/test', (req, res) => {
-    res.send("hello");
-})
+// routers
+app.use('/api/read', readSnippetRouter);
+app.use('/api/edit', editSnippetRouter);
+
+
+// test endpoint
+app.get('/test', (req, res) => {res.send('hello')})
+
+// error handling
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 module.exports = app;
 
