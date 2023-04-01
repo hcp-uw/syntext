@@ -7,6 +7,8 @@ const MYSQL_HOST = process.env.MYSQL_HOST
 const MYSQL_USER = process.env.MYSQL_USER
 const MYSQL_ROOT_PASSWORD = process.env.MYSQL_ROOT_PASSWORD
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE
+const MYSQL_ROOT_USER = process.env.MYSQL_ROOT_USER
+const MYSQL_ADMIN_DATABASE = process.env.MYSQL_ADMIN_DATABASE
 
 module.exports = {
   NODE_PORT,
@@ -14,5 +16,7 @@ module.exports = {
   MYSQL_HOST,
   MYSQL_USER,
   MYSQL_ROOT_PASSWORD,
-  MYSQL_DATABASE
+  MYSQL_DATABASE,
+  MYSQL_ROOT_USER,
+  MYSQL_ADMIN_DATABASE
 }
