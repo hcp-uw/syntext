@@ -4,8 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --verbose --runInBand",
-    "integration-test": "npm run localDBinit && npm test",
+    "test": "cd .. && docker-compose -f docker-compose.test.yaml up --build",
+    "jest": "NODE_ENV=test jest --verbose --runInBand",
+    "integration-test": "(npm run start&) && npm run localDBinit && npm run jest",
     "start": "nodemon server",
     "start-init": "node server && npm run localDBinit",
     "dev": "nodemon devserver.js",

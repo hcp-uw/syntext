@@ -30,24 +30,16 @@ services:
       - '3001:3001'
     networks:
       - backend
-      # - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:3001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     command: npm run integration-test
     
     
-  # client:
-  #   container_name: client_container
-  #   depends_on:
-  #     - server
-  #   image: 
-  #   ports: 
-  #     - '3000:3000'
-  #   networks:
-  #     - frontend
-  #   stdin_open: true
-  #   tty: true
 
 
 
 networks:
   backend:
-  # frontend:
