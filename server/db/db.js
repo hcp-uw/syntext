@@ -66,8 +66,6 @@ const getSnippetByType = async (type) => {
 
     } catch (error) {
         console.error(error);
-    } finally {
-        pool.end();
     }
 };
 
@@ -139,7 +137,7 @@ const getSnippetByID = async (id) => {
     }
 };
 
-const createSnippet = async (snippet) => {
+const createSnippet = async (snippet, pool) => {
 
     const { id, type, length, data } = snippet;
     const connection = await pool.getConnection();
@@ -170,7 +168,6 @@ const createSnippet = async (snippet) => {
         await connection.release();
     }
 };
-
 
 const deleteSnippetByID = async (id) => {
     const connection = await pool.getConnection();
