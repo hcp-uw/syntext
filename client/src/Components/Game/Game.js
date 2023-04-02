@@ -66,12 +66,6 @@ const Game = ({defaultSnippet}) => {
 		setRecording(true);
 	}
 
-	// console.log('data: ', dataTyped.current)
-	// console.log('snap: ', snapshot.current)
-	// console.log('target: ' + typingTarget.length + '\n' + typingTarget)
-	// console.log('progress: ' + typingProgress.current.length + '\n' + typingProgress.current)
-
-
 	const restartGame = () => {
 		setUserInput('')
         setCurrWord(lines[0].split(' ')[0])

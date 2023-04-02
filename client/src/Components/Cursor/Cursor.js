@@ -5,7 +5,6 @@ const Cursor = (props) => {
   const { userInput, currWord, typingStatus, setTypingStatus} = props;
 
   useEffect(()=> {
-    // console.log("typing status: ", typingStatus)
     moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true);
   }, []);
 

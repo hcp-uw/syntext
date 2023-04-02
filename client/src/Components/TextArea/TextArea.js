@@ -135,7 +135,6 @@ export default function TextArea(props) {
 	const cursor = { lineIndex, wordIndex, letterIndex }
 	console.table('props', props)
 	useEffect(() => {
-		//console.log('useEffect called')
 		letterIndex.current = userInput.length;
 	}, [userInput, currWord])
 
@@ -156,7 +155,6 @@ export default function TextArea(props) {
 
 	// handles special keys seperately
 	const handleSpecialKey = event => {
-		//console.log(event.key)
 		// Space key handler
 		if (atEndOfWord(currWord, userInput) && 
 			!atEndOfLine(wordIndex, currLine) &&
@@ -190,9 +188,7 @@ export default function TextArea(props) {
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
-			//console.log('currWord letterIndex:', currWord[(letterIndex.current)])
 			if (currWord[letterIndex.current] === '\t') {
-				//console.log('tab was pressed')
 				setUserInput(userInput.concat('\t'));
 				typingProgress.current += '\t';
 			}
@@ -218,7 +214,6 @@ export default function TextArea(props) {
 		if (!currWordHasMistake(currWord, userInput) && 
 			typingTarget.charAt(typingProgress.current.length) === keyTyped) {
 			typingProgress.current += keyTyped
-			// console.log('added ' + keyTyped)
 		}
 		
 		if (allowedToOverflow(currWord, event.target.value))
