@@ -80,6 +80,7 @@ const Game = ({defaultSnippet}) => {
         wordIndex.current = 0;
         letterIndex.current = -1;
 				setGameFinished(false);
+				setTypingStatus(false);
 		numDel.current = 0;
 		setRecording(false);
 		time.current = 0;
