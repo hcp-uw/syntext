@@ -129,7 +129,7 @@ const getSnippetByID = async (id) => {
         const result = await connection.query(query, [id]);
         return result[0].map(line_data =>  {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')} 
-        });
+        }).map(line => line.line_text);
     } catch (error) {
         console.error(error);
     } finally {
@@ -188,6 +188,10 @@ const deleteSnippetByID = async (id) => {
     }
 };
 
+const getPool = () => {
+    return pool;
+}
+
 const closePool = async () => {
     return pool.end();
 }
@@ -200,5 +204,6 @@ module.exports = {
     createSnippet, 
     deleteSnippetByID,
     getSnippetByLengthAndType,
+    getPool,
     closePool
 }

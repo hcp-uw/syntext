@@ -21,7 +21,7 @@
     "start": "react-scripts start",
     "save": "npm run build && cp -r ./build ../server && rm -r build*",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cd .. && docker-compose -f docker-compose.test.yaml up --build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
