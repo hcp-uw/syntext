@@ -218,7 +218,7 @@ export default function TextArea(props) {
 		if (!currWordHasMistake(currWord, userInput) && 
 			typingTarget.charAt(typingProgress.current.length) === keyTyped) {
 			typingProgress.current += keyTyped
-			console.log('added ' + keyTyped)
+			// console.log('added ' + keyTyped)
 		}
 		
 		if (allowedToOverflow(currWord, event.target.value))

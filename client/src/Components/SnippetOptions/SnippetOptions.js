@@ -33,7 +33,7 @@ const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSele
     }
   })();
 
-  console.log(selectedLength, selectedType)
+  // console.log(selectedLength, selectedType)
 
   return(
     <>

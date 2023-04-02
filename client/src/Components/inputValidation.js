@@ -1,5 +1,5 @@
 const atEndOfLine = (wIndex, cLine) => {
-    console.log('wIndex.current: ', wIndex.current,'cline.length', cLine)
+    // console.log('wIndex.current: ', wIndex.current,'cline.length', cLine)
     return wIndex.current  === cLine.current.length - 1;
 }
 

@@ -1,9 +1,9 @@
 
-// takes in raw typing data 
+// takes in raw typing data
 //      ex: [0, 2, 3, 5, 3, 2, 2, 3, 2, 1]
 //      each int corresponds to char/sec
-// outputs thr rough estimate of wpm for each 
-// second in the array. 
+// outputs thr rough estimate of wpm for each
+// second in the array.
 const smoothen = (data) => {
     const CHARACTERS_PER_WORD = 5;
     const SECONDS_PER_MINUTE = 60;

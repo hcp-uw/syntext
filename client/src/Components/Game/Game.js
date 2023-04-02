@@ -53,9 +53,8 @@ const Game = ({defaultSnippet}) => {
 	useEffect(() => {
 		currLine.current = lines[0].split(" ")
 		setCurrWord(lines[0].split(' ')[0])
-	}, [lines])
+	}, [lines]);
 
-	// i like testing git commits
 	const tickTime = () => {
 		snapshot.current[time.current + 1] = typingProgress.current
 		dataTyped.current[time.current] = snapshot.current[time.current + 1].length - snapshot.current[time.current].length;
@@ -67,10 +66,10 @@ const Game = ({defaultSnippet}) => {
 		setRecording(true);
 	}
 
-	console.log('data: ', dataTyped.current)
-	console.log('snap: ', snapshot.current)
-	console.log('target: ' + typingTarget.length + '\n' + typingTarget)
-	console.log('progress: ' + typingProgress.current.length + '\n' + typingProgress.current)
+	// console.log('data: ', dataTyped.current)
+	// console.log('snap: ', snapshot.current)
+	// console.log('target: ' + typingTarget.length + '\n' + typingTarget)
+	// console.log('progress: ' + typingProgress.current.length + '\n' + typingProgress.current)
 
 
 	const restartGame = () => {
@@ -80,6 +79,7 @@ const Game = ({defaultSnippet}) => {
         lineIndex.current = 0;
         wordIndex.current = 0;
         letterIndex.current = -1;
+				setGameFinished(false);
 		numDel.current = 0;
 		setRecording(false);
 		time.current = 0;
@@ -127,7 +127,8 @@ const Game = ({defaultSnippet}) => {
     ) :
 		(
 			<div className="game-container">
-				<GameSummary gameFinished={gameFinished} dataTyped={dataTyped}/>
+				<GameSummary gameFinished={gameFinished} dataTyped={dataTyped.current} numDel={numDel.current} time={time} typingTarget={typingTarget} snapshot={snapshot}/>
+				<RestartButton restartGame={restartGame}/>
 				<GameOptions/>
 			</div>
 		);

@@ -1,5 +1,6 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
+
 function LineChart({ chartData }) {
   return (
     <div className="chart-container">
@@ -21,6 +22,11 @@ function LineChart({ chartData }) {
                 font: { size: 18 }
               }},
             x: { ticks: { color: 'black' } }
+          },
+          elements: {
+            point: {
+              radius: 1.5
+            }
           },
           responsive: true,
           maintainAspectRatio: false

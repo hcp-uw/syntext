@@ -5,7 +5,7 @@ const Cursor = (props) => {
   const { userInput, currWord, typingStatus, setTypingStatus} = props;
 
   useEffect(()=> {
-    console.log("typing status: ", typingStatus)
+    // console.log("typing status: ", typingStatus)
     moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true);
   }, []);
 
@@ -31,7 +31,7 @@ const Cursor = (props) => {
     let cursorEl = document.querySelector('.cursor');
     resetCursorBlinkAnimation(cursorEl);
 
-    console.log("Moving cursor to: ",document.querySelector('.active').querySelector('div').getBoundingClientRect())
+    // console.log("Moving cursor to: ",document.querySelector('.active').querySelector('div').getBoundingClientRect())
 
     if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') { // We are after a tab character
       cursorEl.style.left = (position.left + 34) + 'px';
