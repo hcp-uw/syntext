@@ -16,9 +16,7 @@ services:
     restart: always
     networks:
       - backend
-    
-    
-  
+
   server:
     container_name: server_container
     depends_on:
@@ -30,16 +28,7 @@ services:
       - '3001:3001'
     networks:
       - backend
-    healthcheck:
-      test: ["CMD-SHELL", "curl --fail http://localhost:3001/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
     command: npm run integration-test
-    
-    
-
-
 
 networks:
   backend:
