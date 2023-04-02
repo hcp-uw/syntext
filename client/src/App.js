@@ -13,18 +13,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import './index.css';
 
 const App = () => {
-	//const exdata = ['My name is Haley and I am a nice person', 'That is simply the truth', 'Nobody can deny it']
-
-	const defaultSnippet =  {
-		id: 1,
-		SnippetType:'FOR_LOOP',
-		length: 'LONG',
-		data: ['meow',
-					'\ti like dogs']
-		//  data: exdata
-	}
-
-	// ['int j = 20;',
+	// const someData = ['int j = 20;',
 	// 					'for (int i = 0; i < 10; i++) {',
 	// 					'	System.out.print(j + " - " + i);',
 	// 					'	if (i > j)',
@@ -35,6 +24,14 @@ const App = () => {
 	// 					'}'
 	// 			]
 
+	const defaultSnippet =  {
+		id: 1,
+		SnippetType:'FOR_LOOP',
+		length: 'LONG',
+		data: ['meow',
+					'\ti like dogs']
+		//  data: someData
+	}
 
 
 

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const baseURL = 'http://localhost:3001'
-let previousIndex = -1; // initialize the previous index to an invalid value
 
 export default function getSnippet(len, type) {
     let snippet;
+    let previousIndex = -1; // initialize the previous index to an invalid value
     const req = axios.get(`${baseURL}/api/read/get/lengthandtype?length=${len}&type=${type}`);
     return req.then(res => {
         let index = Math.floor(Math.random() * res.data.length);
