@@ -13,14 +13,19 @@ editSnippetRouter.post('/mksnippet', jsonParser, (req, res) => {
         data: data
     }
     Snippet.createSnippet(snippetObject).then((result) => {
-        (result.errno) ? res.status(400).send(result) : res.send(result)
+        (result.errno) ? 
+            res.status(400).send("error creating snippet") : 
+            res.send("snippet created")
     });
 })
 
 editSnippetRouter.delete('/delsnippet', (req, res) => {
     const id = req.query.id;
-    console.log('request sent, deleted snippet with id: ', id)
-    res.send(Snippet.deleteSnippetByID(id))
+    res.send(Snippet.deleteSnippetByID(id)).then((result) => {
+        (result.errno) ? 
+            res.status(400).send("error deleting snippet") : 
+            res.send("snippet deleted")
+    })
 })
 
 module.exports = editSnippetRouter;

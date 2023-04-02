@@ -4,9 +4,9 @@ const {toAscii} = require('../db/betweenASCIIValues')
 
 const pool = mysql.createPool({
     host: config.MYSQL_HOST,
-    user: 'root',
+    user: config.MYSQL_ROOT_USER,
     password: config.MYSQL_ROOT_PASSWORD,
-    database: 'mysql'
+    database: config.MYSQL_ADMIN_DATABASE
 }).promise()
 
 const createUser = async (user, pw, host) => {
@@ -33,6 +33,6 @@ const host = process.argv[4];
 createUser(user, pw, host)
     .then(() => {
         console.log('success');
-        process.exit()
+        pool.end();
     })
     .catch((err) => console.log(err))

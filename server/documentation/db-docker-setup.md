@@ -1,5 +1,7 @@
 # Starting Containers
 
+## ***Note: This is old. See `./backend-dev` setup for current instructions
+
 Navigate to syntext root directory and ensure docker-compose file exists.
 
 Run `docker-compose up --build -d` to start the containers. This took my laptop ~200 seconds the first time. Afterwards, verify with `docker ps` that your containers are running. 

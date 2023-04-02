@@ -21,7 +21,7 @@ const createRecordTable = async () => {
         return result[0];
     } catch (error) {
         console.error(error);
-    }
+    } 
 };
 
 const createDataTable = async () => {
@@ -38,4 +38,4 @@ const createDataTable = async () => {
 };
 
 Promise.all([createRecordTable(), createDataTable()])
-    .then(() =>  process.exit());
+    .then(() => pool.end());

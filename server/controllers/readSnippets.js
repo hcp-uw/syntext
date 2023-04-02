@@ -4,7 +4,7 @@ const SnippetDBClient = require('../db/db')
 
 readSnippetRouter.get('/get/length', (req, res) => {
     SnippetDBClient.getSnippetByLength(req.query.length)
-    .then(result => res.send(result))
+    .then(result => res.send(result));
 })
 
 readSnippetRouter.get('/get/lengthandtype', (req, res) => {
@@ -13,41 +13,13 @@ readSnippetRouter.get('/get/lengthandtype', (req, res) => {
 })
 
 /*
-unprocessed result [
+unprocessed result : [
   {
-    id: 1,
-    snippet_type: 'PRINT',
-    snippet_length: 'SHORT',
-    line_index: 0,
-    line_text: 'System.out.println("goodbye world");'
-  },
-  {
-    id: 2,
-    snippet_type: 'PRINT',
-    snippet_length: 'SHORT',
-    line_index: 0,
-    line_text: 'String myCat = "Matilda";'
-  },
-  {
-    id: 3,
-    snippet_type: 'PRINT',
-    snippet_length: 'SHORT',
-    line_index: 0,
-    line_text: 'int sum = myCat.length() - myGod.length();'
-  },
-  {
-    id: 2,
-    snippet_type: 'PRINT',
-    snippet_length: 'SHORT',
-    line_index: 1,
-    line_text: 'System.out.println(myCat.charAt(3));'
-  },
-  {
-    id: 3,
-    snippet_type: 'PRINT',
-    snippet_length: 'SHORT',
-    line_index: 1,
-    line_text: 'System.out.println(sum);'
+    id: int,
+    snippet_type: string,
+    snippet_length: string,
+    line_index: int,
+    line_text: string
   }
 ]
 */
@@ -78,7 +50,6 @@ readSnippetRouter.get('/get/id', (req, res) => {
             data: processedSnippetData
         }
         console.log('got snippet with id: ', id)
-        //console.log('processed result', intermediateResult)
         res.json(intermediateResult);
         
     })

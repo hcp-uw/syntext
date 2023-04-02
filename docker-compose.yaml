@@ -34,6 +34,7 @@ services:
       - backend
       - frontend
     
+    
   client:
     container_name: client_container
     depends_on:

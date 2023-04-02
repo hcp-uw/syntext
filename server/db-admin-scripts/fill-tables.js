@@ -1,15 +1,24 @@
 const {getSnippetData} = require('../example_data/hardcodedsnippets')
-const {createSnippet} = require('../db/db')
+const {createSnippet, closePool} = require('../db/db')
 
 
 const exampleSnippets = getSnippetData();
 
-const fill = (exampleData) => {
-    exampleData.forEach((snippet) => {
-        createSnippet(snippet);
-    })
+const fill = async (exampleData) => {
+    const promises = []
+    await exampleData.forEach((snippet) => {
+        promises.push(createSnippet(snippet));
+    });
+    return Promise.all(promises);
+    
 }
 
-fill(exampleSnippets);
-console.log('filled tables');
+
+
+fill(exampleSnippets)
+    .then(() => console.log("filled tables"))
+    .then(() => closePool())
+    .then(() => console.log("pool closed"));
+    
+
 

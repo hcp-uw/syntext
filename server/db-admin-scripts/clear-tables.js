@@ -46,5 +46,5 @@ const clearDataTable = async () => {
     }
 }
 
-Promise.all([clearDataTable(), clearRecordTable()]).then(() => process.exit())
+Promise.all([clearDataTable(), clearRecordTable()]).then(() => pool.end())
 

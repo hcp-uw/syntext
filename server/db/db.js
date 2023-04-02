@@ -19,7 +19,6 @@ const getSnippetByLengthAndType = async (length, type) => {
         database: config.MYSQL_DATABASE
     })
     return filteredResult = getSnippetByType(type).then(result => {
-        console.log(result)
         return result.filter(snippet => snippet.length === length)
     })
 }
@@ -36,12 +35,10 @@ const getSnippetByType = async (type) => {
         `;
         const result = await connection.query(query, [type]);
         connection.release();
-        console.log(result[0])
         
         const charData = result[0].map(line_data => {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')}
         });
-        console.log(charData)
         let intermediateResult = {};
         charData.forEach(line => {
 
@@ -69,6 +66,8 @@ const getSnippetByType = async (type) => {
 
     } catch (error) {
         console.error(error);
+    } finally {
+        pool.end();
     }
 };
 
@@ -141,6 +140,7 @@ const getSnippetByID = async (id) => {
 };
 
 const createSnippet = async (snippet) => {
+
     const { id, type, length, data } = snippet;
     const connection = await pool.getConnection();
 
@@ -191,6 +191,10 @@ const deleteSnippetByID = async (id) => {
     }
 };
 
+const closePool = async () => {
+    return pool.end();
+}
+
 
 module.exports = {
     getSnippetByType, 
@@ -198,5 +202,6 @@ module.exports = {
     getSnippetByID, 
     createSnippet, 
     deleteSnippetByID,
-    getSnippetByLengthAndType 
+    getSnippetByLengthAndType,
+    closePool
 }

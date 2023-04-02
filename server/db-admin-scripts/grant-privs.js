@@ -4,9 +4,9 @@ const config = require('../utils/config')
 
 const pool = mysql.createPool({
     host: config.MYSQL_HOST,
-    user: 'root',
+    user: config.MYSQL_ROOT_USER,
     password: config.MYSQL_ROOT_PASSWORD,
-    database: 'mysql'
+    database: config.MYSQL_ADMIN_DATABASE
 }).promise()
 
 const grantPrivs = async (user, host) => {

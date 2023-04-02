@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server",
+    "start-init": "node server && npm run localDBinit",
     "dev": "nodemon devserver.js",
     "localDBinit": "node ./db-admin-scripts/create-tables && node ./db-admin-scripts/clear-tables && node ./db-admin-scripts/fill-tables"
   },
