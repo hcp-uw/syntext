@@ -1,0 +1,11 @@
+.icon {
+    /* position: absolute;
+    top: 0;
+    width: 1%;
+    height: 1%; 
+    float: right;
+    margin-right: 5%; */
+    max-width: 75px;
+    max-height: 75px;
+    padding: 15, 15, 15, 15;
+}

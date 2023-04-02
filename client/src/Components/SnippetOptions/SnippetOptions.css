@@ -1,0 +1,29 @@
+.snippet-options-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+}
+
+.snippet-options-container .btn-custom {
+    background-color: #BC8785;
+    color: white;
+    border-radius: 18px;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-right-color: #E5CDCD;
+    margin-right: 1px;
+}
+
+.snippet-options-container .btn-sides {
+    background-color: #BC8785;
+    color: #E5CDCD;
+    border-radius: 18px;
+}
+
+.snippet-options-container .toggled-button {
+    color: white;
+    
+}
+            
+

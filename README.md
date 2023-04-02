@@ -2,24 +2,10 @@
 
 ## Setup for local development
 
-Open two terminal windows, one for the front-end and one for the back-end.
+In the root directory, run `docker-compose up --build -d`
 
-`cd` into the client directory and run `npm start`
+Note that this will probably take a while to finish if this is your first time starting the app.
 
-next, switch to the server directory with `cd ../server` and run `npm run dev`
+If this is your first time, you also need to initialize your local MySQL database container. Luckily, we have made this easy for you. Simply run `docker-compose run server npm run localDBinit`, and you should be good to go!
 
-
-
-### front-end:
-open up the browser and visit this [url](http://localhost:3000) 
-
-right click to inspect and open up the console
-
-
-### back-end:
-feel free to use the browser for GET requests. it can be helpful to download a 
-JSON formatting browser extension. Microsoft Edge has a built in 'Network Console'
-tab that lets you send POST requests as well.
-
-the REST Client extension lets you run the files in the requests directory. it is a 
-pretty useful extension to use while developing.
+Any time you make changes, simply rerun `docker-compose up --build -d` to rebuild your containers.

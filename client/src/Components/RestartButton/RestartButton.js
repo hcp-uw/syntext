@@ -1,10 +1,15 @@
-import restart from "./restart.png";
+import React from 'react' 
+import stylesheet from './RestartButton.css'
 
-const RestartButton = () => {
+const RestartButton = ({ restartGame }) => {
+    const handleClick = (e) => {
+        e.preventDefault()
+        restartGame();
+    }
+
     return (
-        <img src={restart} style={{paddingTop: 10, width: "3%"}}></img>
+        <button className="restart-button"  onClick={handleClick}/>    
     )
 }
-
 
 export default RestartButton;

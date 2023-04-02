@@ -5,22 +5,3 @@ body {
   overflow: hidden;
   font-family: 'Roboto Mono', monospace;
 }
-
-.logo {
-  padding-left: 15%;
-  
-  transform: translate(50%, 0);
-}
-
-/* .rectangle {
-  overflow-x: hidden;
-  background: #393848;
-  width: 85%;
-  height: 80%;
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 0);
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-}  */

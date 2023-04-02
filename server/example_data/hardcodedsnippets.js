@@ -1,55 +1,52 @@
 
 const getSnippetData = () => {
-    return {
-        short: [
-            {
+    return [
+        {
             id: 1, 
-            SnippetType:'PRINT',
+            type:'PRINT',
             length: 'SHORT',
             data: ['System.out.println("goodbye world");']
-            },
-            {
+        },
+        {
             id: 2,
-            SnippetType: 'PRINT',
+            type: 'PRINT',
             length: 'SHORT',
             data: ['String myCat = "Matilda";',
                     'System.out.println(myCat.charAt(3));'
             ] 
-            },
-            {
+        },
+        {
             id: 3,
-            SnippetType: 'PRINT',
+            type: 'PRINT',
             length: 'SHORT',
             data: ['int sum = myCat.length() - myGod.length();',
                     'System.out.println(sum);'
             ]
-            }    
-        ],
-        medium: [
-            {
-            id: 1, 
-            SnippetType:'FOR_LOOP',
-            length: 'MED',
+        },
+        {
+            id: 4, 
+            type:'FOR_LOOP',
+            length: 'MEDIUM',
             data: ['for (int i = 0; i < 10; i++) {',
                     '\tSystem.out.println(i);',
                     '}'    
             ]
-            },
-            {
-            id: 2, 
-            SnippetType:'FOR_LOOP',
-            length: 'MED',  
+        },
+        {
+            id: 5, 
+            type:'FOR_LOOP',
+            length: 'MEDIUM',  
             data: ['for (int i = 0; i < rows; i++) {',
                     '\tfor (int j = 0; j < columns; j++) {',
                     '\t\tSystem.out.print("[" + i + "," + j + "] ");',
                     '\t}',
                     '}'
             ]
-            },
-            {
-            id: 3, 
-            SnippetType:'CONDITIONAL',
-            length: 'MED',
+        },
+        {
+            id: 6, 
+            type:'CONDITIONAL',
+            length: 'MEDIUM',
             data: ['if (hours > 8) {',
                     '\treturn (rate * 8) + ((hours - 8) * (rate * 1.5));',
                     '}',
@@ -57,12 +54,10 @@ const getSnippetData = () => {
                     '\treturn rate * hours;',
                     '}'
             ]  
-            }  
-        ],
-        long: [
-            {
-            id: 1, 
-            SnippetType:'FOR_LOOP',
+        },
+        {
+            id: 7, 
+            type:'FOR_LOOP',
             length: 'LONG',
             data: ['int j = 20;',  
                     'for (int i = 0; i < 10; i++) {',  
@@ -74,10 +69,10 @@ const getSnippetData = () => {
                     '\tj -= 1;',  
                     '}' 
                 ]
-            },
-            {
-            id: 2, 
-            SnippetType:'WHILE_LOOP',
+        },
+        {
+            id: 8, 
+            type:'WHILE_LOOP',
             length: 'LONG',
             data: ['int total = 0;',
                     'int turns = 0;',
@@ -89,10 +84,10 @@ const getSnippetData = () => {
                     '}',
                     'System.out.println("You earned $" + total + "!");'
             ]
-            },
-            {
-            id: 3, 
-            SnippetType:'WHILE_LOOP',
+        },
+        {
+            id: 9, 
+            type:'WHILE_LOOP',
             length: 'LONG',
             data: [
                 'while (input.hasNextLine()) {',
@@ -107,9 +102,8 @@ const getSnippetData = () => {
                 '\tSystem.out.println();',
                 '}'
             ]
-            }
-        ]
-    }
+        }
+    ]
 }
 
 module.exports = {getSnippetData}
