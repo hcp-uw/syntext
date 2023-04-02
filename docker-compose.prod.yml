@@ -1,0 +1,11 @@
+version: "4.17"
+services:
+  server:
+    container_name: server_container
+    build: 
+      dockerfile: ./Dockerfile.web
+    restart: unless-stopped
+    env_file: ./.env
+    ports: 
+      - '3001:3001'
+
