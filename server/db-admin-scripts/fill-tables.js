@@ -1,5 +1,7 @@
 const {getSnippetData} = require('../example_data/hardcodedsnippets')
 const {createSnippet, closePool} = require('../db/db')
+const mysql = require('mysql2');
+const config = require('../utils/config')
 
 const pool = mysql.createPool({
     host: config.MYSQL_HOST, 
