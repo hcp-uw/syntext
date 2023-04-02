@@ -33,8 +33,6 @@ const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSele
     }
   })();
 
-  console.log(selectedLength, selectedType)
-
   return(
     <>
       <div className="snippet-options-container">

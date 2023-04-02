@@ -24,8 +24,6 @@ const createUser = async (user, pw, host) => {
     }
 };
 
-// TODO: need to resolve host to IP using docker DNS somehow
-
 const user = process.argv[2];
 const pw = process.argv[3];
 const host = process.argv[4];
