@@ -1,9 +1,7 @@
+setup:
+  config:
+    env_file: ./.env
 build:
   docker:
     web: ./Dockerfile.web
-run:
-  web:
-    command: npm start
-    env: .env
-    port: 3001
-    type: web
+
