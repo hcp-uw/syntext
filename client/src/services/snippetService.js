@@ -8,7 +8,7 @@ const errSnippet =  {
     length: 'NA',
     data: [
         'public static void main(String[] args) {',
-        '\tSystem.out.println("no snippet found :(',
+        '\tSystem.out.println("no snippet found :(");',
         '}'
     ]
 }
