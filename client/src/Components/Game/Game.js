@@ -124,7 +124,14 @@ const Game = ({defaultSnippet}) => {
 			<div className="game-container">
 				<GameSummary gameFinished={gameFinished} dataTyped={dataTyped.current} numDel={numDel.current} time={time} typingTarget={typingTarget} snapshot={snapshot}/>
 				<RestartButton restartGame={restartGame}/>
-				<GameOptions/>
+				<GameOptions
+					restartGame={() => restartGame()}
+					setLines={setLines}
+					selectedLength={selectedLength}
+					setSelectedLength={setSelectedLength}
+					selectedType={selectedType}
+					setSelectedType={setSelectedType}
+				/>
 			</div>
 		);
 }
