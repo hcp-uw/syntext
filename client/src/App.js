@@ -28,8 +28,12 @@ const App = () => {
 		id: 1,
 		SnippetType:'FOR_LOOP',
 		length: 'LONG',
-		data: ['meow',
-					'\ti like dogs']
+		data: ['public static void main(String[] args) {',
+					'\tint[] result = new int[]{3, 8, 19, 7};',
+					'\tfor (int i = 0; i < result.length; i++) {',
+						'\t\tSystem.out.print(result[i] + " ");',
+					'\t}',
+				'}']
 		//  data: someData
 	}
 
