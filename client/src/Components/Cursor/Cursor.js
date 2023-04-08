@@ -4,27 +4,32 @@ import React, { useState, useEffect } from 'react';
 const Cursor = (props) => {
   const { userInput, currWord, typingStatus, setTypingStatus} = props;
 
-  useEffect(()=> {
-    moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true);
-  }, []);
+  // Gets when App loads for the first time
+  window.addEventListener('load', () => moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true));
 
-  useEffect(() => {
-    return () => {
-      let activeWord = document.querySelector('.active');
-      let letter = document.querySelector('.cursorPos');
-      if (activeWord === null) {
-        return;
-      } else if (letter !== null) {
-        moveCursor(letter.getBoundingClientRect());
-      } else if (letter === null) {
-        moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
-      }
+  // When window is resized
+  window.addEventListener('resize', () => {
+    setTypingStatus(false);
+    checkForMovability(true);
+  });
+
+  // When a new game starts and cursor is rendered again
+  useEffect(() => moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true), []);
+
+  // Whenever user makes progress with typing
+  useEffect(() => checkForMovability(), [userInput, currWord])
+
+  function checkForMovability (check) {
+    let activeWord = document.querySelector('.active');
+    let letter = document.querySelector('.cursorPos');
+    if (activeWord === null) {
+      return;
+    } else if (letter !== null) {
+      moveCursor(letter.getBoundingClientRect(), check);
+    } else if (letter === null) {
+      moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
     }
-  }, [userInput, currWord])
-
-  useEffect(() => {
-    window.addEventListener('resize', () => setTypingStatus(false))
-  })
+  }
 
   function moveCursor (position, newLineCheck) {
     let cursorEl = document.querySelector('.cursor');
