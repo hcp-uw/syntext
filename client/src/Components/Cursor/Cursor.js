@@ -19,13 +19,13 @@ const Cursor = (props) => {
   // Whenever user makes progress with typing
   useEffect(() => checkForMovability(), [userInput, currWord])
 
-  function checkForMovability (check) {
+  function checkForMovability (newLineChecker) {
     let activeWord = document.querySelector('.active');
     let letter = document.querySelector('.cursorPos');
     if (activeWord === null) {
       return;
     } else if (letter !== null) {
-      moveCursor(letter.getBoundingClientRect(), check);
+      moveCursor(letter.getBoundingClientRect(), newLineChecker);
     } else if (letter === null) {
       moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
     }
