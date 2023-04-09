@@ -13,7 +13,7 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
-//const exampleSnippets = getSnippetData();
+// const exampleSnippets = getSnippetData();
 const exampleSnippets = processSnippet("./snippets")
 
 const fill = async (exampleData, connectionPool) => {
@@ -24,8 +24,6 @@ const fill = async (exampleData, connectionPool) => {
     return Promise.all(promises);
     
 }
-
-
 
 fill(exampleSnippets, pool)
     .then(() => console.log("filled tables"))

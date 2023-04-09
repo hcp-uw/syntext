@@ -1,7 +1,5 @@
 const fs = require('fs');
 
-const { toAscii } = require('../db/betweenASCIIValues.js')
-
 const directoryPath = './server/example_data/snippets'
 
 const processSnippet = (dirPath) => {
@@ -67,7 +65,7 @@ const processSnippet = (dirPath) => {
             id: getID(filePath),
             type: getType(filePath),
             length: getLength(fileData),
-            data: fileData.map(line => toAscii(line))
+            data: fileData
         }
     });
 
