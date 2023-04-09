@@ -1,0 +1,17 @@
+Random random = new Random();
+String password = "";
+for (int i = 0; i < 8; i++) {
+	int type = random.nextInt(3);
+	switch (type) {
+		case 0:
+			password += (char)(random.nextInt(26) + 'A');
+			break;
+		case 1:
+			password += (char)(random.nextInt(26) + 'a');
+			break;
+		case 2:
+			password += random.nextInt(10);
+			break;
+	}
+}
+System.out.println("Your password is " + password);

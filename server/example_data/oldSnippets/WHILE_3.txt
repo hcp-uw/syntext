@@ -1,0 +1,8 @@
+Scanner scanner = new Scanner(System.in);
+String input = "";
+while (!input.equals("quit")) {
+	System.out.print("Enter name (or 'quit' to exit): ");
+	String name = scanner.nextLine();
+	System.out.println("You typed: " + name);
+}
+scanner.close();

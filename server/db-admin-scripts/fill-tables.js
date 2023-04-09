@@ -1,7 +1,10 @@
-const {getSnippetData} = require('../example_data/hardcodedsnippets')
-const {createSnippet, closePool} = require('../db/db')
+const { getSnippetData } = require('../example_data/hardcodedsnippets')
+const { createSnippet, closePool } = require('../db/db')
+const { processSnippet } = require('../example_data/processSnippet')
 const mysql = require('mysql2');
 const config = require('../utils/config')
+
+console.table(config)
 
 const pool = mysql.createPool({
     host: config.MYSQL_HOST, 
@@ -10,7 +13,8 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
-const exampleSnippets = getSnippetData();
+//const exampleSnippets = getSnippetData();
+const exampleSnippets = processSnippet("./snippets")
 
 const fill = async (exampleData, connectionPool) => {
     const promises = []

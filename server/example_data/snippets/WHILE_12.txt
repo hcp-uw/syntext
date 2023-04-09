@@ -1,0 +1,14 @@
+Random rand = new Random();
+
+int rolls = 0;
+
+while (true) {
+	int roll = rand.nextInt(6) + 1;
+	rolls++;
+	System.out.println("Roll #" + rolls + ": " + roll);
+	if (roll == 6) {
+		break;
+	}
+}
+
+System.out.println("It took " + rolls + " rolls to roll a 6.");

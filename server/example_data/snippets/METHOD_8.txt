@@ -1,0 +1,9 @@
+private void printSubset(int[] list, int index, List<Integer> subset){
+	if (index == list.length) System.out.println(subset);
+	else {
+		subset.add(list[index]);
+		printSubset(list, index + 1, subset);
+		subset.remove(subset.size() - 1);
+		printSubset(list, index + 1, subset);
+	}
+}

@@ -1,0 +1,10 @@
+int number = 50;
+int count = 0;
+while (number >= 1) {
+	System.out.print(number + " ");
+	count++;
+	if (count % 10 == 0) {
+		System.out.println();
+	}
+	number--;
+}

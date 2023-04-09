@@ -74,6 +74,6 @@ const processSnippet = (dirPath) => {
     return pData
 }
 
-console.log(processSnippet(directoryPath))
+//console.log(processSnippet(directoryPath))
 
 module.exports = { processSnippet }

@@ -1,0 +1,10 @@
+int target = 100;
+int sum = 0;
+int i = 0;
+
+while (sum < target) {
+	i++;
+	sum += i;
+}
+
+System.out.printf("The smallest integer n such that 1 + 2 + ... + n >= %d is %d.", target, i);

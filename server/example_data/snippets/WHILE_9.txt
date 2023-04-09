@@ -1,0 +1,7 @@
+while (num != 7) {
+	num = rand.nextInt(10) + 1;
+	System.out.println(num);
+}
+
+System.out.println("The number 7 was generated!");
+

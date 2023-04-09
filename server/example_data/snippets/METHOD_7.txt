@@ -1,0 +1,10 @@
+public int height() {
+	return height(overallRoot, 0);
+}
+
+private int height(IntTreeNode root, int height) {
+	if (root == null)
+		return height;
+	else return
+	Math.max(height(root.left, height + 1), height(root.right, height + 1));
+}

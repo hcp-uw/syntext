@@ -1,0 +1,9 @@
+int i = 0;
+while (i < 10) {
+	System.out.println("Iteration " + i);
+	if (i == 5) {
+		System.out.println("Halfway there!");
+	}
+	i++;
+}
+System.out.println("Loop finished.");
