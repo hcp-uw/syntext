@@ -1,1 +1,1 @@
-http://localhost:3001/test
+POST http://localhost:3100/api/auth/createUser?last_name%20%20%20=Melton&password%20=Testtest123!&first_name%20=Elijah&email=%20elimelt%40cs.washington.edu

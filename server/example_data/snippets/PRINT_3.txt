@@ -1,0 +1,7 @@
+List<String> names = new ArrayList<>();
+names.add("John");
+names.add("Jane");
+names.add("Bob");
+for (String name : names) {
+	System.out.println(name);
+}
