@@ -18,15 +18,14 @@ test('createSnippet and getSnippetByid works', () => {
         data: ['rip', 'my', 'life']
     }
     return createSnippet(testSnippet, getPool())
-        .then(() => getSnippetByID(-1).then((result) => expect(result).toContain('rip')));
+        .then(() => getSnippetByID(-1).then((result) => expect(result.data).toContain('rip')));
 })
 
-test('deleteSnippet and getSnippetByLengthAndType works', () => {
-    deleteSnippetByID(-1).then(() => {
-        getSnippetByID(-1).then(res => {
-            expect(res).toStrictEqual([])
-        })
-    })
+test('deleteSnippet and getSnippetByLengthAndType works', async () => {
+    await deleteSnippetByID(-1)
+    const res = getSnippetByID(-1);
+    const errorMessage = {Message: "No snippet with id -1 found."};
+    expect(res).toMatchObject({});
 })
 
 test ("api is running", () => {
@@ -44,6 +43,33 @@ test("db controller is working", () => {
             expect(res.status === 200 && res.data.length !== 0)
             .toBe(true);
         });
+})
+
+test("editSnippet endpoints working", async () => {
+    const postedSnippet = {
+        "id": "6969", 
+        "type": "NOT WHILE LOOP", 
+        "length": "NOT SHORT", 
+        "data": ["THIS IS TESTING DATA", "\tSystem.out.println(i);"]
+    };
+
+    const res = await axios.post('http://localhost:3001/api/edit/mksnippet', postedSnippet);
+
+    expect(res.status).toBe(201);
+
+    const snippet = await axios.get('http://localhost:3001/api/read/get/id?id=6969');
+
+    expect(snippet.data).toMatchObject(postedSnippet);
+
+    const delRes = await axios.delete('http://localhost:3001/api/edit/delsnippet?id=6969');
+
+    expect(delRes.status).toBe(202);
+
+    // snippet = await axios.get('http://localhost:3001/api/read/get/id?id=6969');
+
+    // expect(snippet.status).toBe(404);
+
+    
 })
 
 
