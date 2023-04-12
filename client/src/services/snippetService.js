@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://syntext.herokuapp.com/'
+const baseURL = 'https://syntext.herokuapp.com'
 
 const errSnippet =  {
     id: 1,
