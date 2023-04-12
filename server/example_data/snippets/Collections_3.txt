@@ -1,0 +1,7 @@
+List<String> myList = new ArrayList<>(); // create an empty ArrayList
+myList.add("apple"); // add elements to the list
+myList.add("banana");
+myList.add("orange");
+System.out.println(myList); // print the list
+Collections.sort(myList); // sort the list
+System.out.println(myList); // print the sorted list

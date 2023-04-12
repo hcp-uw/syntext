@@ -1,0 +1,9 @@
+Stack<String> fridge = new Stack<>();
+fridge.push("milk"); 
+fridge.push("eggs");
+fridge.push("bacon");
+System.out.println("My fridge contains: " + fridge); 
+String breakfastItem = fridge.pop(); 
+System.out.println("I'm having " + breakfastItem + " for breakfast!"); 
+System.out.println("Now my fridge only has " + fridge.size() + " items left."); 
+

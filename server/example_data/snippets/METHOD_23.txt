@@ -1,0 +1,8 @@
+public static void makeDogNoises(int numBarks) {
+	for (int i = 0; i < numBarks; i++) {
+		System.out.println("Woof!");
+	}
+	for (int i = 0; i < numBarks; i++) {
+		System.out.println("Bark!");
+	}
+}

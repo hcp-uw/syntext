@@ -1,0 +1,14 @@
+
+ArrayList<String> animals = new ArrayList<>();
+animals.add("Cow");
+animals.add("Horse");
+animals.add("Pig");
+if (animals.contains("Horse")) {
+    System.out.println("The farm has a horse!");
+}
+animals.remove("Cow");
+int numAnimals = animals.size();
+for (String animal : animals) {
+    System.out.println("The farm has a " + animal);
+}
+

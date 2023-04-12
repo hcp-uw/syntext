@@ -1,0 +1,11 @@
+
+HashMap<String, String> phoneNumbers = new HashMap<>();
+
+phoneNumbers.put("Alice", "555-1234");
+phoneNumbers.put("Bob", "555-5678");
+phoneNumbers.put("Charlie", "555-9101");
+
+String phoneNumber = phoneNumbers.get("Bob");
+System.out.println("Bob's phone number is " + phoneNumber);
+
+

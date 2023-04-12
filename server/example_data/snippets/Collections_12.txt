@@ -1,0 +1,7 @@
+List<String> names = new ArrayList<>();
+Set<Integer> numbers = new HashSet<>();
+Map<String, Integer> ages = new HashMap<>();
+
+names.add("Pikachu");
+numbers.add(1);
+ages.put("Adult", 21);

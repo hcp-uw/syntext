@@ -1,0 +1,11 @@
+int[] arr = {1, 2, 3, 4, 5};
+Stack<Integer> stack = new Stack<>();
+for (int i = arr.length - 1; i >= 0; i--) {
+    stack.add(arr[i]);
+}
+for (int i = 0; i < arr.length; i++) {
+    arr[i] = stack.pop();
+}
+// print the reversed array
+System.out.println(Arrays.toString(arr));
+
