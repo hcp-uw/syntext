@@ -1,0 +1,12 @@
+int number = 1;
+int sum = 0;
+int product = 1;
+
+while (number <= 10) {
+	sum += number;
+	product *= number;
+	number++;
+}
+
+System.out.println("The sum of the first 10 positive integers is " + sum + ".");
+System.out.println("The product of the first 10 positive integers is " + product + ".");

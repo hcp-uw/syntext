@@ -1,0 +1,17 @@
+String str = "Hello, World!";
+int len = str.length();
+int i = 0;
+
+while (i < len) {
+	char c = str.charAt(i);
+	if (Character.isUpperCase(c)) {
+		System.out.print(Character.toLowerCase(c));
+	} else if (Character.isLowerCase(c)) {
+		System.out.print(Character.toUpperCase(c));
+	} else {
+		System.out.print(c);
+	}
+	i++;
+}
+
+System.out.println();

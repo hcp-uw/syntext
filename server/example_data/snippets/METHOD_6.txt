@@ -1,0 +1,9 @@
+public int count(E element){
+	ListNode curr = this.front;
+	int count = 0;
+	while(curr!=null){
+		if (curr.data.equals(element)) count++;
+			curr = curr.next;
+		}
+	return count;
+}

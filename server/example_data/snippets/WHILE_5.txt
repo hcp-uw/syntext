@@ -1,0 +1,17 @@
+Scanner scanner = new Scanner(System.in);
+int num;
+
+System.out.println("Enter positive integers, or a negative integer to quit:");
+
+while (true) {
+	System.out.print("Enter a number: ");
+	num = scanner.nextInt();
+	
+	if (num < 0) {
+		break;
+	}
+	
+	System.out.println("You entered: " + num);
+}
+
+System.out.println("Program has ended.");

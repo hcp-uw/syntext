@@ -1,0 +1,9 @@
+public static List<People> findCoolPeople(List<People> people) {
+	List<People> coolPeople = new ArrayList<>();
+	for (People person : people) {
+		if (person.isCool()) {
+			coolPeople.add(person);
+		}
+	}
+	return coolPeople;
+}

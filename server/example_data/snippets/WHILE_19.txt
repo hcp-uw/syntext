@@ -1,0 +1,11 @@
+int numTerms = 10;
+int currentTerm = 0;
+int nextTerm = 1;
+
+while (numTerms > 0) {
+	System.out.print(nextTerm + " ");
+	int sum = currentTerm + nextTerm;
+	currentTerm = nextTerm;
+	nextTerm = sum;
+	numTerms--;
+}

@@ -1,8 +1,7 @@
-int[] array = {5, 2, 7, 1, 9};
-int max = array[0];
-for (int i = 1; i < array.length; i++) {
-	if (array[i] > max) {
-		max = array[i];
+int[] numbers = {5, 8, 2, 6, 1};
+int min = numbers[0];
+for (int i = 1; i < numbers.length; i++) {
+	if (numbers[i] < min) {
+		min = numbers[i];
 	}
 }
-System.out.println("The maximum value is " + max);

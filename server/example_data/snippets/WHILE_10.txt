@@ -1,0 +1,9 @@
+int limit = 100;
+int a = 0, b = 1;
+
+while (a <= limit) {
+	System.out.print(a + " ");
+	int sum = a + b;
+	a = b;
+	b = sum;
+}

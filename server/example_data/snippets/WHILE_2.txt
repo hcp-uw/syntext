@@ -1,18 +1,6 @@
-Random random = new Random();
-int targetNumber = random.nextInt(100) + 1;
-int guess = 0;
-int numGuesses = 0;
-
-while (guess != targetNumber) {
-	System.out.print("Guess a number between 1 and 100: ");
-	guess = scanner.nextInt();
-	numGuesses++;
-
-	if (guess < targetNumber) {
-		System.out.println("Too low! Guess again.");
-	} else if (guess > targetNumber) {
-		System.out.println("Too high! Guess again.");
-	}
+int number = 2, count = 0;
+while (count < 10) {
+	System.out.print(number + " ");
+	number += 2;
+	count++;
 }
-
-System.out.println("It took " + numGuesses + " guesses.");

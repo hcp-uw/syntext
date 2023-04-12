@@ -1,0 +1,8 @@
+public String substring(String word, int start, int end){
+	if (start < 0 || end > word.length()|| end < start)
+		throw new IllegalArgumentException();
+	if (word.length() == 0 || start == end) 
+		return "";
+	else 
+	return word.charAt(start) + substring(word, start+1, end);
+}

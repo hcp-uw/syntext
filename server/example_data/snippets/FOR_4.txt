@@ -1,5 +1,6 @@
+int[] numbers = {1, 5, 3, 2, 4};
 int sum = 0;
-for (int i = 1; i <= 5; i++) {
-	sum += i;
+for (int number : numbers) {
+	sum += number;
 }
-System.out.println(sum);
+double average = (double) sum / numbers.length;

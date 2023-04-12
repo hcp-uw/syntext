@@ -1,0 +1,7 @@
+int counter = 1;
+int totalSum = 0;
+while (counter <= 5) {
+	totalSum += counter;
+	counter++;
+}
+System.out.println("The sum of the first five positive integers is " + totalSum + ".");

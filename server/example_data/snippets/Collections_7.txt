@@ -1,0 +1,17 @@
+class Node {
+	String data;
+	Node left;
+	Node right;
+	
+	Node(String data) {
+		this.data = data;
+		this.left = null;
+		this.right = null;
+	}
+}
+
+// create a binary tree to represent a decision tree
+Node root = new Node("Is it a mammal?");
+root.left = new Node("Does it have fur?");
+root.right = new Node("Does it lay eggs?");
+root.left.left = new Node("Does it live in water?");

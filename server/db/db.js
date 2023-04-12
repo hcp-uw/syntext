@@ -11,6 +11,7 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
+
 const getSnippetByLengthAndType = async (length, type) => {
     console.table({
         host: config.MYSQL_HOST, 
@@ -72,13 +73,13 @@ const createSnippet = async (snippet, pool) => {
     try {
         await connection.beginTransaction()
         // Insert the snippet record into snippet_records table
-        const recordQuery = "INSERT INTO syntext.snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
+        const recordQuery = "INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
         await connection.query(recordQuery, [id, type, length]);
         const preparedValues = []
         // Insert each array in the data array into snippet_data table
         const dataQueries = data.map((array, arrayIndex) => {
             preparedValues[arrayIndex] = ({id:id, i:arrayIndex, d: toAscii(array)})
-            return "INSERT INTO syntext.snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
+            return "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
         });
         await Promise.all(dataQueries.map((query, index) => 
             connection.query(query, [preparedValues[index].id, preparedValues[index].i, preparedValues[index].d])));

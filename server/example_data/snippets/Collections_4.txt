@@ -1,0 +1,5 @@
+LinkedList<String> queue = new LinkedList<>();
+queue.add("Alice");
+queue.add("Bob");
+queue.add("Charlie");
+System.out.println(queue.poll()); // Alice
