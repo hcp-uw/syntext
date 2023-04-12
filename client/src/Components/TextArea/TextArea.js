@@ -22,12 +22,10 @@ const Letter = (props) => {
 		letterTyped !== undefined
 	) ? letterTyped : letterActual
 
-	//if (inActiveWord) console.log(index, 'displayed', letterDisplayed, 'typed', letterTyped, 'actual', letterActual)
-	
 	let className = '';
-	if (inActiveWord && hasBeenTyped && letterTyped !== undefined) 
+	if (inActiveWord && hasBeenTyped && letterTyped !== undefined)
 		className = isCorrect ? ' correct' : ' incorrect';
-	if (inActiveWord && cursor.letterIndex.current  === index) 
+	if (inActiveWord && cursor.letterIndex.current === index)
 		className += ' cursorPos';
 
 	return (<div className={`letter${className}`}>{letterDisplayed}</div>);
@@ -133,10 +131,7 @@ export default function TextArea(props) {
 		typingTarget
 	} = props;
 	const cursor = { lineIndex, wordIndex, letterIndex }
-	console.table('props', props)
-	useEffect(() => {
-		letterIndex.current = userInput.length;
-	}, [userInput, currWord])
+	// console.table('props', props)
 
 	const DEBUG = (hasMistake, allowedToOverflow) => {
 		console.table({'userInput': userInput,
@@ -156,13 +151,13 @@ export default function TextArea(props) {
 	// handles special keys seperately
 	const handleSpecialKey = event => {
 		// Space key handler
-		if (atEndOfWord(currWord, userInput) && 
+		if (atEndOfWord(currWord, userInput) &&
 			!atEndOfLine(wordIndex, currLine) &&
 			event.key === ' ' &&
 			!currWordHasMistake(currWord, userInput)) {
 			setCurrWord(currLine.current[wordIndex.current + 1]);
 			wordIndex.current++;
-			letterIndex.current = (-1);
+			letterIndex.current = -1;
 			setUserInput('');
 			typingProgress.current += ' ';
 			event.preventDefault();
@@ -188,16 +183,17 @@ export default function TextArea(props) {
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
-			if (currWord[letterIndex.current] === '\t') {
+			if (currWord[letterIndex.current + 1] === '\t') {
 				setUserInput(userInput.concat('\t'));
+				letterIndex.current = userInput.length;
 				typingProgress.current += '\t';
 			}
 			event.preventDefault();
-		} 
+		}
 		// Backspace key handler
 		else if (event.key === 'Backspace') {
-			if (letterIndex.current >= 1) {
-				letterIndex.current -= 2;
+			if (letterIndex.current >= 0) {
+				letterIndex.current -= 1;
 				setUserInput(userInput.substring(0, userInput.length - 1));
 				numDel.current++;
 			}
@@ -208,16 +204,18 @@ export default function TextArea(props) {
 	// handles all characters that are displayed
 	function handleChange(event) {
 		if (!recording) startGame();
-		
+
 		const keyTyped = event.target.value.charAt(event.target.value.length - 1)
 
-		if (!currWordHasMistake(currWord, userInput) && 
+		if (!currWordHasMistake(currWord, userInput) &&
 			typingTarget.charAt(typingProgress.current.length) === keyTyped) {
 			typingProgress.current += keyTyped
 		}
-		
-		if (allowedToOverflow(currWord, event.target.value))
-				setUserInput(event.target.value);
+
+		if (allowedToOverflow(currWord, event.target.value)) {
+			setUserInput(event.target.value);
+			letterIndex.current = userInput.length;
+		}
 	}
 
 	DEBUG(currWordHasMistake(currWord, userInput), allowedToOverflow(currWord, userInput));
