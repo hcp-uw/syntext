@@ -10,8 +10,7 @@ const processSnippet = (dirPath) => {
     }
 
     const getID = (filePath) => {
-        const type = getType(filePath)
-
+        const type = getType(filePath).toUpperCase();
         const temp = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
         const num = temp[temp.length - 1].split('_')[1];
         
@@ -23,7 +22,7 @@ const processSnippet = (dirPath) => {
             case "METHOD":
                 id = `2${num}` 
                 break;
-            case "PRINT":
+            case "COLLECTIONS":
                 id = `3${num}` 
                 break;
 
@@ -31,14 +30,15 @@ const processSnippet = (dirPath) => {
                 id = `4${num}` 
                 break;
         }
+        
         return Number(id.replace('.txt', ''));
     }
 
 
     const getLength = (fileData) => {
     const len = fileData.length
-    if (len <= 3) return "SHORT";
-    if (len <= 7) return "MEDIUM";
+    if (len <= 6) return "SHORT";
+    if (len <= 10) return "MEDIUM";
     else return "LONG";
     }
 
@@ -71,6 +71,9 @@ const processSnippet = (dirPath) => {
 
     return pData
 }
+
+console.log(processSnippet('./snippets'))
+;
 
 //console.log(processSnippet(directoryPath))
 

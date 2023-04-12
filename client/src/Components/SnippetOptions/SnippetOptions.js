@@ -22,9 +22,9 @@ const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSele
     switch (selectedType) {
       case 'METHOD':
         return 'methods';
-      case 'FOR_LOOP':
+      case 'FOR':
         return 'for loop';
-      case 'WHILE_LOOP':
+      case 'WHILE':
         return 'while loop';
       case 'CONDITIONAL':
         return 'conditional'
@@ -46,8 +46,8 @@ const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSele
               onSelect={handleTypeChange}
             >
               <Dropdown.Item eventKey="METHOD">methods</Dropdown.Item>
-              <Dropdown.Item eventKey="FOR_LOOP">for loop</Dropdown.Item>
-              <Dropdown.Item eventKey="WHILE_LOOP">while loop</Dropdown.Item>
+              <Dropdown.Item eventKey="FOR">for loop</Dropdown.Item>
+              <Dropdown.Item eventKey="WHILE">while loop</Dropdown.Item>
               <Dropdown.Item eventKey="CONDITIONAL">conditional</Dropdown.Item>
             </DropdownButton>
           </Dropdown>
