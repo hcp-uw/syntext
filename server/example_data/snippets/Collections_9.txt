@@ -1,0 +1,12 @@
+int[][] board = new int[10][10]; 
+
+// traverse the board and check for hits and misses
+for (row = 0; row < 10; row++) {
+	for (col = 0; col < 10; col++) {
+		if (board[row][col] == 1) {
+			System.out.println("Hit at row " + row + ", column " + col);
+		} else {
+			System.out.println("Miss at row " + row + ", column " + col);
+		}
+	}
+}

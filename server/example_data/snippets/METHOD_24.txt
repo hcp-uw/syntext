@@ -1,0 +1,8 @@
+public static String generateInsult() {
+	String[] adjectives = {"ugly", "stupid", "lazy", "smelly", "obnoxious"};
+	String[] nouns = {"monkey", "slug", "weasel", "toad", "pigeon"};
+	Random random = new Random();
+	String adjective = adjectives[random.nextInt(adjectives.length)];
+	String noun = nouns[random.nextInt(nouns.length)];
+	return "You " + adjective + " " + noun + "!";
+}

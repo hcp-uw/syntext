@@ -2,6 +2,7 @@ const mysql = require('mysql2');
 const config = require('../utils/config')
 const {toAscii} = require('../db/betweenASCIIValues')
 
+console.table(config)
 
 const pool = mysql.createPool({
     host: config.MYSQL_HOST, 

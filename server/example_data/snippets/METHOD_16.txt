@@ -1,0 +1,7 @@
+public static int findMax(int[] arr) {
+	int max = Integer.MIN_VALUE;
+	for (int num : arr) {
+		max = Math.max(max, num);
+	}
+	return max;
+}

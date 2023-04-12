@@ -1,0 +1,11 @@
+int x = 3;
+int y = 7;
+int power = 1;
+int result = 1;
+
+while (power <= y) {
+	result *= x;
+	power++;
+}
+
+System.out.println(x + " raised to the power of " + y + " is " + result + ".");

@@ -1,0 +1,8 @@
+public Map<String, List<Integer>> deepCopy(Map<String, List<Integer>> input){
+	Map<String, List<Integer>> output = new TreeMap<>();
+	for (String key : input.keySet()){
+		output.put(key, new LinkedList<Integer>());
+		for (int num : input.get(key))output.get(key).add(num);
+	}
+	return output;
+}
