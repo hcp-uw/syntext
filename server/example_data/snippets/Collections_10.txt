@@ -6,6 +6,6 @@ monkeyHabitats.put("Howler Monkey", "Central and South America");
 
 System.out.println("List of monkey types and their habitat:");
 	for (String monkey : monkeyHabitats.keySet()) {
-            String habitat = monkeyHabitats.get(monkey);
-            System.out.println(monkey + ": " + habitat);
-        }
+			String habitat = monkeyHabitats.get(monkey);
+			System.out.println(monkey + ": " + habitat);
+		}

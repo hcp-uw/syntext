@@ -1,4 +1,3 @@
-
 HashMap<String, String> phoneNumbers = new HashMap<>();
 
 phoneNumbers.put("Alice", "555-1234");

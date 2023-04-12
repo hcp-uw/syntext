@@ -1,7 +1,7 @@
 public static double findAverage(double[] arr) {
 	if (arr == null || arr.length == 0) {
 		throw new IllegalArgumentException("Array cannot be null or empty");
-    	}
+		}
 	double sum = 0;
 	for (double num : arr) {
 		sum += num;

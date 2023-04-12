@@ -1,3 +1,4 @@
+
 public static boolean detectIntruder(String username, Set<String> authorizedUsers) {
 	if (username == null || authorizedUsers == null) {
 		return false;
