@@ -10,8 +10,8 @@ const Cursor = (props) => {
   // When window is resized
   const throttledResizeHandler = throttle(() => {
     setTypingStatus(false);
+    qs('input').blur();
     checkForMovability();
-    console.log('throttling')
   }, 10);
 
   function throttle(func, wait) {
