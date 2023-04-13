@@ -11,11 +11,14 @@ export default function GameSummary({ dataTyped, numDel, time, typingTarget, sna
   const data = smoothen(dataTyped);
   let totalPresses;
   let accuracy;
+  let averageWpm;
 
   useEffect(() => {
 		totalPresses = dataTyped.reduce((a, b) => a + b) + numDel;
     accuracy = Math.floor(((totalPresses - parseFloat(numDel)) / totalPresses) * 100);
+    averageWpm = Math.floor(data.reduce((a, b) => a + b) / parseFloat(data.length));
     document.querySelector("#acc span").innerHTML = accuracy + "%";
+    document.querySelector("#wpm span").innerHTML = averageWpm;
 	}, []);
 
   const [chartData, setChartData] = useState({

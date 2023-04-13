@@ -4,36 +4,58 @@ import React, { useState, useEffect } from 'react';
 const Cursor = (props) => {
   const { userInput, currWord, typingStatus, setTypingStatus} = props;
 
-  useEffect(()=> {
-    moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true);
-  }, []);
+  // Gets when App loads for the first time
+  window.addEventListener('load', () => moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true));
 
-  useEffect(() => {
-    return () => {
-      let activeWord = document.querySelector('.active');
-      let letter = document.querySelector('.cursorPos');
-      if (activeWord === null) {
+  // When window is resized
+  const throttledResizeHandler = throttle(() => {
+    setTypingStatus(false);
+    checkForMovability();
+    console.log('throttling')
+  }, 10);
+
+  function throttle(func, wait) {
+    let lastCall = 0;
+    return function (...args) {
+      const now = new Date().getTime();
+      if (now - lastCall < wait) {
         return;
-      } else if (letter !== null) {
-        moveCursor(letter.getBoundingClientRect());
-      } else if (letter === null) {
-        moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
       }
-    }
-  }, [userInput, currWord])
+      lastCall = now;
+      return func.apply(this, args);
+    };
+  }
 
-  useEffect(() => {
-    window.addEventListener('resize', () => setTypingStatus(false))
-  })
+  window.addEventListener('resize', throttledResizeHandler);
+
+  // When a new game starts and cursor is rendered again
+  useEffect(() => moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true), []);
+
+  // Whenever user makes progress with typing
+  useEffect(() => checkForMovability(), [userInput, currWord])
+
+  function checkForMovability (newLineChecker) {
+    let activeWord = document.querySelector('.active');
+    let letter = document.querySelector('.cursorPos');
+    if (activeWord === null) {
+      return;
+    } else if (letter !== null) {
+      moveCursor(letter.getBoundingClientRect());
+    } else if (letter === null) {
+      moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
+    }
+  }
 
   function moveCursor (position, newLineCheck) {
     let cursorEl = document.querySelector('.cursor');
     resetCursorBlinkAnimation(cursorEl);
 
-    // console.log("Moving cursor to: ",document.querySelector('.active').querySelector('div').getBoundingClientRect())
-
-    if (document.querySelector('.cursorPos') !== null && document.querySelector('.cursorPos').innerHTML === '	') { // We are after a tab character
+    if (qs('.cursorPos') !== null && qs('.cursorPos').innerHTML === '	') { // We are after a tab character
       cursorEl.style.left = (position.left + 34) + 'px';
+      cursorEl.style.top = (position.top - 2.5) + 'px';
+    } else if (qs('.cursorPos') === null && qsa('.active .letter.correct').length === qsa('.active .letter').length) { // Done with word but no space has been pressed
+      position = qsa('.active .letter.correct')[qsa('.active .letter.correct').length - 1].getBoundingClientRect();
+      cursorEl.style.left = (position.left + 10) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
     } else if (!newLineCheck) { // Normal letter
       cursorEl.style.left = (position.left + 10) + 'px';
@@ -48,6 +70,14 @@ const Cursor = (props) => {
     cursor.style.animation = 'none';
     cursor.focus();
     cursor.style.animation = null;
+  }
+
+  function qsa(selector) {
+    return document.querySelectorAll(selector);
+  }
+
+  function qs(selector) {
+    return document.querySelector(selector);
   }
 
   // if (document.querySelector("input") === null) {
