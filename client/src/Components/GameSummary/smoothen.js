@@ -7,7 +7,7 @@
 const smoothen = (data) => {
     const CHARACTERS_PER_WORD = 5;
     const SECONDS_PER_MINUTE = 60;
-    const WINDOW_SIZE = 4;
+    const WINDOW_SIZE = Math.min(Math.floor(data.length/5), 2);
 
     const wpm = [];
     const dataLength = data.length;
@@ -16,7 +16,7 @@ const smoothen = (data) => {
         let sum = currentWPM;
         let count = 1;
         for (let j = 1; j <= WINDOW_SIZE; j++) {
-            if (i - j >= 0) {
+            if (i >= j) {
                 sum += data[i - j] * (SECONDS_PER_MINUTE / CHARACTERS_PER_WORD);
                 count++;
             }

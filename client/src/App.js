@@ -28,8 +28,8 @@ const App = () => {
 		id: 1,
 		SnippetType:'FOR_LOOP',
 		length: 'LONG',
-		data: ['meow',
-					'\ti like dogs']
+		data: ['meow']
+					//'\ti like dogs']
 		//  data: someData
 	}
 
