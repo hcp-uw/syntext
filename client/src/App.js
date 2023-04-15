@@ -24,6 +24,8 @@ const App = () => {
 	// 					'}'
 	// 			]
 
+	// testing
+
 	const defaultSnippet =  {
 		id: 1,
 		SnippetType:'FOR_LOOP',
