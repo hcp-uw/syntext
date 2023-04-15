@@ -59,8 +59,8 @@ const SnippetOptions = (props) => {
         return 'for loop';
       case 'WHILE':
         return 'while loop';
-      case 'CONDITIONAL':
-        return 'conditional'
+      case 'COLLECTIONS':
+        return 'collections'
       default:
         return 'snippet type';
     }
@@ -81,7 +81,7 @@ const SnippetOptions = (props) => {
               <Dropdown.Item eventKey="METHOD">methods</Dropdown.Item>
               <Dropdown.Item eventKey="FOR">for loop</Dropdown.Item>
               <Dropdown.Item eventKey="WHILE">while loop</Dropdown.Item>
-              <Dropdown.Item eventKey="CONDITIONAL">conditional</Dropdown.Item>
+              <Dropdown.Item eventKey="COLLECTIONS">collections</Dropdown.Item>
             </DropdownButton>
           </Dropdown>
           <ToggleButtonGroup 
