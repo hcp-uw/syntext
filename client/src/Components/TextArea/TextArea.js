@@ -218,7 +218,7 @@ export default function TextArea(props) {
 		}
 	}
 
-	DEBUG(currWordHasMistake(currWord, userInput), allowedToOverflow(currWord, userInput));
+	//DEBUG(currWordHasMistake(currWord, userInput), allowedToOverflow(currWord, userInput));
 
 	const renderedLines = lines.map((line, index) => {
 		return (

@@ -9,6 +9,8 @@ import Timer from "../Timer/Timer";
 const Game = ({defaultSnippet}) => {
     // what the user has typed so far for the current word
 	// cleared with wordIndex changes
+	const [currSnippet, setCurrSnippet] = useState({});
+
 	const [lines, setLines] = useState(defaultSnippet);
 
 	const [userInput, setUserInput] = useState('');
@@ -46,9 +48,9 @@ const Game = ({defaultSnippet}) => {
 
 	const snapshot = useRef(['']);
 
-	const [selectedLength, setSelectedLength] = useState(1);
+	const [selectedLength, setSelectedLength] = useState();
 
-  const [selectedType, setSelectedType] = useState('snippet type');
+  const [selectedType, setSelectedType] = useState();
 
 	useEffect(() => {
 		currLine.current = lines[0].split(" ")
@@ -117,6 +119,8 @@ const Game = ({defaultSnippet}) => {
 				setSelectedLength={setSelectedLength}
 				selectedType={selectedType}
 				setSelectedType={setSelectedType}
+				currSnippet={currSnippet} 
+				setCurrSnippet={setCurrSnippet}
 			/>
 		</div>
     ) :
@@ -131,6 +135,8 @@ const Game = ({defaultSnippet}) => {
 					setSelectedLength={setSelectedLength}
 					selectedType={selectedType}
 					setSelectedType={setSelectedType}
+					currSnippet={currSnippet} 
+					setCurrSnippet={setCurrSnippet}
 				/>
 			</div>
 		);
