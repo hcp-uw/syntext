@@ -13,7 +13,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import next from './nextArrow';
 import "./GameOptions.css"
-
+import { useState } from 'react';
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 const GameOptions = (props) => {
@@ -23,17 +23,28 @@ const GameOptions = (props) => {
 		selectedType, 
 		setSelectedType, 
 		selectedLength, 
-		setSelectedLength 
+		setSelectedLength, 
+		currSnippet, 
+		setCurrSnippet
 	} = props;
 
+	const [currSnippets, setCurrSnippets] = useState([]);
+	
 	
 	const onNewSnippetClick = () => {
+		// console.log('currSnippet', currSnippet)
+		// console.log('currSnippets', currSnippets)
+		// console.log('selLen', selectedLength)
+		// console.log('selType', selectedType)
+		if (!selectedLength || !selectedType) return;
+		let nextIndex = currSnippets.findIndex(snippet => currSnippet.id === snippet.id)
+		nextIndex = (nextIndex + 1) % currSnippets.length;
+		console.log('nextIndex', nextIndex);
+		console.log('next snippet', currSnippets[nextIndex])
 
-		getSnippet(selectedLength, selectedType)
-			.then(snippet => {
-				setLines(snippet);
-				restartGame();
-			})
+		setCurrSnippet(currSnippets[nextIndex]);
+		setLines(currSnippets[nextIndex].data);
+		restartGame();
 	}
 
 	return(
@@ -46,6 +57,8 @@ const GameOptions = (props) => {
 						setSelectedType={setSelectedType} 
 						selectedLength={selectedLength} 
 						setSelectedLength={setSelectedLength}
+						currSnippet={currSnippet} 
+						setCurrSnippets={setCurrSnippets}
 					/>
 				</Col>
 				<Col xs sm='auto' md={{offset: 2}}>
