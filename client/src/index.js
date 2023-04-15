@@ -4,8 +4,13 @@ import App from './App';
 import './index.css';
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
+import {BrowserRouter as Router} from 'react-router-dom';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App/>
+    <Router>
+        <App/>
+    </Router>
 );

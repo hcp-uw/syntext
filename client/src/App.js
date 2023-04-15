@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Route, Routes } from 'react-router-dom';
 
 import Game from './Components/Game/Game'
 import NewNavBar from './Components/NewNavBar/NewNavBar';
@@ -11,6 +12,7 @@ import Stack from "react-bootstrap/Stack";
 import Navbar from 'react-bootstrap/Navbar';
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import './index.css';
+import Timer from './Components/Timer/Timer';
 
 const App = () => {
 	// const someData = ['int j = 20;',
@@ -35,14 +37,23 @@ const App = () => {
 		//  data: someData
 	}
 
-
+	const Routing = () => {
+		return (
+			<Routes>
+					{/* <Route exact path="/" element={<Home />} /> */}
+					<Route path="/test" element={<Timer/>}/>
+			</Routes>
+		)
+	}
 
 	return(
 		<div className="app-container">
 			<NewNavBar/>
 			<Game defaultSnippet={defaultSnippet.data}/>
+
+			<Routing/>
 		</div>
 	)
-  }
+}
 
 export default App;
