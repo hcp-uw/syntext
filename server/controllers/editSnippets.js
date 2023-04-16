@@ -1,6 +1,6 @@
-const editSnippetRouter = require('express').Router()
-const Snippet = require('../db/db')
-const bodyParser = require('body-parser')
+const editSnippetRouter = require('express').Router();
+const Snippet = require('../db/db');
+const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
 
