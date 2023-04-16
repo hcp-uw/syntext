@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import Game from './Components/Game/Game'
 import NewNavBar from './Components/NewNavBar/NewNavBar';
+import Login from './Components/Login/Login';
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -39,6 +40,7 @@ const App = () => {
 		<div className="app-container">
 			<NewNavBar/>
 			<Game defaultSnippet={defaultSnippet.data}/>
+			<Login/>
 		</div>
 	)
   }
