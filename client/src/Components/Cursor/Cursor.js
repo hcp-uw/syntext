@@ -10,8 +10,8 @@ const Cursor = (props) => {
   // When window is resized
   const throttledResizeHandler = throttle(() => {
     setTypingStatus(false);
-    qs('input').blur();
     checkForMovability();
+    console.log('throttling')
   }, 10);
 
   function throttle(func, wait) {
@@ -37,10 +37,13 @@ const Cursor = (props) => {
   function checkForMovability (newLineChecker) {
     let activeWord = document.querySelector('.active');
     let letter = document.querySelector('.cursorPos');
+
     if (activeWord === null) {
       return;
     } else if (letter !== null) {
       moveCursor(letter.getBoundingClientRect());
+    } else if (activeWord.hasChildNodes() == false) {
+      moveCursor(activeWord.getBoundingClientRect(), true)
     } else if (letter === null) {
       moveCursor(activeWord.querySelector('div').getBoundingClientRect(), true);
     }
@@ -53,7 +56,11 @@ const Cursor = (props) => {
     if (qs('.cursorPos') !== null && qs('.cursorPos').innerHTML === '	') { // We are after a tab character
       cursorEl.style.left = (position.left + 34) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
-    } else if (qs('.cursorPos') === null && qsa('.active .letter.correct').length === qsa('.active .letter').length) { // Done with word but no space has been pressed
+    } else if (qs('.active').hasChildNodes() == false) { // Empty line
+      position = qs('.active').getBoundingClientRect();
+      cursorEl.style.left = (position.left - 1) + 'px';
+      cursorEl.style.top = (position.top - 6.5) + 'px';
+    } else if (qs('.cursorPos') === null && qsa('.active .letter.correct').length === qsa('.active .letter').length) { // Done with word but no space/enter has been pressed
       position = qsa('.active .letter.correct')[qsa('.active .letter.correct').length - 1].getBoundingClientRect();
       cursorEl.style.left = (position.left + 10) + 'px';
       cursorEl.style.top = (position.top - 2.5) + 'px';
