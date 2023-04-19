@@ -4,13 +4,19 @@ const jwt = require('jsonwebtoken');
 
 
 // create new user
-usersRouter.post('/', (req, res) => {
+usersRouter.post('/create', (req, res) => {
   /*
+
+    salt: 22
+    hash: 31
+
     retrieve username and password from request body.
     hash password using bcrypt and save new user to database.
     create JWT token and send it back in response if successful,
     or send error message if request fails.
   */
+
+    
 });
 
 // authenticate user and generate JWT token
