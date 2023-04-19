@@ -1,0 +1,37 @@
+div.settings-container {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 5vh;
+  width: 750px;
+  height: 500px;
+  background-color: rgb(42, 42, 42);
+  border-radius: 3%/4.5%;
+  color: rgb(255, 253, 219);
+  box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);
+}
+
+.black-shade {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+  opacity: 55%;
+}
+
+h1 {
+  font-size: 30pt;
+  margin-left: 40px;
+  margin-top: 20px;
+}
+
+hr {
+  background-color: rgb(255, 253, 219);
+  height: 3px;
+  width: 90%;
+  margin: auto;
+}

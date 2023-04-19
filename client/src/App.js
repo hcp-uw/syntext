@@ -12,7 +12,7 @@ import Stack from "react-bootstrap/Stack";
 import Navbar from 'react-bootstrap/Navbar';
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import './index.css';
-import Timer from './Components/Timer/Timer';
+import SettingsPage from './Components/SettingsPage/SettingsPage';
 
 const App = () => {
 	// const someData = ['int j = 20;',
@@ -41,7 +41,7 @@ const App = () => {
 		return (
 			<Routes>
 					{/* <Route exact path="/" element={<Home />} /> */}
-					<Route path="/test" element={<Timer/>}/>
+					<Route path="/settings" element={<SettingsPage/>}/>
 			</Routes>
 		)
 	}
