@@ -1,9 +1,10 @@
+import { Link } from 'react-router-dom';
 import stylesheet from './SettingsPage.css';
 
 const SettingsPage = () => {
   return (
     <>
-      <div className='black-shade'></div>
+      <Link to="/"><div className='black-shade'></div></Link>
       <div className='settings-container'>
         <h1>Settings</h1>
         <hr></hr>

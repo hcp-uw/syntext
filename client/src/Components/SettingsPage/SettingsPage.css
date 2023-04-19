@@ -21,6 +21,7 @@ div.settings-container {
   left: 0;
   background-color: black;
   opacity: 55%;
+  cursor: default;
 }
 
 h1 {
