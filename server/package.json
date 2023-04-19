@@ -10,7 +10,8 @@
     "start": "nodemon server",
     "start-init": "node server && npm run localDBinit",
     "dev": "nodemon devserver.js",
-    "localDBinit": "node ./db-admin-scripts/create-tables && node ./db-admin-scripts/clear-tables && node ./db-admin-scripts/fill-tables"
+    "create-tables": "node ./db-admin-scripts/create-snippet-tables && node ./db-admin-scripts/create-user-tables && node ./db-admin-scripts/create-settings-tables && node ./db-admin-scripts/create-games-tables",
+    "localDBinit": "npm run create-tables && node ./db-admin-scripts/clear-tables && node ./db-admin-scripts/fill-tables"
   },
   "keywords": [],
   "author": "",
