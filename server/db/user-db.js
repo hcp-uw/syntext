@@ -13,22 +13,28 @@ const pool = mysql.createPool({
 // creates user 
 const createUser = (username, hash, salt) => {
     // check if username exists in table
-    // SELECT username from users where username = ?
     //if it does, error
-    // insert into users values (...);
     //if it doesnt, insert row
+
+    /* example query (not sure if this is 100% right)
+    INSERT INTO users (username, salt, hash_password, date_created, last_login)
+    VALUES (username, salt, hash, CURRENT_DATE, NULL);
+    */
 }
 
 
 // get salt from db based on username
 const getSalt = (username) => {
-    // select salt from users where username = ?
+    /* example query (not sure if this is 100% right)
+    SELECT salt FROM users WHERE username = username;
+    */
 }
 
 
 
 // boolean, checks if hash matches
 const authenticate = (username, hash) => {
-    // select hash from users where username = ?
-    // hash === hash????
+    /* example query (not sure if this is 100% right)
+    SELECT hash_password FROM users WHERE username = username;
+    */
 }
