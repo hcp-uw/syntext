@@ -28,7 +28,7 @@ const getSalt = (username) => {
 
 
 // boolean, checks if hash matches
-const verify = (username, hash) => {
+const authenticate = (username, hash) => {
     // select hash from users where username = ?
     // hash === hash????
 }
