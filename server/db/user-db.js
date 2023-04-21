@@ -13,34 +13,17 @@ const pool = mysql.createPool({
 // creates user 
 const createUser = async (username, hash, salt) => {
     try {
+        const connection = await pool.getConnection();
         // Check if username exists in table
         const query = 'SELECT username FROM users WHERE username = ?';
-        const result = await pool.query(query, [username]);
+        const result = await connection.query(query, [username]);
         //checks if any rows were returned
-        if (result.length > 0) {
-          throw new Error('Username already exists'); 
+        if (result[0].length > 0) {
+            return {error: `User ${username} already exists`}; 
         } else  {
-            const result = await pool.query('INSERT INTO users (username, salt, hash_password, date_created, last_login) VALUES (?, ?, ?, CURRENT_DATE, NULL)', [username, salt, hash]);
+            const insert = 'INSERT INTO users (userID, username, salt, hash_password, date_created, last_login) VALUES (NULL, ?, ?, ?, CURRENT_DATE, NULL)'
+            const result = await pool.query(insert, [username, salt, hash]);
             console.log('User created successfully');
-        }
-    } catch (error) {
-        console.error(error);
-        connection.rollback();
-        return error;
-    } 
-}
-
-
-// get salt from db based on username
-const getSalt = async (username) => {
-    try {
-        const query = 'SELECT salt FROM users WHERE username = ?';
-        const result = await pool.query(query, [username]);
-        const rows = result[0];
-        if (rows.length > 0) {
-            return rows[0].salt;
-        } else {
-            throw new Error('User not found');
         }
     } catch (error) {
         console.error(error);
@@ -49,22 +32,51 @@ const getSalt = async (username) => {
 }
 
 
+// get salt from db based on username
+const getSalt = async (username) => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT salt FROM users WHERE username = ?';
+        const result = await connection.query(query, [username]);
+        const rows = result[0];
+        if (rows.length > 0) {
+            return rows[0].salt;
+        } else {
+            return {error: `User ${username} not found`};
+        }
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+}
 
 
 const authenticate = async (username, hash) => {
     try {
+        const connection = await pool.getConnection();
         // Check if username exists in table
-        const query = 'SELECT username FROM users WHERE username = ?';
-        const result = await pool.query(query, [username]);
-        if (result.length > 0) {
-            const user = result[0];
+        const query = 'SELECT username, hash_password FROM users WHERE username = ?';
+        const result = await connection.query(query, [username]);
+        //checks if any rows were returned
+        if (result[0].length === 0) {
+            return {error: `User ${username} doesn't exist`}; 
+        } else  {
+            console.log(result[0][0])
+            const user = result[0][0];
+            console.log('user found', user)
             const savedHash = user.hash_password;
+            console.log('provided', hash)
+            console.log('retrieved', savedHash)
             return hash === savedHash;
-        } else {
-            throw new Error('User not found');
         }
     } catch (error) {
         console.error(error);
         return error;
     } 
+}
+
+module.exports = {
+    createUser,
+    getSalt,
+    authenticate
 }

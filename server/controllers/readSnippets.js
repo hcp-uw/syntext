@@ -1,5 +1,5 @@
 const readSnippetRouter = require('express').Router()
-const SnippetDBClient = require('../db/db')
+const SnippetDBClient = require('../db/snippet-db')
 
 
 readSnippetRouter.get('/get/length', async (req, res) => {
