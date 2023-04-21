@@ -61,12 +61,8 @@ const authenticate = async (username, hash) => {
         if (result[0].length === 0) {
             return {error: `User ${username} doesn't exist`}; 
         } else  {
-            console.log(result[0][0])
             const user = result[0][0];
-            console.log('user found', user)
             const savedHash = user.hash_password;
-            console.log('provided', hash)
-            console.log('retrieved', savedHash)
             return hash === savedHash;
         }
     } catch (error) {
