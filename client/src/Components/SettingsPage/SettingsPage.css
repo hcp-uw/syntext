@@ -10,9 +10,20 @@ div.settings-container {
   background-color: rgb(42, 42, 42);
   border-radius: 3%/4.5%;
   color: rgb(255, 253, 219);
-  box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);
+  /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
+  filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
+  animation: fadeIn 0.1s;
 }
 
+@keyframes fadeInShade {
+  0% { opacity: 0; }
+  100% { opacity: 55%; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
 .black-shade {
   width: 100vw;
   height: 100vh;
@@ -22,6 +33,7 @@ div.settings-container {
   background-color: black;
   opacity: 55%;
   cursor: default;
+  animation: fadeInShade 0.3s;
 }
 
 h1 {
