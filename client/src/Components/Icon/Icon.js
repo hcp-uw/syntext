@@ -2,9 +2,10 @@ import pfp from "./pfpicon.png";
 import stylesheet from './Icon'
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-const IconNavBar = () => {
+const IconNavBar = (props) => {
+  const { setSettingsFocus } = props;
     return(
-      <Link to="/settings"><img className="icon" src={pfp} style={{stylesheet}}></img></Link>
+      <img className="icon" src={pfp} style={{stylesheet}} onClick={setSettingsFocus(true)}></img>
     )
   }
 

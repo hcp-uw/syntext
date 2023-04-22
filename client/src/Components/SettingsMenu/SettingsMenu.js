@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import stylesheet from './SettingsPage.css';
+import stylesheet from './SettingsMenu.css';
 
-const SettingsPage = () => {
+const SettingsMenu = () => {
   return (
     <>
       <Link to="/"><div className='black-shade'></div></Link>
@@ -13,4 +13,4 @@ const SettingsPage = () => {
   )
 }
 
-export default SettingsPage;
+export default SettingsMenu;
