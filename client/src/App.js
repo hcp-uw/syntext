@@ -26,8 +26,6 @@ const App = () => {
 	// 					'}'
 	// 			]
 
-	// testing
-
 	const defaultSnippet =  {
 		id: 1,
 		SnippetType:'FOR_LOOP',
@@ -37,21 +35,14 @@ const App = () => {
 		//  data: someData
 	}
 
-	const Routing = () => {
-		return (
-			<Routes>
-					{/* <Route exact path="/" element={<Home />} /> */}
-					<Route path="/settings" element={<SettingsPage/>}/>
-			</Routes>
-		)
-	}
-
 	return(
 		<div className="app-container">
 			<NewNavBar/>
 			<Game defaultSnippet={defaultSnippet.data}/>
 
-			<Routing/>
+			<Routes>
+					<Route path="/settings" element={<SettingsPage/>}/>
+			</Routes>
 		</div>
 	)
 }

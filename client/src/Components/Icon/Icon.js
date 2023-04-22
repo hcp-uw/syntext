@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 const IconNavBar = () => {
     return(
-      <>
-        <Link to="/settings"><img className="icon" src={pfp} style={{stylesheet}}></img></Link>
-      </>
+      <Link to="/settings"><img className="icon" src={pfp} style={{stylesheet}}></img></Link>
     )
   }
 
