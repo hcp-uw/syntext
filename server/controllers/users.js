@@ -10,7 +10,7 @@ const jsonParser = bodyParser.json();
 const saltRounds = 3;
 
 const generateToken = (username) => {
-  const token = jwt.sign({ id: username }, JWT_SECRET);
+  const token = jwt.sign({ username: username }, JWT_SECRET, { expiresIn: '1800s' });
   return token;
 }
 

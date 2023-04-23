@@ -81,11 +81,13 @@ const deleteUser = async (username, password) => {
         const deleteSettings = "DELETE FROM settings AS s WHERE s.userID=?;";
         const deleteGames = "DELETE FROM games AS g WHERE g.userID=?;";
         const deleteUser = "DELETE FROM users AS u WHERE u.userID=?;";
-        queries = [deleteSettings, deleteGames, deleteUser];
+        q = [deleteSettings, deleteGames, deleteUser];
         await connection.beginTransaction();
-        const results = await queries.map(q => connection.query(q, [id]));
-        connection.commit();
-        return {success: true, deleted: username, result: results};
+        await connection.query(q[0], id);
+        await connection.query(q[1], id);
+        await connection.query(q[2], id);
+        await connection.commit();
+        return {success: true, deleted: username};
     } catch (error) {
         console.error(error);
         connection.rollback();
