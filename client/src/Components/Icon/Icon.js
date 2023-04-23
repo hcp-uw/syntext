@@ -4,7 +4,7 @@ import stylesheet from './Icon'
 const IconNavBar = (props) => {
   const { setSettingsFocus } = props;
     return(
-      <img className="icon" src={pfp} style={{stylesheet}} onClick={() => setSettingsFocus(true)}></img>
+      <img className="icon" src={pfp} style={{stylesheet}} onClick={() => setSettingsFocus(true)}/>
     )
   }
 
