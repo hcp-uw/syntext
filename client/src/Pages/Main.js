@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 
 import Game from '../Components/Game/Game'
-import NewNavBar from '../Components/NewNavBar/NewNavBar';
+import MainNavBar from '../Components/MainNavBar/MainNavBar';
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import '../index.css';
-import PopupController from '../Components/PopupController/PopupController';
-
-
+import MainPopupController from '../Components/MainPopupController/MainPopupController';
 
 const Main = () => {
   const [settingsFocus, setSettingsFocus] = useState(false);
@@ -33,9 +31,9 @@ const Main = () => {
 
 	return(
 		<div className="app-container">
-      <NewNavBar setSettingsFocus={setSettingsFocus}/>
+      <MainNavBar setSettingsFocus={setSettingsFocus}/>
       <Game defaultSnippet={defaultSnippet.data}/>
-      <PopupController settingsFocus={settingsFocus} setSettingsFocus={setSettingsFocus}/>
+      <MainPopupController settingsFocus={settingsFocus} setSettingsFocus={setSettingsFocus}/>
 			{/* <NewNavBar/>
 			<Game defaultSnippet={defaultSnippet.data}/> */}
 		</div>

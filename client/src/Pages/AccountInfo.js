@@ -1,8 +1,7 @@
 const AccountInfo = () => {
   return(
-    <>
-      <div>meow</div>
-    </>
+    <div className="account-info-container">
+    </div>
   )
 }
 

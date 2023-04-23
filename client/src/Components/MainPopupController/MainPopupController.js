@@ -3,8 +3,7 @@ import SettingsMenu from "../SettingsMenu/SettingsMenu"
 
 const PopUpController = (props) => {
   const { settingsFocus, setSettingsFocus } = props;
-  useEffect(() => {
-  }, [settingsFocus])
+  useEffect(() => {}, [settingsFocus])
 
   if (settingsFocus) {
     return <SettingsMenu setSettingsFocus={setSettingsFocus}/>

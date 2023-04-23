@@ -1,5 +1,5 @@
 import pfp from "./pfpicon.png";
-import stylesheet from './Icon'
+import stylesheet from './Icon.css'
 
 const IconNavBar = (props) => {
   const { setSettingsFocus } = props;

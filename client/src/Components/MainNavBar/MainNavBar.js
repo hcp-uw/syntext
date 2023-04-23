@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Navbar from 'react-bootstrap/Navbar';
-import stylesheet from './NewNavBar'
+import stylesheet from './MainNavBar'
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 
 const NewNavBar = (props) => {
