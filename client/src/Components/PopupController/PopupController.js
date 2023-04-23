@@ -1,11 +1,17 @@
+import { useEffect } from "react";
 import SettingsMenu from "../SettingsMenu/SettingsMenu"
 
-export default PopUpController = (props) => {
-  const { settingsFocus } = props;
+const PopUpController = (props) => {
+  const { settingsFocus, setSettingsFocus } = props;
+  useEffect(() => {
+  }, [settingsFocus])
+
   if (settingsFocus) {
-    return <SettingsMenu/>
+    return <SettingsMenu setSettingsFocus={setSettingsFocus}/>
   }
   // if (loginFocus) {
   //   return <LoginPopup/>
   // }
 }
+
+export default PopUpController;

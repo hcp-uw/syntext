@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import stylesheet from './SettingsMenu.css';
 
-const SettingsMenu = () => {
+const SettingsMenu = (props) => {
+  const { setSettingsFocus } = props;
   return (
     <>
-      <Link to="/"><div className='black-shade'></div></Link>
+      <div className='black-shade' onClick={() => setSettingsFocus(false)}></div>
       <div className='settings-container'>
         <h1>Settings</h1>
         <hr></hr>
