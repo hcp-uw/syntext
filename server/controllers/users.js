@@ -1,7 +1,13 @@
-const usersRouter = require('express').Router();
+const userRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 const { JWT_SECRET } = require('../utils/config');
+const { createUser, deleteUser } = require('../db/user-db');
+const jsonParser = bodyParser.json();
+
+
+const saltRounds = 3;
 
 const generateToken = (username) => {
   const token = jwt.sign({ id: username }, JWT_SECRET);
@@ -9,14 +15,12 @@ const generateToken = (username) => {
 }
 
 // create new user
-usersRouter.post('/create', async (req, res) => {
+userRouter.post('/create', jsonParser, async (req, res) => {
   const { username, password } = req.body;
-  const saltRounds = 3;
-  const initialHash = await bcrypt.hash(password, saltRounds);
-  const salt = await bcrypt.genSalt(saltRounds);
-  const finalHash = await bcrypt.hash(initialHash + salt, saltRounds); 
+   
+  const hash = await bcrypt.hash(password, saltRounds);
   try {
-    const result = await createUser(username, finalHash, salt);
+    const result = await createUser(username, hash);
     const token = generateToken(username);
     res.set('Authorization', `Bearer ${token}`)
       .status(200)
@@ -39,7 +43,7 @@ usersRouter.post('/create', async (req, res) => {
 });
 
 // authenticate user and generate JWT token
-usersRouter.post('/login', (req, res) => {
+userRouter.post('/login', (req, res) => {
   /*
     retrieve username and password from request body.
     verify user exists in database and check password with bcrypt.
@@ -49,7 +53,7 @@ usersRouter.post('/login', (req, res) => {
 });
 
 // get current user's data
-usersRouter.get('/me', (req, res) => {
+userRouter.get('/me', (req, res) => {
   /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
@@ -59,7 +63,7 @@ usersRouter.get('/me', (req, res) => {
 });
 
 // update current user's data
-usersRouter.put('/me', (req, res) => {
+userRouter.put('/me', (req, res) => {
   /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
@@ -70,7 +74,7 @@ usersRouter.put('/me', (req, res) => {
 });
 
 // delete current user's account
-usersRouter.delete('/me', (req, res) => {
+userRouter.delete('/me', (req, res) => {
   /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
@@ -80,4 +84,9 @@ usersRouter.delete('/me', (req, res) => {
   */
 });
 
-module.exports = usersRouter;
+
+module.exports = {
+  userRouter,
+  saltRounds,
+  generateToken,
+};

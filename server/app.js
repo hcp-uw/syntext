@@ -1,6 +1,6 @@
 const express = require('express');
 const snippetRouter = require('./controllers/snippets');
-const userRouter = require('./controllers/users');
+const { userRouter } = require('./controllers/users');
 
 const cors = require('cors');
 const path = require("path");

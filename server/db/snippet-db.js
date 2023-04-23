@@ -193,13 +193,10 @@ const getSnippetByID = async (id) => {
     }
 };
 
-const getPool = () => {
-    return pool;
-}
+const getPool = () => pool;
 
-const closePool = async () => {
-    return pool.end();
-}
+
+const closePool = async () => { pool.end(); }
 
 
 module.exports = {
