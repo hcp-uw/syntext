@@ -2,14 +2,15 @@
 const mysql = require('mysql2');
 const config = require('../utils/config.js')
 const {toAscii, toChar} = require('./betweenASCIIValues')
+const { pool } = require('./pool.js')
 
 
-const pool = mysql.createPool({
-    host: config.MYSQL_HOST, 
-    user: config.MYSQL_USER,
-    password: config.MYSQL_ROOT_PASSWORD,
-    database: config.MYSQL_DATABASE
-}).promise()
+// const pool = mysql.createPool({
+//     host: config.MYSQL_HOST, 
+//     user: config.MYSQL_USER,
+//     password: config.MYSQL_ROOT_PASSWORD,
+//     database: config.MYSQL_DATABASE
+// }).promise()
 
 
 const getSnippetByLengthAndType = async (length, type) => {
@@ -19,9 +20,8 @@ const getSnippetByLengthAndType = async (length, type) => {
         password: config.MYSQL_ROOT_PASSWORD,
         database: config.MYSQL_DATABASE
     })
-    return filteredResult = getSnippetByType(type).then(result => {
-        return result.filter(snippet => snippet.length === length)
-    })
+    const result = await getSnippetByType(type)
+    return result.filter(snippet => snippet.length === length)
 }
 
 const getSnippetByType = async (type) => {
@@ -65,35 +65,50 @@ const getSnippetByType = async (type) => {
     } 
 };
 
-const createSnippet = async (snippet, pool) => {
+const createSnippet = async (snippet) => {
 
+    let connection;
     const { id, type, length, data } = snippet;
-    const connection = await pool.getConnection();
 
     try {
-        await connection.beginTransaction()
-        // Insert the snippet record into snippet_records table
+        connection = await pool.getConnection();
         const recordQuery = "INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
         await connection.query(recordQuery, [id, type, length]);
-        const preparedValues = []
-        // Insert each array in the data array into snippet_data table
-        const dataQueries = data.map((array, arrayIndex) => {
-            preparedValues[arrayIndex] = ({id:id, i:arrayIndex, d: toAscii(array)})
-            return "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
-        });
-        await Promise.all(dataQueries.map((query, index) => 
-            connection.query(query, [preparedValues[index].id, preparedValues[index].i, preparedValues[index].d])));
-        await connection.commit();
+        connection.connection.release();
+        const preparedValues = [];
+        const insertQuery = "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
+        let index = 0;
+        for (const line of data) {
+            preparedValues[index] = {id:id, i:index, d: toAscii(line)}
+            index++;
+        } 
+
+        // const dataQueries = await data.map((array, arrayIndex) => {
+        //     preparedValues[arrayIndex] = ({id:id, i:arrayIndex, d: toAscii(array)})
+        //     return "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
+        // });
+
+        index = 0;
+        let values;
+        for (const values of preparedValues) { 
+            connection = await pool.getConnection();
+            //values = preparedValues[index]
+            await connection.query(insertQuery, [values.id, values.i, values.d]);
+            await connection.connection.release()
+            index++;
+        }
+        connection.connection.release()
+
+        await connection.connection.release();
         return {
             outcome: 'success',
             created: {id, type, length}
         };
     } catch (error) {
         console.error(error);
-        await connection.rollback();
         return error;
     } finally {
-        await connection.release();
+        await connection.connection.release();
     }
 };
 
@@ -105,11 +120,13 @@ const deleteSnippetByID = async (id) => {
         await connection.beginTransaction();
         await connection.query(query1, [id]);
         await connection.query(query2, [id]);
-        connection.commit();
         console.log(`snippet with id ${id} deleted`)
+        await connection.commit();
+        await connection.connection.release()
     } catch (error) {
         console.error(error);
-        connection.rollback();
+        await connection.rollback();
+        await connection.connection.release()
         return error;
     } 
 };
@@ -154,6 +171,7 @@ const getSnippetByLength = async (length) => {
         })
         return processedResult
     } catch (error) {
+        connection.connection.release()
         console.error(error);
     } 
 };
@@ -183,7 +201,7 @@ const getSnippetByID = async (id) => {
             length: length,
             data: processedSnippetText
         };
-        
+        connection.release();
         return processedResult;
     } catch (error) {
         return {};

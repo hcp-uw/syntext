@@ -1,6 +1,7 @@
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { pool } = require('../db/pool')
 const { JWT_SECRET } = require('../utils/config');
 const {
     createUser,
@@ -37,7 +38,7 @@ test("userRouter endpoints: /create, /delete work as intended", async () => {
     expect(res.status).toBe(200);
     expect(res.headers.authorization.startsWith('Bearer ')).toBe(true);
     const token = res.headers.authorization.split(' ')[1];
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = await jwt.verify(token, JWT_SECRET);
     expect(decoded.username).toBe(testUser.username);
     const resDelete = await deleteUser(testUser.username, testUser.password);
     expect(resDelete.success).toBe(true);
@@ -46,4 +47,29 @@ test("userRouter endpoints: /create, /delete work as intended", async () => {
     expect(errorHopefully).toMatchObject({success: false, error: `User ${testUser.username} not found`})
 })
 
-afterAll(() => closePool())
+test("userRouter endpoint: /create, /login, /me (delete) work as intended", async () => {
+    // Create a test user
+    const testLoginUser = { username: 'thefirsttologin', password: 'testpassword' }
+    const createUserRes = await axios.post('http://localhost:3001/api/user/create', testLoginUser);//.then(res => expect(res.status).toBe(200))
+    expect(createUserRes.status).toBe(200)
+    console.log("FIRST!!!!!")
+    // Log in with the test user
+    const loginRes = await axios.post('http://localhost:3001/api/user/login', testLoginUser)
+    expect(loginRes.status).toBe(200)
+    //expect(typeof loginRes.data).toBe('object')
+    expect(loginRes.data.success).toBe(true)
+    console.log("SECOND!!!!!")
+    const token = loginRes.headers.authorization
+    // Delete the test user
+    // const deleteUserRes = await axios.delete(
+    //     'http://localhost:3001/api/user/del', 
+    //     {
+    //         headers: {"Authorization" : token}
+    //     }
+    // )
+    // return expect(deleteUserRes.status).toBe(204)
+    // return deleteUserRes;
+    console.log("THIRDDDD!!!!!")
+})
+
+afterAll(() => pool.end())

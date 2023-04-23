@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "cd .. && docker-compose -f docker-compose.test.yaml up --build",
-    "jest": "NODE_ENV=test jest --verbose --runInBand",
-    "integration-test": "(npm run start&) && npm run localDBinit && npm run jest",
+    "jest": "NODE_ENV=test jest --detectOpenHandles --verbose --runInBand",
+    "integration-test": "(npm run start&) && npm run create-tables && node ./db-admin-scripts/clear-tables  && npm run jest",
     "start": "nodemon server",
     "start-init": "node server && npm run localDBinit",
     "dev": "nodemon devserver.js",
