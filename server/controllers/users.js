@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const { JWT_SECRET } = require('../utils/config')
-const { createUser, deleteUser, authenticate } = require('../db/user-db')
+const { createUser, deleteUser, authenticate, updateLastsLogin } = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
 const saltRounds = 3
@@ -49,6 +49,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     else {
       const token = generateToken(username, password)
       res.set('Authorization', `Bearer ${token}`).status(200).json(authorized)
+      updateLastLogin(username)
     }
   } catch (error) {
     console.error(error)
@@ -56,18 +57,30 @@ userRouter.post('/login', jsonParser, async (req, res) => {
   }
 })
 
-// get current user's data
-userRouter.get('/me', async (req, res) => {
   /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
     send user data in response if successful,
     or send error message if request fails or token is invalid.
   */
+userRouter.get('/account', async (req, res) => {
+  try {
+    const token = req.rawHeaders[3]
+    if (!token) res.status(500).send({success: false});
+    else {
+      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
+      //const result = await deleteUser(decoded.username, decoded.password);
+      const result = await returnUserData
+      const statusCode = result.success ? 204 : 401;
+      res.status(statusCode);
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' })
+  }
 })
 
-// update current user's data
-userRouter.put('/me', async (req, res) => {
   /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
@@ -75,6 +88,23 @@ userRouter.put('/me', async (req, res) => {
     send updated user object in response if successful,
     or send error message if request fails or token is invalid.
   */
+userRouter.put('/account', async (req, res) => {
+  const { newUsername, newPassword } = req.body
+
+  try {
+    const token = req.rawHeaders[3]
+    if (!token) res.status(500).send({success: false});
+    else {
+      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
+      const result = await updateUser(decoded.username, newUsername, await bcrypt.hash(newPassword, saltRounds));
+      const statusCode = result.success ? 204 : 401;
+      res.status(statusCode);
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' })
+  }
 })
 
 /*
@@ -84,7 +114,7 @@ userRouter.put('/me', async (req, res) => {
   send success message in response if successful,
   or send error message if request fails or token is invalid.
 */
-userRouter.delete('/del', jsonParser, async (req, res) => {
+userRouter.delete('/account', jsonParser, async (req, res) => {
   try {
     const token = req.rawHeaders[3]
     if (!token) res.status(500).send({success: false});
@@ -93,7 +123,6 @@ userRouter.delete('/del', jsonParser, async (req, res) => {
       const result = await deleteUser(decoded.username, decoded.password);
       const statusCode = result.success ? 204 : 401;
       res.status(statusCode);
-      console.log("Does this even get ran????")
       return;
     }
   } catch (error) {

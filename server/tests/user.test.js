@@ -61,14 +61,14 @@ test("userRouter endpoint: /create, /login, /me (delete) work as intended", asyn
     console.log("SECOND!!!!!")
     const token = loginRes.headers.authorization
     // Delete the test user
-    // const deleteUserRes = await axios.delete(
-    //     'http://localhost:3001/api/user/del', 
-    //     {
-    //         headers: {"Authorization" : token}
-    //     }
-    // )
-    // return expect(deleteUserRes.status).toBe(204)
-    // return deleteUserRes;
+    const deleteUserRes = await axios.delete(
+        'http://localhost:3001/api/user/account', 
+        {
+            headers: {"Authorization" : token}
+        }
+    )
+    return expect(deleteUserRes.status).toBe(204)
+    return deleteUserRes;
     console.log("THIRDDDD!!!!!")
 })
 

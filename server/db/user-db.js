@@ -10,6 +10,36 @@ const { pool } = require('./pool.js')
 //     database: config.MYSQL_DATABASE
 // }).promise()
 
+const returnUserData = async (username) => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT username, last_login FROM users WHERE username = ?';
+        const result = await connection.query(query, [username]);
+        const rows = result[0];
+        connection.release();
+        if (rows.length > 0) {
+            return rows;
+        } else {
+            return {success: false, error: `User ${username} not found`};
+        }
+    } catch (error) {
+        console.error(error);
+        connection.release();
+        return error;
+    }
+}
+
+const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
+    try {
+        const connection = pool.getConnection();
+        const query = "UPDATE users SET password_hash=?, username=? WHERE username=?;";
+        const result = await connection.query(query, [newPasswordHash, newUsername, oldUsername]);
+    } catch (error) {
+        console.error(error);
+        return ({error: error.code, num: error.errno})
+    }
+}
+
 const getUserID = async (username) => {
     try {
         const connection = await pool.getConnection();
@@ -81,6 +111,20 @@ const authenticate = async (username, password) => {
     } 
 }
 
+const updateLastLogin = async (username) => {
+    
+    try {
+        const connection = await pool.getConnection();
+        const insert = 'UPDATE users SET last_login= CURRENT_DATE where username = ?'; 
+        const result = await connection.query(insert, [username]);
+        connection.release();
+    } catch (error) {
+        console.error(error);
+        connection.release();
+        return error;
+    }        
+}
+
 const deleteUser = async (username, password) => {
     const connection = await pool.getConnection();
     try {
@@ -116,5 +160,7 @@ module.exports = {
     getUserID,
     authenticate,
     getPool,
-    closePool
+    closePool,
+    updateLastLogin,
+    returnUserData
 }
