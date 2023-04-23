@@ -1,10 +1,32 @@
 const usersRouter = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../utils/config');
 
+const generateToken = (username) => {
+  const token = jwt.sign({ id: username }, JWT_SECRET);
+  return token;
+}
 
 // create new user
-usersRouter.post('/create', (req, res) => {
+usersRouter.post('/create', async (req, res) => {
+  const { username, password } = req.body;
+  const saltRounds = 3;
+  const initialHash = await bcrypt.hash(password, saltRounds);
+  const salt = await bcrypt.genSalt(saltRounds);
+  const finalHash = await bcrypt.hash(initialHash + salt, saltRounds); 
+  try {
+    const result = await createUser(username, finalHash, salt);
+    const token = generateToken(username);
+    res.set('Authorization', `Bearer ${token}`)
+      .status(200)
+      .json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+
+
   /*
     salt: 22
     hash: 31

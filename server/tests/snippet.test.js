@@ -10,15 +10,16 @@ const {
     getPool 
 } = require('../db/snippet-db');
 
-test('createSnippet and getSnippetByid works', () => {
+test('createSnippet and getSnippetByid works', async () => {
     const testSnippet = {
         id: -1, 
         type:'TEST',
         length: 'SHORT',
         data: ['rip', 'my', 'life']
     }
-    return createSnippet(testSnippet, getPool())
-        .then(() => getSnippetByID(-1).then((result) => expect(result.data).toContain('rip')));
+    await createSnippet(testSnippet, getPool());
+    const result_1 = await getSnippetByID(-1);
+    return expect(result_1.data).toContain('rip');
 })
 
 test('deleteSnippet and getSnippetByLengthAndType works', async () => {
@@ -38,14 +39,14 @@ test ("api is running", () => {
 
 test("db controller is working", () => {
     return axios
-        .get("http://localhost:3001/api/read/get/lengthandtype?length=LONG&type=WHILE_LOOP")
+        .get("http://localhost:3001/api/snippet/get/lengthandtype?length=LONG&type=WHILE_LOOP")
         .then((res) => {
             expect(res.status === 200 && res.data.length !== 0)
             .toBe(true);
         });
 })
 
-test("editSnippet endpoints working", async () => {
+test("snippet endpoints working", async () => {
     const postedSnippet = {
         "id": "6969", 
         "type": "NOT WHILE LOOP", 
@@ -53,15 +54,15 @@ test("editSnippet endpoints working", async () => {
         "data": ["THIS IS TESTING DATA", "\tSystem.out.println(i);"]
     };
 
-    const res = await axios.post('http://localhost:3001/api/edit/mksnippet', postedSnippet);
+    const res = await axios.post('http://localhost:3001/api/snippet/create', postedSnippet);
 
     expect(res.status).toBe(201);
 
-    const snippet = await axios.get('http://localhost:3001/api/read/get/id?id=6969');
+    const snippet = await axios.get('http://localhost:3001/api/snippet/get/id?id=6969');
 
     expect(snippet.data).toMatchObject(postedSnippet);
 
-    const delRes = await axios.delete('http://localhost:3001/api/edit/delsnippet?id=6969');
+    const delRes = await axios.delete('http://localhost:3001/api/snippet/remove?id=6969');
 
     expect(delRes.status).toBe(202);
 

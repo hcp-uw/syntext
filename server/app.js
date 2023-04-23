@@ -1,6 +1,7 @@
-const express = require('express')
-const readSnippetRouter = require('./controllers/readSnippets')
-const editSnippetRouter = require('./controllers/editSnippets')
+const express = require('express');
+const snippetRouter = require('./controllers/snippets');
+const userRouter = require('./controllers/users');
+
 const cors = require('cors');
 const path = require("path");
 const { unknownEndpoint, errorHandler } = require('./utils/middleware');
@@ -14,8 +15,8 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
 
 // routers
-app.use('/api/read', readSnippetRouter);
-app.use('/api/edit', editSnippetRouter);
+app.use('/api/snippet', snippetRouter);
+app.use('/api/user', userRouter);
 
 
 // test endpoint

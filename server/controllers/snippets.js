@@ -1,8 +1,38 @@
-const readSnippetRouter = require('express').Router()
 const SnippetDBClient = require('../db/snippet-db')
+const snippetRouter = require('express').Router();
 
+const bodyParser = require('body-parser');
 
-readSnippetRouter.get('/get/length', async (req, res) => {
+const jsonParser = bodyParser.json();
+
+snippetRouter.post('/create', jsonParser, async (req, res) => {
+    const {id, type, length, data} = req.body;
+    const snippetObject = {
+        id: id,
+        type: type,
+        length: length,
+        data: data
+    };
+
+    try {
+        await SnippetDBClient.createSnippet(snippetObject, SnippetDBClient.getPool());
+        res.status(201).send("snippet created");
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+snippetRouter.delete('/remove', async (req, res) => {
+    const id = req.query.id;
+    try {
+        const result = await SnippetDBClient.deleteSnippetByID(id);
+        res.status(202).send("snippet deleted");
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+snippetRouter.get('/get/length', async (req, res) => {
     try {
         const result = await SnippetDBClient.getSnippetByLength(req.query.length);
         res.send(result);
@@ -11,7 +41,7 @@ readSnippetRouter.get('/get/length', async (req, res) => {
     }
 });
 
-readSnippetRouter.get('/get/lengthandtype', async (req, res) => {
+snippetRouter.get('/get/lengthandtype', async (req, res) => {
     try {
         const result = await SnippetDBClient.getSnippetByLengthAndType(req.query.length, req.query.type);
         res.send(result);
@@ -32,7 +62,7 @@ unprocessed result : [
 ]
 */
 
-readSnippetRouter.get('/get/type', async (req, res) => {
+snippetRouter.get('/get/type', async (req, res) => {
     try {
         const result = await SnippetDBClient.getSnippetByType(req.query.type);
         res.json(result);
@@ -41,7 +71,7 @@ readSnippetRouter.get('/get/type', async (req, res) => {
     }
 });
 
-readSnippetRouter.get('/get/id', async (req, res) => {
+snippetRouter.get('/get/id', async (req, res) => {
     try {
         const result = await SnippetDBClient.getSnippetByID(req.query.id);
 
@@ -54,4 +84,4 @@ readSnippetRouter.get('/get/id', async (req, res) => {
 });
 
 
-module.exports = readSnippetRouter
+module.exports = snippetRouter
