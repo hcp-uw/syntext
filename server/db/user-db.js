@@ -13,7 +13,7 @@ const { pool } = require('./pool.js')
 const returnUserData = async (username) => {
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT username, last_login FROM users WHERE username = ?';
+        const query = 'SELECT username, last_login, userID FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
         connection.release();
