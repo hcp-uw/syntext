@@ -74,7 +74,7 @@ const createSnippet = async (snippet) => {
         connection = await pool.getConnection();
         const recordQuery = "INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
         await connection.query(recordQuery, [id, type, length]);
-        connection.connection.release();
+        connection.release()
         const preparedValues = [];
         const insertQuery = "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
         let index = 0;
@@ -94,12 +94,12 @@ const createSnippet = async (snippet) => {
             connection = await pool.getConnection();
             //values = preparedValues[index]
             await connection.query(insertQuery, [values.id, values.i, values.d]);
-            await connection.connection.release()
+            await connection.release()
             index++;
         }
-        connection.connection.release()
+        connection.release()
 
-        await connection.connection.release();
+        await connection.release()
         return {
             outcome: 'success',
             created: {id, type, length}
@@ -108,7 +108,7 @@ const createSnippet = async (snippet) => {
         console.error(error);
         return error;
     } finally {
-        await connection.connection.release();
+        await connection.release()
     }
 };
 
@@ -122,11 +122,11 @@ const deleteSnippetByID = async (id) => {
         await connection.query(query2, [id]);
         console.log(`snippet with id ${id} deleted`)
         await connection.commit();
-        await connection.connection.release()
+        await connection.release()
     } catch (error) {
         console.error(error);
         await connection.rollback();
-        await connection.connection.release()
+        await connection.release()
         return error;
     } 
 };
@@ -171,7 +171,7 @@ const getSnippetByLength = async (length) => {
         })
         return processedResult
     } catch (error) {
-        connection.connection.release()
+        connection.release()
         console.error(error);
     } 
 };

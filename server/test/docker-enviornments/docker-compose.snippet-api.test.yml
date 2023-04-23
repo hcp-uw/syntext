@@ -2,13 +2,13 @@ version: "4.17"
 services:
   database:
     container_name: db_container
-    env_file: ./.env
-    environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_USER=$MYSQL_USER
-      - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_DATABASE
-      - MYSQL_HOST=$MYSQL_HOST
+    env_file: ../../../.env
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+    #   - MYSQL_USER=$MYSQL_USER
+    #   - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
+    #   - MYSQL_DATABASE=$MYSQL_DATABASE
+    #   - MYSQL_HOST=$MYSQL_HOST
     image: mysql:latest
     ports:
       - "3307:3306"
@@ -21,14 +21,14 @@ services:
     container_name: server_container
     depends_on:
       - database
-    build: ./server
+    build: ../../
     restart: "no"
-    env_file: ./.env
+    env_file: ../../../.env
     ports: 
       - '3001:3001'
     networks:
       - backend
-    command: npm run integration-test
+    command: npm run snippet-api-test-runner
 
 networks:
   backend:

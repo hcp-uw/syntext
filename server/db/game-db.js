@@ -20,7 +20,8 @@ const createEntry = (game) => {
     try {
         const connection = pool.getConnection();
         const query = `
-            INSERT INTO games (id, 
+            INSERT INTO games (
+                id, 
                 userID, 
                 snippet_id, 
                 total_time, 
@@ -37,6 +38,18 @@ const createEntry = (game) => {
 
         const result = connection.query(query, [...game])
 
+    } catch (error) {
+        
+    }
+}
+
+const getGameStats = async (userID) => {
+    try {
+        const connection = pool.getConnection();
+        const query = `
+            SELECT * FROM games WHERE userID=?;
+        `
+        const result = connection.query(query, [userID]);
     } catch (error) {
         
     }

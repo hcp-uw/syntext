@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const { JWT_SECRET } = require('../utils/config')
-const { createUser, deleteUser, authenticate, updateLastsLogin } = require('../db/user-db')
+const { createUser, deleteUser, authenticate, updateLastLogin, returnUserData } = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
 const saltRounds = 3
@@ -69,8 +69,7 @@ userRouter.get('/account', async (req, res) => {
     if (!token) res.status(500).send({success: false});
     else {
       const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
-      //const result = await deleteUser(decoded.username, decoded.password);
-      const result = await returnUserData
+      const result = await returnUserData(username)
       const statusCode = result.success ? 204 : 401;
       res.status(statusCode);
       return;
