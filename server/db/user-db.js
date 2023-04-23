@@ -24,6 +24,10 @@ const createUser = async (username, hash, salt) => {
             const insert = 'INSERT INTO users (userID, username, salt, hash_password, date_created, last_login) VALUES (NULL, ?, ?, ?, CURRENT_DATE, NULL)'
             const result = await pool.query(insert, [username, salt, hash]);
             console.log('User created successfully');
+            return {
+                outcome: 'success',
+                created: username
+            };
         }
     } catch (error) {
         console.error(error);
@@ -71,8 +75,14 @@ const authenticate = async (username, hash) => {
     } 
 }
 
+const getPool = () => pool;
+
+const closePool = () => { pool.end(); }
+
 module.exports = {
     createUser,
     getSalt,
-    authenticate
+    authenticate,
+    getPool,
+    closePool
 }

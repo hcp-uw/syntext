@@ -8,7 +8,7 @@ const {
     getSnippetByLengthAndType,
     closePool,
     getPool 
-} = require('../db/db');
+} = require('../db/snippet-db');
 
 test('createSnippet and getSnippetByid works', () => {
     const testSnippet = {
