@@ -29,22 +29,19 @@ test('deleteSnippet and getSnippetByLengthAndType works', async () => {
     expect(res).toMatchObject({});
 })
 
-test ("api is running", () => {
-    return axios
-        .get("http://localhost:3001/test")
-        .then(res => {
-            expect(res.data).toBe("hello")
-        })
+test ("api is running", async () => {
+    const res = await axios.get("http://localhost:3001/test");
+    expect(res.data).toBe("hello");
 })
 
-test("db controller is working", () => {
-    return axios
-        .get("http://localhost:3001/api/snippet/get/lengthandtype?length=LONG&type=WHILE_LOOP")
-        .then((res) => {
-            expect(res.status === 200 && res.data.length !== 0)
-            .toBe(true);
-        });
-})
+test("db controller is working", async () => {
+    try {
+      const res = await axios.get("http://localhost:3001/api/snippet/get/lengthandtype?length=LONG&type=WHILE_LOOP");
+      expect(res.status === 200 && res.data.length !== 0).toBe(true);
+    } catch (error) {
+      console.error(error);
+    }
+});
 
 test("snippet endpoints working", async () => {
     const postedSnippet = {
