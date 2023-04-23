@@ -22,7 +22,16 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
 
     try {
         await GameDBClient.createEntry(gameObject, GameDBClient.getPool());
-        res.status(201).send({ success: true }); //--> Idk what this does
+        res.status(201).send({ success: true });
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+gameRouter.post('/getStats', async (req, res) => {
+    try {
+        const result = await GameDBCClient.getGameStats(req.query.length, req.query.type);
+        es.send(result);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
