@@ -5,7 +5,8 @@
     height: 1%; 
     float: right;
     margin-right: 5%; */
-    max-width: 75px;
-    max-height: 75px;
+    /* max-width: 75px;
+    max-height: 75px; */
     padding: 15, 15, 15, 15;
+    cursor: pointer;
 }

@@ -1,9 +1,10 @@
 import pfp from "./pfpicon.png";
-import stylesheet from './Icon'
+import stylesheet from './Icon.css'
 
-const IconNavBar = () => {
+const IconNavBar = (props) => {
+  const { setSettingsFocus } = props;
     return(
-      <img className="icon" src={pfp} style={{stylesheet}}></img>
+      <img className="icon" src={pfp} style={{stylesheet}} onClick={() => setSettingsFocus(true)}/>
     )
   }
 
