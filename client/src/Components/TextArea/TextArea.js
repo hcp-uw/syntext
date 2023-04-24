@@ -163,19 +163,18 @@ export default function TextArea(props) {
 			event.preventDefault();
 		}
 		// Enter key handler
-		else if (atEndOfWord(currWord, userInput) && 
+		else if (atEndOfWord(currWord, userInput) &&
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
 			event.key === 'Enter') {
 				currLine.current = (lines[lineIndex.current + 1].split(" "));
-				lineIndex.current++; 
+				lineIndex.current++;
 				setCurrWord((lines[lineIndex.current].split(" "))[0]);
 				wordIndex.current = 0;
 				letterIndex.current = -1;
 				setUserInput('');
 				typingProgress.current += '\n';
 				event.preventDefault();
-			
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
@@ -213,7 +212,10 @@ export default function TextArea(props) {
 			letterIndex.current = userInput.length;
 		}
 
-		if (atEndOfWord(currWord, userInput) && 
+		// Remove atEndOfWord checker and replace with current word length === userinput length - 1 checker
+		// Add a new checker using the keyTyped above and compare it to current word's last character
+		// You can also move the lines length === index + 1 checker into the first if statement.
+		if (atEndOfWord(currWord, userInput) &&
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput)) {
 			if (lines.length === lineIndex.current + 1) {
