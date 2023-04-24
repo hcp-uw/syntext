@@ -167,10 +167,6 @@ export default function TextArea(props) {
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
 			event.key === 'Enter') {
-			if (lines.length === lineIndex.current + 1) {
-				setGameFinished(true);
-				event.preventDefault();
-			} else {
 				currLine.current = (lines[lineIndex.current + 1].split(" "));
 				lineIndex.current++; 
 				setCurrWord((lines[lineIndex.current].split(" "))[0]);
@@ -179,7 +175,7 @@ export default function TextArea(props) {
 				setUserInput('');
 				typingProgress.current += '\n';
 				event.preventDefault();
-			}
+			
 		}
 		// Tab key handler
 		else if (event.key === 'Tab') {
@@ -215,6 +211,15 @@ export default function TextArea(props) {
 		if (allowedToOverflow(currWord, event.target.value)) {
 			setUserInput(event.target.value);
 			letterIndex.current = userInput.length;
+		}
+
+		if (atEndOfWord(currWord, userInput) && 
+			atEndOfLine(wordIndex, currLine) &&
+			!currWordHasMistake(currWord, userInput)) {
+			if (lines.length === lineIndex.current + 1) {
+				setGameFinished(true);
+				event.preventDefault();
+			}
 		}
 	}
 
