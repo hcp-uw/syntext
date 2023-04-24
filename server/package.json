@@ -16,7 +16,7 @@
     "user-db-test-runner": "(npm run start&) && npm run localDBinit && npm run jest ./test/user.db.test.js",
     "jest": "NODE_ENV=test jest --verbose --runInBand",
     "create-tables": "node ./db-admin-scripts/create-snippet-tables && node ./db-admin-scripts/create-user-tables && node ./db-admin-scripts/create-settings-tables && node ./db-admin-scripts/create-games-tables",
-    "localDBinit": "npm run create-tables && node ./db-admin-scripts/clear-tables && node ./db-admin-scripts/fill-tables",
+    "localDBinit": "npm run create-tables && node ./db-admin-scripts/clear-tables",
     "start": "nodemon server"
   },
   "keywords": [],

@@ -2,7 +2,7 @@ version: "4.17"
 services:
   database:
     container_name: db_container
-    env_file: ../../../.env
+    env_file: .env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_USER=$MYSQL_USER
@@ -23,7 +23,7 @@ services:
       - database
     build: ../../
     restart: "no"
-    env_file: ../../../.env
+    env_file: .env
     ports: 
       - '3001:3001'
     networks:
