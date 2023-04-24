@@ -2,9 +2,9 @@ const axios = require('axios');
 
 describe('Snippet API', () => {
   const postedSnippet = {
-    id: '6969',
-    type: 'NOT WHILE LOOP',
-    length: 'NOT SHORT',
+    id: 6969,
+    type: 'WHILE_LOOP',
+    length: 'SHORT',
     data: ['THIS IS TESTING DATA', '\tSystem.out.println(i);']
   }
 
@@ -15,10 +15,18 @@ describe('Snippet API', () => {
     )
 
     expect(res.status).toBe(201)
-    expect(res.data).toBe("snippet created")
+    expect(res.data).toBe("Snippet created")
+    await axios.delete(
+      'http://localhost:3001/api/snippet/remove?id=6969'
+    )
   })
 
   test('get a snippet by ID', async () => {
+    await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      postedSnippet
+    )
+
     const res = await axios.get(
       'http://localhost:3001/api/snippet/get/id?id=6969'
     )
@@ -28,17 +36,25 @@ describe('Snippet API', () => {
   })
 
   test('delete a snippet by ID', async () => {
+    await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      postedSnippet
+    )
     const res = await axios.delete(
       'http://localhost:3001/api/snippet/remove?id=6969'
     )
 
     expect(res.status).toBe(202)
-    expect(res.data).toBe("snippet deleted")
+    expect(res.data).toBe("Snippet deleted")
   })
 
   test('get snippets by length', async () => {
+    await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      postedSnippet
+    )
     const res = await axios.get(
-      'http://localhost:3001/api/snippet/get/length?length=NOT SHORT'
+      'http://localhost:3001/api/snippet/get/length?length=SHORT'
     )
 
     expect(res.status).toBe(200)
@@ -46,8 +62,13 @@ describe('Snippet API', () => {
   })
 
   test('get snippets by length and type', async () => {
+    await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      postedSnippet
+    )
+
     const res = await axios.get(
-      'http://localhost:3001/api/snippet/get/lengthandtype?length=NOT SHORT&type=NOT WHILE LOOP'
+      'http://localhost:3001/api/snippet/get/lengthandtype?length=SHORT&type=WHILE_LOOP'
     )
 
     expect(res.status).toBe(200)
@@ -55,8 +76,13 @@ describe('Snippet API', () => {
   })
 
   test('get snippets by type', async () => {
+    await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      postedSnippet
+    )
+    
     const res = await axios.get(
-      'http://localhost:3001/api/snippet/get/type?type=NOT WHILE LOOP'
+      'http://localhost:3001/api/snippet/get/type?type=WHILE_LOOP'
     )
 
     expect(res.status).toBe(200)
@@ -77,7 +103,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Missing data in request body')
+      expect(error.response.data).toBe('Bad Request: Missing data in request body')
     }
   })
 
@@ -96,7 +122,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Invalid data in request body')
+      expect(error.response.data).toBe('Bad Request: Invalid data in request body')
     }
   })
 
@@ -107,7 +133,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Missing ID parameter')
+      expect(error.response.data).toBe('Bad Request: Missing id parameter')
     }
   })
 

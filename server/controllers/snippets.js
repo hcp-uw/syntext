@@ -19,11 +19,11 @@ snippetRouter.post('/create', jsonParser, async (req, res) => {
     const { id, type, length, data } = req.body;
 
     if (!id || !type || !length || !data) {
-        return res.status(400).send('Bad Request: Missing required field(s)');
+        return res.status(400).send('Bad Request: Missing data in request body');
     }
 
     const snippetObject = {
-        id: id,
+        id: Number(id),
         type: type,
         length: length,
         data: data
@@ -39,7 +39,7 @@ snippetRouter.post('/create', jsonParser, async (req, res) => {
 });
 
 snippetRouter.delete('/remove', async (req, res) => {
-    const id = req.query.id;
+    const id = Number(req.query.id);
 
     if (!id) {
         return res.status(400).send('Bad Request: Missing id parameter');
@@ -48,7 +48,7 @@ snippetRouter.delete('/remove', async (req, res) => {
     try {
         const result = await deleteSnippetByID(id);
 
-        if (result) {
+        if (result && result.success) {
             return res.status(202).send('Snippet deleted');
         } else {
             return res.status(404).send('Not Found: Snippet not found');
@@ -128,7 +128,7 @@ snippetRouter.get('/get/type', async (req, res) => {
 
 
 snippetRouter.get('/get/id', async (req, res) => {
-    const id = req.query.id;
+    const id = Number(req.query.id);
 
     if (!id) {
         return res.status(400).send('Bad Request: Missing id parameter');

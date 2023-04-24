@@ -30,6 +30,7 @@ services:
     networks:
       - backend
     command: npm run snippet-api-test-runner
+    tty: true
 
 networks:
   backend:
