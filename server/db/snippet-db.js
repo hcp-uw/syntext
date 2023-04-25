@@ -31,8 +31,7 @@ const getSnippetByType = async (type) => {
         `;
         const result = await connection.query(query, [type]);
         if (result[0].length === 0) return [];
-        console.log("query result", result[0])
-        const charData = result.map(line_data => {
+        const charData = result[0].map(line_data => {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')}
         });
         let intermediateResult = {};

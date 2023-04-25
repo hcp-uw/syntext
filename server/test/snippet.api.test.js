@@ -33,6 +33,9 @@ describe('Snippet API', () => {
 
     expect(res.status).toBe(200)
     expect(res.data).toMatchObject(postedSnippet)
+    await axios.delete(
+      'http://localhost:3001/api/snippet/remove?id=6969'
+    )
   })
 
   test('delete a snippet by ID', async () => {
@@ -59,6 +62,9 @@ describe('Snippet API', () => {
 
     expect(res.status).toBe(200)
     expect(res.data).toMatchObject([postedSnippet])
+    await axios.delete(
+      'http://localhost:3001/api/snippet/remove?id=6969'
+    )
   })
 
   test('get snippets by length and type', async () => {
@@ -73,6 +79,9 @@ describe('Snippet API', () => {
 
     expect(res.status).toBe(200)
     expect(res.data).toMatchObject([postedSnippet])
+    await axios.delete(
+      'http://localhost:3001/api/snippet/remove?id=6969'
+    )
   })
 
   test('get snippets by type', async () => {
@@ -87,6 +96,9 @@ describe('Snippet API', () => {
 
     expect(res.status).toBe(200)
     expect(res.data).toMatchObject([postedSnippet])
+    await axios.delete(
+      'http://localhost:3001/api/snippet/remove?id=6969'
+    )
   })
 
   test('handle error when creating a new snippet with missing data', async () => {
@@ -164,6 +176,10 @@ describe('Snippet API', () => {
       await axios.post('http://localhost:3001/api/snippet/create', snippet)
     } catch (error) {
       expect(error.response.status).toBe(400)
+    } finally {
+      await axios.delete(
+        'http://localhost:3001/api/snippet/remove?id=1234'
+      )
     }
   })
   
@@ -179,6 +195,10 @@ describe('Snippet API', () => {
       await axios.post('http://localhost:3001/api/snippet/create', snippet)
     } catch (error) {
       expect(error.response.status).toBe(400)
+    }finally {
+      await axios.delete(
+        'http://localhost:3001/api/snippet/remove?id=1234'
+      )
     }
   })
   
@@ -192,7 +212,7 @@ describe('Snippet API', () => {
   
   test('handle error when retrieving snippets by length and type with missing length', async () => {
     try {
-      await axios.get('http://localhost:3001/api/snippet/get/lengthandtype?type=FOR%20LOOP')
+      await axios.get('http://localhost:3001/api/snippet/get/lengthandtype?type=FOR_LOOP')
     } catch (error) {
       expect(error.response.status).toBe(400)
     }
