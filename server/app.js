@@ -8,8 +8,12 @@ const { unknownEndpoint, errorHandler } = require('./utils/middleware');
 
 const app = express();
 
+const corsOptions = {
+    exposedHeaders: 'Authorization',
+};
+
 // cors
-app.use(cors());
+app.use(cors(corsOptions));
 
 // provides middlewares for node server to serve front-end build files
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
