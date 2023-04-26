@@ -46,5 +46,50 @@ const clearDataTable = async () => {
     }
 }
 
-Promise.all([clearDataTable(), clearRecordTable()]).then(() => pool.end())
+const clearUserTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM users WHERE 1 = 1;'
+        const result = await connection.query(query);
+        connection.release();
+        console.log('cleared users')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const clearSettingsTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM settings WHERE 1 = 1;'
+        const result = await connection.query(query);
+        connection.release();
+        console.log('cleared settings')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const clearGamesTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM games WHERE 1 = 1;'
+        const result = await connection.query(query);
+        connection.release();
+        console.log('cleared snippet_data')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+Promise.all([
+    clearDataTable(), 
+    clearRecordTable(),
+    clearGamesTable(),
+    clearSettingsTable(),
+    clearUserTable()
+]).then(() => pool.end())
 
