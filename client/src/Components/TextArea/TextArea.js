@@ -215,13 +215,13 @@ export default function TextArea(props) {
 		// Remove atEndOfWord checker and replace with current word length === userinput length - 1 checker
 		// Add a new checker using the keyTyped above and compare it to current word's last character
 		// You can also move the lines length === index + 1 checker into the first if statement.
-		if (atEndOfWord(currWord, userInput) &&
+		if (currWord.length - 1 === userInput.length &&
 			atEndOfLine(wordIndex, currLine) &&
-			!currWordHasMistake(currWord, userInput)) {
-			if (lines.length === lineIndex.current + 1) {
+			!currWordHasMistake(currWord, userInput) &&
+			keyTyped === currWord[currWord.length - 1] &&
+			lines.length === lineIndex.current + 1) {
 				setGameFinished(true);
 				event.preventDefault();
-			}
 		}
 	}
 
