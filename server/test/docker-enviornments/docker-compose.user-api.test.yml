@@ -29,6 +29,7 @@ services:
     networks:
       - backend
     command: npm run user-api-test-runner
+    tty: true
 
 networks:
   backend:

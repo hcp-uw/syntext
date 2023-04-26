@@ -30,5 +30,6 @@ services:
       - backend
     command: npm run snippet-db-test-runner
     tty: true
+    
 networks:
   backend:

@@ -36,7 +36,7 @@ const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
         const result = await connection.query(query, [newPasswordHash, newUsername, oldUsername]);
     } catch (error) {
         console.error(error);
-        return ({error: error.code, num: error.errno})
+        return ({success: false, error: error.code, num: error.errno})
     }
 }
 
@@ -69,7 +69,7 @@ const createUser = async (username, hash) => {
         //checks if any rows were returned
         if (result[0].length > 0) {
             connection.release();
-            return {error: `User ${username} already exists`}; 
+            return {success: false, error: `User ${username} already exists`}; 
         } else  {
             const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'
             const result = await pool.query(insert, [username, hash]);
@@ -100,9 +100,9 @@ const authenticate = async (username, password) => {
         } else  {
             const user = result[0][0];
             const savedHash = user.hash_password;
-            console.table({password, savedHash})
             connection.release();
-            return { success: await bcrypt.compare(password, savedHash) };
+            const authResult = await bcrypt.compare(password, savedHash);
+            return { success: authResult }
         }
     } catch (error) {
         console.error(error);
