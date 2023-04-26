@@ -212,9 +212,6 @@ export default function TextArea(props) {
 			letterIndex.current = userInput.length;
 		}
 
-		// Remove atEndOfWord checker and replace with current word length === userinput length - 1 checker
-		// Add a new checker using the keyTyped above and compare it to current word's last character
-		// You can also move the lines length === index + 1 checker into the first if statement.
 		if (currWord.length - 1 === userInput.length &&
 			atEndOfLine(wordIndex, currLine) &&
 			!currWordHasMistake(currWord, userInput) &&
