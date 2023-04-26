@@ -3,8 +3,8 @@ const config = require('../utils/config.js');
 const bcrypt = require('bcrypt');
 const { pool } = require('./pool.js');
 
-
-    //id int primary key auto_increment,
+    // game schema:
+    //     id int primary key auto_increment,
     //     username varchar(256) references users(username),
     //     snippet_id int,
     //     total_time int,
@@ -16,41 +16,43 @@ const { pool } = require('./pool.js');
     //     time_stamp datetime,
 
 const createEntry = (game) => {
+    throw new Error({message: "not yet implemented"})
     //const {} = game;
-    try {
-        const connection = pool.getConnection();
-        const query = `
-            INSERT INTO games (
-                id, 
-                userID, 
-                snippet_id, 
-                total_time, 
-                total_characters,
-                wpm_data,
-                wpm_avg,
-                accuracy,
-                num_mistakes,
-                time_stamp
-            ) VALUES (
-                NULL,?,?,?,?,?,?,?,NOW()
-            );
-        `
+    // try {
+    //     const connection = pool.getConnection();
+    //     const query = `
+    //         INSERT INTO games (
+    //             id, 
+    //             userID, 
+    //             snippet_id, 
+    //             total_time, 
+    //             total_characters,
+    //             wpm_data,
+    //             wpm_avg,
+    //             accuracy,
+    //             num_mistakes,
+    //             time_stamp
+    //         ) VALUES (
+    //             NULL,?,?,?,?,?,?,?,NOW()
+    //         );
+    //     `
 
-        const result = connection.query(query, [...game])
+    //     const result = connection.query(query, [...game])
 
-    } catch (error) {
+    // } catch (error) {
         
-    }
+    // }
 }
 
 const getGameStats = async (userID) => {
-    try {
-        const connection = pool.getConnection();
-        const query = `
-            SELECT * FROM games WHERE userID=?;
-        `
-        const result = connection.query(query, [userID]);
-    } catch (error) {
+    throw new Error({message: "not yet implemented"})
+    // try {
+    //     const connection = pool.getConnection();
+    //     const query = `
+    //         SELECT * FROM games WHERE userID=?;
+    //     `
+    //     const result = connection.query(query, [userID]);
+    // } catch (error) {
         
-    }
+    // }
 }

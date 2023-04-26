@@ -10,15 +10,15 @@ const { pool } = require('./pool.js')
 //     database: config.MYSQL_DATABASE
 // }).promise()
 
-const returnUserData = async (username) => {
+const getUser = async (username) => {
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT username, last_login, userID FROM users WHERE username = ?';
+        const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
         connection.release();
         if (rows.length > 0) {
-            return rows;
+            return rows[0];
         } else {
             return {success: false, error: `User ${username} not found`};
         }
@@ -29,14 +29,15 @@ const returnUserData = async (username) => {
     }
 }
 
+// this function depends on how we store user information. If we only use an id 
+// to identify the user, then we won't have cascading changes!
 const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
+    throw new Error({message: "not yet implemented"})
     try {
-        const connection = pool.getConnection();
-        const query = "UPDATE users SET password_hash=?, username=? WHERE username=?;";
-        const result = await connection.query(query, [newPasswordHash, newUsername, oldUsername]);
+        
     } catch (error) {
         console.error(error);
-        return ({success: false, error: error.code, num: error.errno})
+        return ({success: false, ...error})
     }
 }
 
@@ -112,16 +113,16 @@ const authenticate = async (username, password) => {
 }
 
 const updateLastLogin = async (username) => {
-    
     try {
         const connection = await pool.getConnection();
-        const insert = 'UPDATE users SET last_login= CURRENT_DATE where username = ?'; 
+        const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
         const result = await connection.query(insert, [username]);
         connection.release();
+        return {success: true}
     } catch (error) {
         console.error(error);
         connection.release();
-        return error;
+        return {...error, success: false};
     }        
 }
 
@@ -162,5 +163,6 @@ module.exports = {
     getPool,
     closePool,
     updateLastLogin,
-    returnUserData
+    getUser,
+    updateUser
 }
