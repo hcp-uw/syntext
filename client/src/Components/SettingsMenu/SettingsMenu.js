@@ -1,10 +1,13 @@
-import stylesheet from './SettingsMenu.css';
+import './SettingsMenu.css'
 
-const SettingsMenu = (props) => {
-  const { setSettingsFocus } = props;
+const SettingsMenu = props => {
+  const { setSettingsFocus } = props
   return (
     <>
-      <div className='black-shade' onClick={() => setSettingsFocus(false)}></div>
+      <div
+        className='black-shade'
+        onClick={() => setSettingsFocus(false)}
+      ></div>
       <div className='settings-container'>
         <h1>Settings</h1>
         <hr></hr>
@@ -13,4 +16,4 @@ const SettingsMenu = (props) => {
   )
 }
 
-export default SettingsMenu;
+export default SettingsMenu

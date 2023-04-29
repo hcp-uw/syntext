@@ -1,8 +1,5 @@
 const AccountInfo = () => {
-  return(
-    <div className="account-info-container">
-    </div>
-  )
+  return <div className='account-info-container'></div>
 }
 
-export default AccountInfo;
+export default AccountInfo
