@@ -1,15 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import Game from '../Components/Game/Game'
-import MainNavBar from '../Components/MainNavBar/MainNavBar'
-import Login from '../Components/Login/Login'
-import CreateAccount from '../Components/CreateAccount/CreateAccount'
-import 'bootstrap/dist/css/bootstrap-grid.min.css'
-import '../index.css'
-import MainPopupController from '../Components/MainPopupController/MainPopupController'
+import Game from "../Components/Game/Game";
+import MainNavBar from "../Components/MainNavBar/MainNavBar";
+
+import "bootstrap/dist/css/bootstrap-grid.min.css";
+import "../index.css";
+import MainPopupController from "../Components/MainPopupController/MainPopupController";
 
 const Main = () => {
-  const [settingsFocus, setSettingsFocus] = useState(false)
+  const [settingsFocus, setSettingsFocus] = useState(false);
   /*
   const someData = [
     'int j = 20;',
@@ -25,14 +24,14 @@ const Main = () => {
 */
   const defaultSnippet = {
     id: 1,
-    SnippetType: 'FOR_LOOP',
-    length: 'LONG',
-    data: ['meow', '\ti like dogs']
+    SnippetType: "FOR_LOOP",
+    length: "LONG",
+    data: ["meow", "\ti like dogs"],
     //  data: someData
-  }
+  };
 
   return (
-    <div className='app-container'>
+    <div className="app-container">
       <MainNavBar setSettingsFocus={setSettingsFocus} />
       <Game defaultSnippet={defaultSnippet.data} />
       <MainPopupController
@@ -40,7 +39,7 @@ const Main = () => {
         setSettingsFocus={setSettingsFocus}
       />
     </div>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
