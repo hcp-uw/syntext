@@ -3,25 +3,34 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const { JWT_SECRET } = require('../utils/config')
-const { createUser, deleteUser, authenticate, updateLastLogin, getUser, getUserID } = require('../db/user-db')
+const {
+  createUser,
+  deleteUser,
+  authenticate,
+  updateLastLogin,
+  getUser,
+  getUserID
+} = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
 const saltRounds = 3
 
 const generateToken = async (username, password) => {
-  const id = await getUserID(username);
-  const token = jwt.sign({ username: username, password: password, userID: id }, JWT_SECRET, {
-    expiresIn: '1800s'
-  })
+  const id = await getUserID(username)
+  const token = jwt.sign(
+    { username: username, password: password, userID: id },
+    JWT_SECRET,
+    {
+      expiresIn: '1800s'
+    }
+  )
   return token
 }
 
-const verifyToken = async (token) => {
-  const res = await jwt.verify(token.split(' ')[1], JWT_SECRET);
-  return res;
+const verifyToken = async token => {
+  const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+  return res
 }
-
-
 
 /*
   retrieve username and password from request body.
@@ -30,22 +39,27 @@ const verifyToken = async (token) => {
   or send error message if request fails.
 */
 userRouter.post('/create', jsonParser, async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ success: false, error: 'Missing required fields' });
+    return res
+      .status(400)
+      .json({ success: false, error: 'Missing required fields' })
   }
 
   try {
-    const hash = await bcrypt.hash(password, saltRounds);
-    const result = await createUser(username, hash);
-    const token = await generateToken(username, password);
-    return res.set('Authorization', `Bearer ${token}`).status(201).json({ success: true });
+    const hash = await bcrypt.hash(password, saltRounds)
+    const result = await createUser(username, hash)
+    const token = await generateToken(username, password)
+    return res
+      .set('Authorization', `Bearer ${token}`)
+      .status(201)
+      .json({ success: true })
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, ...error });
+    console.error(error)
+    return res.status(500).json({ success: false, ...error })
   }
-});
+})
 
 /*
   retrieve username and password from request body.
@@ -56,15 +70,23 @@ userRouter.post('/create', jsonParser, async (req, res) => {
 userRouter.post('/login', jsonParser, async (req, res) => {
   const { username, password } = req.body
 
-  if (!username || !password) 
-    return res.status(400).json({ success: false, error: 'Missing required fields' });
-  
+  if (!username || !password)
+    return res
+      .status(400)
+      .json({ success: false, error: 'Missing required fields' })
+
   try {
     const authorized = await authenticate(username, password)
-    if (!authorized.success) res.status(401).send({success: false, error: "Invalid username or password"})
+    if (!authorized.success)
+      res
+        .status(401)
+        .send({ success: false, error: 'Invalid username or password' })
     else {
       const token = await generateToken(username, password)
-      res.set('Authorization', `Bearer ${token}`).status(200).json({success: true});
+      res
+        .set('Authorization', `Bearer ${token}`)
+        .status(200)
+        .json({ success: true })
       updateLastLogin(username)
     }
   } catch (error) {
@@ -73,7 +95,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
   }
 })
 
-  /*
+/*
     verify JWT token in authorization header.
     find user in database based on decoded token.
     send user data in response if successful,
@@ -81,24 +103,25 @@ userRouter.post('/login', jsonParser, async (req, res) => {
   */
 userRouter.get('/account', async (req, res) => {
   try {
-    const tokenIndex = req.rawHeaders.findIndex(header => header === "Authorization") + 1;
+    const tokenIndex =
+      req.rawHeaders.findIndex(header => header === 'Authorization') + 1
     const token = req.rawHeaders[tokenIndex]
-    if (!token) res.status(500).send({success: false});
+    if (!token) res.status(500).send({ success: false })
     else {
-      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
-      const result = await getUser(decoded.username);
-      if (result.username && decoded.username) 
-        res.status(200).send({...result, success: true});
-      else res.status(401).send({success: false});
-      return;
+      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+      const result = await getUser(decoded.username)
+      if (result.username && decoded.username)
+        res.status(200).send({ ...result, success: true })
+      else res.status(401).send({ success: false })
+      return
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
   }
 })
 
-  /*
+/*
     verify JWT token in authorization header.
     find user in database based on decoded token.
     update user data and save to database.
@@ -110,16 +133,20 @@ userRouter.put('/account', async (req, res) => {
 
   try {
     const token = req.rawHeaders[3]
-    if (!token) res.status(500).send({success: false});
+    if (!token) res.status(500).send({ success: false })
     else {
-      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
-      const result = await updateUser(decoded.username, newUsername, await bcrypt.hash(newPassword, saltRounds));
-      const statusCode = result.success ? 204 : 401;
-      res.status(statusCode);
-      return;
+      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+      const result = await updateUser(
+        decoded.username,
+        newUsername,
+        await bcrypt.hash(newPassword, saltRounds)
+      )
+      const statusCode = result.success ? 204 : 401
+      res.status(statusCode)
+      return
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
   }
 })
@@ -132,19 +159,20 @@ userRouter.put('/account', async (req, res) => {
   or send error message if request fails or token is invalid.
 */
 userRouter.delete('/account', jsonParser, async (req, res) => {
-  const tokenIndex = req.rawHeaders.findIndex(header => header === "Authorization") + 1;
+  const tokenIndex =
+    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
   const token = req.rawHeaders[tokenIndex]
   try {
-    if (!token) res.status(500).send({success: false});
+    if (!token) res.status(500).send({ success: false })
     else {
-      const decoded = await verifyToken(token);
-      const result = await deleteUser(decoded.username, decoded.password);
-      const statusCode = result.success ? 204 : 401;
-      res.status(statusCode).send({success: statusCode === 204});
-      return;
+      const decoded = await verifyToken(token)
+      const result = await deleteUser(decoded.username, decoded.password)
+      const statusCode = result.success ? 204 : 401
+      res.status(statusCode).send({ success: statusCode === 204 })
+      return
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
   }
 })
