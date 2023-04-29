@@ -18,9 +18,7 @@ const SnippetOptions = (props) => {
   } = props;
 
   useEffect(() => {
-    console.log('in useEffect')
     if (selectedLength && selectedType) {
-      console.log('in if statement')
       loadNewSnippets(selectedLength, selectedType)
     }
   }

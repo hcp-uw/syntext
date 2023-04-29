@@ -77,6 +77,35 @@ test("authenticate works properly", async () => {
 
     const resWrongEverything = await authenticate("fakeusername", "notmypassword");
     expect(resWrongEverything).toMatchObject({success: false, error: `User fakeusername doesn't exist`});
+<<<<<<< HEAD
+=======
+
+    await deleteUser(testUser.user, testUser.pw);
+})
+
+// write test for updateLastLogin, updateUser, getUser
+
+test("getUser, updateLastLogin works as intended", async () => {
+    const testUser = {
+        user: "elijah", 
+        pw: "ohno"
+    }
+
+    const resCreate = await createUser(testUser.user, await bcrypt.hash(testUser.pw, saltRounds));
+    expect(resCreate).toMatchObject({success: true, created: testUser.user});  
+
+    const resGetUser = await getUser(testUser.user);
+    expect(resGetUser.username).toBe(testUser.user);
+    expect(resGetUser.last_login === null).toBe(true);
+
+    const resUpdateLastLogin = await updateLastLogin(testUser.user);
+    expect(resUpdateLastLogin.success).toBe(true);
+
+    const resGetUserAgain = await getUser(testUser.user);
+    expect(resGetUserAgain.username).toBe(testUser.user);
+    expect(resGetUserAgain.last_login === null).toBe(false);
+
+>>>>>>> c0d73dce0302cea0262e6e1a89aad7de085fed6f
 
     await deleteUser(testUser.user, testUser.pw);
 })
@@ -103,7 +132,6 @@ test("getUser, updateLastLogin works as intended", async () => {
 })
 
 // write test for updateUser!!!
-
 
 
 afterAll(() => pool.end())

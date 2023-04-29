@@ -1,40 +1,102 @@
-test("userRouter endpoints: /create, /delete work as intended", async () => {
-    const testUser = {
-        username: "elijah2", 
-        password: "aDUmbPaSsw0rd!" 
+const axios = require('axios')
+const { verifyToken } = require('../controllers/users')
+const baseURL = 'http://localhost:3001/api/user' // Update with the correct URL
+
+describe('POST /create', () => {
+  it('returns 400 if missing required fields', async () => {
+    try {
+      const response = await axios.post(`${baseURL}/create`, {
+        username: 'testuser'
+      })
+    } catch (error) {
+      expect(error.response.status).toBe(400)
+      expect(error.response.data.success).toBe(false)
+      expect(error.response.data.error).toBe('Missing required fields')
     }
-    const res = await axios.post("http://localhost:3001/api/user/create", testUser);
-    expect(res.status).toBe(200);
-    expect(res.headers.authorization.startsWith('Bearer ')).toBe(true);
-    const token = res.headers.authorization.split(' ')[1];
-    const decoded = await jwt.verify(token, JWT_SECRET);
-    expect(decoded.username).toBe(testUser.username);
-    const resDelete = await deleteUser(testUser.username, testUser.password);
-    expect(resDelete.success).toBe(true);
-    expect(resDelete.deleted).toBe(testUser.username);
-    const errorHopefully = await getUserID(testUser.username);
-    expect(errorHopefully).toMatchObject({success: false, error: `User ${testUser.username} not found`})
+  })
+
+  it('returns 201 and a success object on valid request', async () => {
+    const testUser = { username: 'testuser', password: 'password123' }
+    const response = await axios.post(`${baseURL}/create`, testUser)
+    expect(response.status).toBe(201)
+    expect(response.data.success).toBe(true)
+    expect(response.headers['authorization']).toBeDefined()
+    const token = response.headers['authorization']
+    const resTokenVerify = await verifyToken(token)
+    expect(resTokenVerify.username).toBe(testUser.username)
+    expect(resTokenVerify.password).toBe(testUser.password)
+    const resDelete = await axios.delete(`${baseURL}/account`, {
+      headers: {
+        Authorization: token
+      }
+    })
+    expect(resDelete.status).toBe(204)
+  })
 })
 
-test("userRouter endpoint: /create, /login, /me (delete) work as intended", async () => {
-    // Create a test user
-    const testLoginUser = { username: 'thefirsttologin', password: 'testpassword' }
-    const createUserRes = await axios.post('http://localhost:3001/api/user/create', testLoginUser);//.then(res => expect(res.status).toBe(200))
-    expect(createUserRes.status).toBe(200)
-    // Log in with the test user
-    const loginRes = await axios.post('http://localhost:3001/api/user/login', testLoginUser)
-    expect(loginRes.status).toBe(200)
-    //expect(typeof loginRes.data).toBe('object')
-    expect(loginRes.data.success).toBe(true)
+describe('POST /login', () => {
+  const validUser = { username: 'testuser', password: 'password123' }
+  const invalidUser = { username: 'testuser', password: 'wrongpassword' }
+  let authToken
 
-    const token = loginRes.headers.authorization
+  beforeAll(async () => {
+    // Create a test user
+    const response = await axios.post(`${baseURL}/create`, validUser)
+
+    // Get the auth token for the test user
+    authToken = response.headers['authorization']
+  })
+
+  afterAll(async () => {
     // Delete the test user
-    const deleteUserRes = await axios.delete(
-        'http://localhost:3001/api/user/account', 
-        {
-            headers: {"Authorization" : token}
-        }
-    )
-    return expect(deleteUserRes.status).toBe(204)
-    return deleteUserRes;
+    await axios.delete(`${baseURL}/account`, {
+      headers: {
+        Authorization: authToken
+      }
+    })
+  })
+
+  it('returns 400 if missing required fields', async () => {
+    try {
+      const response = await axios.post(`${baseURL}/login`, {
+        username: validUser.username
+      })
+    } catch (error) {
+      expect(error.response.status).toBe(400)
+      expect(error.response.data.success).toBe(false)
+      expect(error.response.data.error).toBe('Missing required fields')
+    }
+  })
+
+  it('returns 401 if provided invalid credentials', async () => {
+    try {
+      const response = await axios.post(`${baseURL}/login`, invalidUser)
+    } catch (error) {
+      expect(error.response.status).toBe(401)
+      expect(error.response.data.success).toBe(false)
+      expect(error.response.data.error).toBe('Invalid username or password')
+    }
+  })
+
+  it('returns 200 and an auth token if provided valid credentials', async () => {
+    const response = await axios.post(`${baseURL}/login`, validUser)
+    expect(response.status).toBe(200)
+    expect(response.headers['authorization']).toBeDefined()
+    const token = response.headers['authorization']
+    const resTokenVerify = await verifyToken(token)
+    expect(resTokenVerify.username).toBe(validUser.username)
+    expect(resTokenVerify.password).toBe(validUser.password)
+  })
+
+  // it('updates the last login time for the user', async () => {
+  //   // Get the current last login time for the user
+  //   const user = await getUserByUsername(validUser.username);
+  //   const previousLastLogin = user.last_login;
+
+  //   // Login as the user
+  //   const response = await axios.post(`${baseURL}/login`, validUser);
+
+  //   // Check that the response includes the user's data
+
+  // });
 })
