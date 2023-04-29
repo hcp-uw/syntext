@@ -1,5 +1,6 @@
 import Login from "../Components/Login/Login";
 import CreateAccount from "../Components/CreateAccount/CreateAccount";
+import "./LoginPage.css";
 
 const LoginPage = () => {
   return (
