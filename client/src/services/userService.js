@@ -1,26 +1,27 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const baseURL = 'http://localhost:3001/api/user';
+const baseURL = 'http://localhost:3001/api/user'
 
-let authToken = window.localStorage.getItem("authToken");
+let authToken = window.localStorage.getItem('authToken')
 
 /*
     send POST request to server with provided username and password.
     returns promise that resolves to new user object if successful,
     reject with error message if request fails.
 */
-const createUser = async (username, password) => {  
-    try {
-      const res = await axios.post(`${baseURL}/create`, {
-        username: username, password: password
-      });
-      console.log('create POST response: ', res);
-  
-      return {...res.data, token: res.headers['authorization']}  
-    } catch (error) {
-      //console.error(error);
-      return {success: false};
-    }
+const createUser = async (username, password) => {
+  try {
+    const res = await axios.post(`${baseURL}/create`, {
+      username: username,
+      password: password
+    })
+    console.log('create POST response: ', res)
+
+    return { ...res.data, token: res.headers['authorization'] }
+  } catch (error) {
+    //console.error(error);
+    return { success: false }
+  }
 }
 
 /*
@@ -31,16 +32,16 @@ const createUser = async (username, password) => {
 const authenticate = async (username, password) => {
   try {
     const res = await axios.post(`${baseURL}/login`, {
-      username: username, password: password
-    });
-    console.log('login POST response: ', res);
+      username: username,
+      password: password
+    })
+    console.log('login POST response: ', res)
 
-    return {...res.data, token: res.headers['authorization']}  
+    return { ...res.data, token: res.headers['authorization'] }
   } catch (error) {
     //console.error(error);
-    return {success: false};
+    return { success: false }
   }
-  
 }
 
 /*
@@ -51,16 +52,16 @@ const authenticate = async (username, password) => {
 const getCurrentUser = async () => {
   try {
     const res = await axios.get(`${baseURL}/account`, {
-      headers: { Authorization: authToken}
-    });
-    return res.data;
+      headers: { Authorization: authToken }
+    })
+    return res.data
   } catch (error) {
     console.log(error)
-  }  
+  }
 }
 
 // update current user's data
-const updateCurrentUser = (userData) => {
+const updateCurrentUser = userData => {
   /*
     send PUT request to server with JWT token in auth header
     and provided user data in request body.
@@ -84,4 +85,4 @@ export {
   getCurrentUser,
   updateCurrentUser,
   deleteCurrentUser
-};
+}

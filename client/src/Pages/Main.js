@@ -10,7 +10,7 @@ import MainPopupController from '../Components/MainPopupController/MainPopupCont
 
 const Main = () => {
   const [settingsFocus, setSettingsFocus] = useState(false)
-/*
+  /*
   const someData = [
     'int j = 20;',
     'for (int i = 0; i < 10; i++) {',
