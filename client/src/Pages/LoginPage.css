@@ -1,0 +1,47 @@
+div.login-container {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: 5vh;
+  width: 750px;
+  height: 500px;
+  background-color: rgb(42, 42, 42);
+  border-radius: 3%/4.5%;
+  color: rgb(255, 253, 219);
+  /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
+  filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
+  animation: fadeIn 0.1s;
+}
+
+@keyframes fadeInShade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 55%;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+h1 {
+  font-size: 30pt;
+  margin-left: 40px;
+  margin-top: 20px;
+}
+
+hr {
+  background-color: rgb(255, 253, 219);
+  height: 3px;
+  width: 90%;
+  margin: auto;
+}
