@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { authenticate, getCurrentUser } from '../../services/userService';
+import { createUser, getCurrentUser } from '../../services/userService';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -11,15 +11,15 @@ const Login = () => {
     const handlePasswordChange = (event) => setPassword(event.target.value);
     
 
-    const handleLogin = async (event) => {
+    const handleCreate = async (event) => {
         event.preventDefault();
-        const loginResult = await authenticate(username, password);
-        if (loginResult.success) {
-            alert('logged in as ' + username);
+        const createResult = await createUser(username, password);
+        if (createResult.success) {
+            alert('created user ' + username);
             setErrorMessage(null);
-            window.localStorage.setItem('authToken', loginResult.token);
+            window.localStorage.setItem('authToken', createResult.token);
         } else {
-            setErrorMessage('Invalid username or password');
+            setErrorMessage('Username not available');
         }
         
     };
@@ -33,8 +33,8 @@ const Login = () => {
 
     return (
     <>
-        <h2> Login to an existing account</h2>
-        <form onSubmit={handleLogin}>
+    <h2>Create new account</h2>
+        <form onSubmit={handleCreate}>
         <div>
             <label>Username:</label>
             <input 
@@ -48,9 +48,8 @@ const Login = () => {
             <label>Password:</label>
             <input type="password" id="password" value={password} onChange={handlePasswordChange} />
         </div>
-        <button type="submit" onClick={handleLogin}>Login</button>
+        <button type="submit" onClick={handleCreate}>Login</button>
         {errorMessage && <span style={{color:"red"}}>{errorMessage}</span>}
-        {/* <button type="submit" onClick={handleCreateAccount}>Create Account</button> */}
         </form>
     </>
     );

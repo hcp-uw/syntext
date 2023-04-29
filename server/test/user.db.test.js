@@ -22,7 +22,9 @@ test("user-db functions: createUser, getUserID, removeUser work as intended", as
         user: "elijah", 
         pw: "ohno"
     }
-    const resCreate = await createUser(testUser.user, await bcrypt.hash(testUser.pw, saltRounds));
+
+    const hash = await bcrypt.hash(testUser.pw, saltRounds)
+    const resCreate = await createUser(testUser.user, hash);
     expect(resCreate).toMatchObject({success: true, created: testUser.user});  
 
     const resID = await getUserID(testUser.user);

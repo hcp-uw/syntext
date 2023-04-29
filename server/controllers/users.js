@@ -3,13 +3,14 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const { JWT_SECRET } = require('../utils/config')
-const { createUser, deleteUser, authenticate, updateLastLogin, returnUserData } = require('../db/user-db')
+const { createUser, deleteUser, authenticate, updateLastLogin, getUser, getUserID } = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
 const saltRounds = 3
 
 const generateToken = async (username, password) => {
-  const token = jwt.sign({ username: username, password: password }, JWT_SECRET, {
+  const id = await getUserID(username);
+  const token = jwt.sign({ username: username, password: password, userID: id }, JWT_SECRET, {
     expiresIn: '1800s'
   })
   return token
@@ -80,13 +81,15 @@ userRouter.post('/login', jsonParser, async (req, res) => {
   */
 userRouter.get('/account', async (req, res) => {
   try {
-    const token = req.rawHeaders[3]
+    const tokenIndex = req.rawHeaders.findIndex(header => header === "Authorization") + 1;
+    const token = req.rawHeaders[tokenIndex]
     if (!token) res.status(500).send({success: false});
     else {
       const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET);
-      const result = await returnUserData(username)
-      const statusCode = result.success ? 204 : 401;
-      res.status(statusCode);
+      const result = await getUser(decoded.username);
+      if (result.username && decoded.username) 
+        res.status(200).send({...result, success: true});
+      else res.status(401).send({success: false});
       return;
     }
   } catch (error) {
@@ -129,9 +132,9 @@ userRouter.put('/account', async (req, res) => {
   or send error message if request fails or token is invalid.
 */
 userRouter.delete('/account', jsonParser, async (req, res) => {
+  const tokenIndex = req.rawHeaders.findIndex(header => header === "Authorization") + 1;
+  const token = req.rawHeaders[tokenIndex]
   try {
-    const tokenIndex = req.rawHeaders.findIndex(header => header === "Authorization") + 1;
-    const token = req.rawHeaders[tokenIndex]
     if (!token) res.status(500).send({success: false});
     else {
       const decoded = await verifyToken(token);
@@ -149,5 +152,6 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
 module.exports = {
   userRouter,
   verifyToken,
-  generateToken
+  generateToken,
+  saltRounds
 }
