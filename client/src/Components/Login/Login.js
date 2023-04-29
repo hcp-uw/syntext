@@ -22,13 +22,6 @@ const Login = () => {
     }
   }
 
-  // const handleCreateAccount = (event) => {
-  //     event.preventDefault();
-  //     alert('Creating account for ' + username);
-  //     users.push({username: username, password: password})
-  //     // create account with user service
-  // };
-
   return (
     <>
       <h2> Login to an existing account</h2>
@@ -55,7 +48,6 @@ const Login = () => {
           Login
         </button>
         {errorMessage && <span style={{ color: 'red' }}>{errorMessage}</span>}
-        {/* <button type="submit" onClick={handleCreateAccount}>Create Account</button> */}
       </form>
     </>
   )
