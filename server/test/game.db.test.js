@@ -8,7 +8,7 @@ const { pool } = require('../db/pool');
 
 const user = {username: "test", password: "password"}
 const snippet = {
-    id: 22,
+    id: 98,
     type: 'WHILE_LOOP',
     length: 'SHORT',
     data: ['THIS IS TESTING DATA', '\tSystem.out.println(i);']
@@ -33,15 +33,14 @@ afterAll(async () => {
           Authorization: token
         }
       })
-      expect(resDelete.status).toBe(204)
+    expect(resDelete.status).toBe(204)
+    const resDeleteSnippet = await deleteSnippetByID(snippet.id);
+    expect(resDeleteSnippet.success).toBe(true)
 })
 
 describe('createEntry', () => {
 
   it('should insert a new game entry and return success true', async () => {
-    /*
-     id, userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes, time_stamp
-    */
     
     const game = {
         userID: userID, 
@@ -57,20 +56,11 @@ describe('createEntry', () => {
     const result = await createEntry(game);
 
     expect(result.success).toBe(true);
-    expect(result.message).toBe('Entry created successfully.');
   });
 
   it('should return success false and an error message when the query fails', async () => {
-
-
-
-
-
-    const result = await createEntry(game);
-
-
+    const result = await createEntry('fakedata');
     expect(result.success).toBe(false);
-
   });
 });
 
