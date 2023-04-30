@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 gameRouter.post('/create', jsonParser, async (req, res) => {
-    const {id, type, length, data} = req.body;
+    const {userID, snippet_id,total_time,total_characters, wpm_data, wpm_avg, accuracy, num_mistakes} = req.body;
     const gameObject = {
         userID: userID,
         snippet_id:snippet_id,
@@ -17,7 +17,6 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
         accuracy: accuracy,
         num_mistakes: num_mistakes,
     }
-
     try {
         await GameDBClient.createEntry(gameObject, GameDBClient.getPool());
         res.status(201).send({ success: true });
@@ -26,6 +25,29 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
     }
 });
 
+gameRouter.get('/get/gameStats', jsonParser, async (req, res) => {
+    const {username} = req.body;
+    const userID = await getUserID (username);
+    try {
+        const {
+            total_time,
+            total_characters,
+            wpm_data,
+            wpm_avg,
+            accuracy,
+            num_mistakes,
+        } = await GameDBClient.getGameStats(userID);
+        res.status(201).send({ success: true, 
+            total_time: total_time, 
+            total_characters: total_characters,
+            wpm_data: wpm_data,
+            wpm_avg: wpm_avg,
+            accuracy: accuracy,
+            num_mistakes: num_mistakes});
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});   
 
 //Add in more about what frontend needs 
 
