@@ -15,10 +15,11 @@ const { pool } = require('./pool.js')
 //     time_stamp datetime,
 
 const createEntry = async game => {
+  const {userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes} = game;
   try {
     const connection = await pool.getConnection()
     const query = `INSERT INTO games ( id, userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes, time_stamp ) VALUES ( NULL,?,?,?,?,?,?,?,?, NOW() );`
-    const result = await connection.query(query, [...game])
+    const result = await connection.query(query, [userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes])
     connection.release()
     return { success: true }
   } catch (error) {

@@ -1,35 +1,39 @@
 // Import the dependencies and the function
-const mysql = require('mysql2');
+const axios = require('axios');
 const { createUser, getUserID, deleteUser } = require('../db/user-db');
 const { createEntry } = require('../db/game-db');
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db');
 
 const { pool } = require('../db/pool');
 
-const user = {username: "elijah", password: "password"}
+const user = {username: "test", password: "password"}
 const snippet = {
-    id: 6,
+    id: 22,
     type: 'WHILE_LOOP',
     length: 'SHORT',
     data: ['THIS IS TESTING DATA', '\tSystem.out.println(i);']
 }
+const baseURL = 'http://localhost:3001/api/user' 
 let userID;
-beforeAll(async () => {    
-    const createUserRes = await createUser(user);
-    expect(createUserRes.success).toBe(true);
+let token;
 
+beforeAll(async () => {    
+    const response = await axios.post(`${baseURL}/create`, user)
+    expect(response.status).toBe(201)
+    token = response.headers['authorization']
     userID = await getUserID(user.username);
     
-    const createSnippetRes = await createSnippet(snippet1);
+    const createSnippetRes = await createSnippet(snippet);
     expect(createSnippetRes.success).toBe(true);
 });
 
 afterAll(async () => {
-    const deleteUserRes = await deleteUser(user.username, user.password);
-    expect(deleteUserRes.success).toBe(true);
-
-    const deleteSnippetRes = await deleteSnippetByID(snippet.id);
-    expect(deleteSnippetRes.success).toBe(true);
+    const resDelete = await axios.delete(`${baseURL}/account`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      expect(resDelete.status).toBe(204)
 })
 
 describe('createEntry', () => {
