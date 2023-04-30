@@ -16,6 +16,8 @@ const Login = () => {
     if (createResult.success) {
       alert('created user ' + username)
       setErrorMessage(null)
+      console.log(createResult.token)
+      console.log(createResult);
       window.localStorage.setItem('authToken', createResult.token)
     } else {
       setErrorMessage('Username not available')
