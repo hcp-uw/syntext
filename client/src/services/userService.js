@@ -59,6 +59,7 @@ const getCurrentUser = async () => {
     console.log(error)
   }
 }
+console.log(window.localStorage.getItem('authToken'))
 
 // update current user's data
 const updateCurrentUser = userData => {

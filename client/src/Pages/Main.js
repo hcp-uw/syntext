@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Game from "../Components/Game/Game";
 import MainNavBar from "../Components/MainNavBar/MainNavBar";
-
+import CreateAccount from '../Components/CreateAccount/CreateAccount'
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "../index.css";
 import MainPopupController from "../Components/MainPopupController/MainPopupController";
@@ -38,6 +38,7 @@ const Main = () => {
         settingsFocus={settingsFocus}
         setSettingsFocus={setSettingsFocus}
       />
+      <CreateAccount/>
     </div>
   );
 };
