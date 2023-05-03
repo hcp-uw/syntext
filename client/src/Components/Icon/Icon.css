@@ -19,25 +19,21 @@
     padding: 40px 40px 0 0;
 }
 
-.icon-container .btn-custom {
-    background-color: #BC8785;
-    color: white;
-    border-radius: 18px;
-    border-top-right-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-    border-right-color: #E5CDCD;
-    margin-right: 1px;
-}
-
 .icon-container .btn-sides {
     background-color: #BC8785;
     color: #E5CDCD;
     border-radius: 20px;
 }
 
-.icon-container .toggled-button {
-    color: white;
-    
+.icon-container .btn-sides:hover {
+    background-color: #585086;
+    color: #E5CDCD;
+}
+
+.icon-container .toggled-button:selected {
+    background-color: #BC8785;
+    color: #E5CDCD;
+    border-radius: 20px;
 }
             
 
