@@ -1,5 +1,4 @@
 import Icon from '../Icon/Icon'
-import ReactDOM from 'react-dom/client'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Navbar from 'react-bootstrap/Navbar'

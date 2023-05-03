@@ -5,8 +5,39 @@
     height: 1%; 
     float: right;
     margin-right: 5%; */
-    /* max-width: 75px;
-    max-height: 75px; */
+    max-width: 75px;
+    max-height: 50px;
     padding: 15, 15, 15, 15;
     cursor: pointer;
 }
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    padding: 40px 40px 0 0;
+}
+
+.icon-container .btn-custom {
+    background-color: #BC8785;
+    color: white;
+    border-radius: 18px;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-right-color: #E5CDCD;
+    margin-right: 1px;
+}
+
+.icon-container .btn-sides {
+    background-color: #BC8785;
+    color: #E5CDCD;
+    border-radius: 20px;
+}
+
+.icon-container .toggled-button {
+    color: white;
+    
+}
+            
+
