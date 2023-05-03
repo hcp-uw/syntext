@@ -14,6 +14,7 @@
     "user-api-test-runner": "(npm run start&) && npm run jest ./test/user.api.test.js",
     "user-db-test": "docker-compose -f ./test/docker-enviornments/docker-compose.user-db.test.yml up --build",
     "user-db-test-runner": "(npm run start&) && npm run jest ./test/user.db.test.js",
+    "games-api-test-runner": "(npm run start&) && npm run jest ./test/games.api.test.js",
     "jest": "npm run localDBinit && NODE_ENV=test jest --verbose --runInBand",
     "create-tables": "node ./db-admin-scripts/create-snippet-tables && node ./db-admin-scripts/create-user-tables && node ./db-admin-scripts/create-settings-tables && node ./db-admin-scripts/create-games-tables",
     "localDBinit": " npm run create-tables && node ./db-admin-scripts/clear-tables",

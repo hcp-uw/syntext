@@ -1,5 +1,5 @@
 const axios = require('axios');
-const baseURL = 'http://localhost:3001/api/games' //??
+const baseURL = 'http://localhost:3001/api/games' 
 const { createUser, getUserID, deleteUser } = require('../db/user-db');
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db');
 
@@ -14,6 +14,13 @@ beforeAll(async () => {
     const createSnippetRes = await createSnippet(snippet1);
     expect(createSnippetRes.success).toBe(true);
 });
+afterAll(async () => {
+  const deleteUserRes = await deleteUser(user.username, user.password);
+  expect(deleteUserRes.success).toBe(true);
+
+  const deleteSnippetRes = await deleteSnippetByID(snippet.id);
+  expect(deleteSnippetRes.success).toBe(true);
+})
 
 describe('POST /create', () => {
     it('returns 400 if missing required fields', async () => {
@@ -36,10 +43,4 @@ describe('POST /create', () => {
     })
 });
 
-afterAll(async () => {
-    const deleteUserRes = await deleteUser(user.username, user.password);
-    expect(deleteUserRes.success).toBe(true);
 
-    const deleteSnippetRes = await deleteSnippetByID(snippet.id);
-    expect(deleteSnippetRes.success).toBe(true);
-})
