@@ -14,7 +14,7 @@ const { pool } = require('./pool.js')
 //     num_mistakes int,
 //     time_stamp datetime,
 
-const createEntry = async game => {
+const createGameEntry = async game => {
   const {userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes} = game;
   try {
     const connection = await pool.getConnection()
@@ -28,7 +28,7 @@ const createEntry = async game => {
   }
 }
 
-const getGameStats = async userID => {
+const getGameEntry = async userID => {
   try {
     const connection = pool.getConnection()
     const query = `
@@ -41,4 +41,4 @@ const getGameStats = async userID => {
 //Add in function that returns aggergate stats for leaderboard (JOINT for users.id & games.userID)\
 //Sub-query on user stats -> pull average stats and return stats ranked (WPM)
 
-module.exports = { createEntry }
+module.exports = { createGameEntry, getGameEntry }

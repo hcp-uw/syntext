@@ -18,7 +18,7 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
         num_mistakes: num_mistakes,
     }
     try {
-        await GameDBClient.createEntry(gameObject, GameDBClient.getPool());
+        await GameDBClient.createGameEntry(gameObject, GameDBClient.getPool());
         res.status(201).send({ success: true });
     } catch (error) {
         res.status(500).send("Internal Server Error");
@@ -36,7 +36,7 @@ gameRouter.get('/get/gameStats', jsonParser, async (req, res) => {
             wpm_avg,
             accuracy,
             num_mistakes,
-        } = await GameDBClient.getGameStats(userID);
+        } = await GameDBClient.getGameEntry(userID);
         res.status(201).send({ success: true, 
             total_time: total_time, 
             total_characters: total_characters,
