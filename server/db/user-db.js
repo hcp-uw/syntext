@@ -5,6 +5,7 @@ const { pool } = require('./pool.js')
 
 
 const getUser = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
@@ -36,6 +37,7 @@ const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
 }
 
 const getUserID = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         const query = 'SELECT userID FROM users WHERE username = ?';
@@ -56,6 +58,7 @@ const getUserID = async (username) => {
 
 // creates user 
 const createUser = async (username, hash) => {
+    if (!username || !hash) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         // Check if username exists in table
@@ -83,6 +86,7 @@ const createUser = async (username, hash) => {
 
 
 const authenticate = async (username, password) => {
+    if (!username || ! password) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         // Check if username exists in table
@@ -107,6 +111,7 @@ const authenticate = async (username, password) => {
 }
 
 const updateLastLogin = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
@@ -120,7 +125,9 @@ const updateLastLogin = async (username) => {
     }        
 }
 
+
 const deleteUser = async (username, password) => {
+    if (!username || !password) return {success: false, error: 'missing required field'};
     const connection = await pool.getConnection();
     try {
         const isAuthorized = await authenticate(username, password);

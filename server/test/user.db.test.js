@@ -79,8 +79,6 @@ test("authenticate works properly", async () => {
 
     const resWrongEverything = await authenticate("fakeusername", "notmypassword");
     expect(resWrongEverything).toMatchObject({success: false, error: `User fakeusername doesn't exist`});
-<<<<<<< HEAD
-=======
 
     await deleteUser(testUser.user, testUser.pw);
 })
@@ -107,7 +105,6 @@ test("getUser, updateLastLogin works as intended", async () => {
     expect(resGetUserAgain.username).toBe(testUser.user);
     expect(resGetUserAgain.last_login === null).toBe(false);
 
->>>>>>> c0d73dce0302cea0262e6e1a89aad7de085fed6f
 
     await deleteUser(testUser.user, testUser.pw);
 })
