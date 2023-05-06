@@ -25,7 +25,7 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
     }
 });
 
-gameRouter.get('/get/gameStats', jsonParser, async (req, res) => {
+gameRouter.get('/get/game', jsonParser, async (req, res) => {
     const {username} = req.body;
     const userID = await getUserID (username);
     try {
@@ -48,6 +48,8 @@ gameRouter.get('/get/gameStats', jsonParser, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });   
+
+
 
 //Add in more about what frontend needs 
 

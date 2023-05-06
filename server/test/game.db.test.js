@@ -1,7 +1,7 @@
 // Import the dependencies and the function
 const axios = require('axios');
 const { createUser, getUserID, deleteUser } = require('../db/user-db');
-const { createGameEntry, clearGameEntries } = require('../db/game-db');
+const { createGameEntry, clearGameEntries, getGameEntry } = require('../db/game-db');
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db');
 
 const { pool } = require('../db/pool');
@@ -63,7 +63,7 @@ describe('getGameEntry', () => {
         num_mistakes: 5, 
     };
 
-    const result = await createEntry(game);
+    const result = await getGameEntry(game);
 
     expect(result.success).toBe(true);
   });
@@ -73,6 +73,49 @@ describe('getGameEntry', () => {
     expect(result.success).toBe(false);
   });
 });
+
+
+describe('clearGameEntries', () => {
+
+  it('should delete all entries for the specified user', async () => {
+    const game1 = {
+      userID: userID, 
+      snippet_id: snippet.id, 
+      total_time: 69, 
+      total_characters: 69, 
+      wpm_data: '[1,2,3,69]', 
+      wpm_avg: 69, 
+      accuracy:.69, 
+      num_mistakes: 69, 
+    };
+    const game2 = {
+      userID: userID, 
+      snippet_id: snippet.id, 
+      total_time: 42, 
+      total_characters: 42, 
+      wpm_data: '[1,2,3,42]', 
+      wpm_avg: 42, 
+      accuracy:.42, 
+      num_mistakes: 42, 
+    };
+
+    const result1 = await createEntry(game1);
+    expect(result1.success).toBe(true);
+
+    const result2 = await createEntry(game2);
+    expect(result2.success).toBe(true);
+
+    const resultDelete = await clearGameEntries(userID);
+    expect(resultDelete.success).toBe(true);
+
+    const resultGet = await getGameEntry(userID);
+
+    expect(result.error).toBe(undefined);
+    expect(result[0].length).toBe(0);
+
+  })
+
+})
 
 
 beforeAll(async () => {    

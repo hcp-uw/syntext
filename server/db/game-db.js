@@ -36,7 +36,7 @@ const createGameEntry = async game => {
       ) 
       VALUES ( NULL,?,?,?,?,?,?,?,?, NOW() );
     `
-    const result = await connection.execute(query, [
+    const result = await connection.query(query, [
       userID,
       snippet_id,
       total_time,
@@ -46,11 +46,11 @@ const createGameEntry = async game => {
       accuracy,
       num_mistakes
     ])
-    connection.release()
-    return { success: true }
+    await connection.release();
+    return { success: true };
   } catch (error) {
     console.error(error)
-    return { success: false }
+    return { success: false, error: error };
   }
 }
 
@@ -60,7 +60,9 @@ const getGameEntry = async userID => {
     const query = `
       SELECT * FROM games WHERE userID=?;
     `
-    const result = await connection.query(query, [userID])
+    const result = await connection.query(query, [userID]);
+    await connection.release();
+    return result;
   } catch (error) {
     console.error(error)
     return { error: error }
@@ -69,11 +71,12 @@ const getGameEntry = async userID => {
 
 const clearGameEntries = async userID => {
   try {
-    const connection = pool.getConnection()
+    const connection = pool.getConnection();
     const query = `
       DELETE FROM games as g WHERE g.userID=?;
     `
-    const result = await connection.execute(query, [userID])
+    const result = await connection.query(query, [userID]);
+    await connection.release();
     return { success: true, result: result }
   } catch (error) {
     console.error(error)
