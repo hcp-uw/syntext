@@ -9,7 +9,7 @@ div.settings-container {
   height: 500px;
   background-color: rgb(42, 42, 42);
   border-radius: 3%/4.5%;
-  color: rgb(255, 253, 219);
+  color: rgb(233, 233, 233);
   /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
   filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
   animation: fadeIn 0.1s;
@@ -43,8 +43,9 @@ h1 {
 }
 
 hr {
-  background-color: rgb(255, 253, 219);
+  background-color: rgb(233, 233, 233);
   height: 3px;
-  width: 90%;
+  width: 95%;
   margin: auto;
+  margin-bottom: 50px;
 }

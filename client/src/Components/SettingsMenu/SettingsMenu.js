@@ -1,7 +1,6 @@
-import { createContext, useState, useContext } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import './SettingsMenu.css'
 import Setting from '../Setting/Setting'
-import { Dropdown } from 'bootstrap';
 
 export const UserSettingsContext = createContext();
 
@@ -13,6 +12,11 @@ const SettingsMenu = props => {
     "cursor-smoothness": "1"
   })
 
+  useEffect(() => {
+    console.log(userSettings)
+    console.log('changed user settings!')
+  }, [userSettings])
+
   return (
     <>
       <div
@@ -23,6 +27,7 @@ const SettingsMenu = props => {
         <UserSettingsContext.Provider value={setUserSettings}>
           <h1>Settings</h1>
           <hr></hr>
+          <Setting/>
           <Setting/>
         </UserSettingsContext.Provider>
       </div>

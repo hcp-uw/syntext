@@ -1,0 +1,29 @@
+div.setting { 
+  width: 93%;
+  height: 80px;
+  background-color: rgb(58, 58, 58);
+  border-radius: 1%/10%;
+  margin: 12px auto;
+  box-shadow: 0px 3.5px 0px 0px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting h2 {
+  font-size: 15pt;
+  margin-left: 15px;
+}
+
+.menu-option {
+  margin-right: 15px;
+  color: white;
+}
+
+.menu-option a {
+  color: pink;
+}
+
+.menu-option button {
+  color: white;
+}
