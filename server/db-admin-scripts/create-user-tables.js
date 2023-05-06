@@ -13,7 +13,7 @@ const createUserTable = async () => {
         const connection = await pool.getConnection();
         const query = `CREATE TABLE IF NOT EXISTS users (userID int NOT NULL AUTO_INCREMENT, username varchar(256) NOT NULL, salt varchar(32), hash_password char(64) NOT NULL, date_created date, last_login date, primary key (userID));`;
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('created users')
         return result[0];
     } catch (error) {

@@ -1,15 +1,13 @@
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../db/pool')
+const { closePool } = require('../db/pool');
 const { JWT_SECRET } = require('../utils/config');
 const {
     createUser,
     getUserID,
     deleteUser,
     authenticate,
-    getPool,
-    closePool,
     updateLastLogin,
     getUser,
     updateUser
@@ -133,4 +131,4 @@ test("getUser, updateLastLogin works as intended", async () => {
 // write test for updateUser!!!
 
 
-afterAll(() => pool.end())
+afterAll(() => closePool());

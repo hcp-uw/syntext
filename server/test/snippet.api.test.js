@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { closePool } = require('../db/pool');
 
 describe('Snippet API', () => {
   const postedSnippet = {
@@ -231,3 +232,5 @@ describe('Snippet API', () => {
     expect(res.data).toBe('hello')
   })
 })  
+
+afterAll(() => closePool());

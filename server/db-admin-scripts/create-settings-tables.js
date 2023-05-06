@@ -15,7 +15,7 @@ const createSettingsTable = async () => {
         const query = `
             CREATE TABLE IF NOT EXISTS settings (type varchar(16) NOT NULL, userID int NOT NULL, value varchar(256) NOT NULL, primary key (type, userID), foreign key (userID) references users(userID));`;
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('created settings')
         return result[0];
     } catch (error) {

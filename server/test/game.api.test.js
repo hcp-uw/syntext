@@ -2,6 +2,7 @@ const axios = require('axios');
 const baseURL = 'http://localhost:3001/api/games' 
 const { createUser, getUserID, deleteUser } = require('../db/user-db');
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db');
+const { closePool } = require('../db/pool.js')
 
 const user = {username: 'KitKat', password: '123password'};
 let userID;
@@ -20,6 +21,7 @@ afterAll(async () => {
 
   const deleteSnippetRes = await deleteSnippetByID(snippet.id);
   expect(deleteSnippetRes.success).toBe(true);
+  closePool();
 })
 
 describe('POST /create', () => {

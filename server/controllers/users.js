@@ -44,7 +44,7 @@ userRouter.post('/create', jsonParser, async (req, res) => {
   if (!username || !password) {
     return res
       .status(400)
-      .json({ success: false, error: 'Missing required fields' })
+      .send({ success: false, error: 'Missing required fields' })
   }
 
   try {
@@ -54,7 +54,7 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     return res
       .set('Authorization', `Bearer ${token}`)
       .status(201)
-      .json({ success: true })
+      .send({ success: true })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ success: false, ...error })
@@ -77,11 +77,11 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
   try {
     const authorized = await authenticate(username, password)
-    if (!authorized.success)
+    if (!authorized.success){
       res
         .status(401)
         .send({ success: false, error: 'Invalid username or password' })
-    else {
+    }else {
       const token = await generateToken(username, password)
       res
         .set('Authorization', `Bearer ${token}`)

@@ -16,10 +16,10 @@ const pool = mysql.createPool({
 const exampleSnippets = getSnippetData();
 //const exampleSnippets = processSnippet("./snippets")
 
-const fill = async (exampleData, connectionPool) => {
+const fill = async (exampleData) => {
     const promises = []
     await exampleData.forEach((snippet) => {
-        promises.push(createSnippet(snippet, connectionPool));
+        promises.push(createSnippet(snippet));
     });
     return Promise.all(promises);
     

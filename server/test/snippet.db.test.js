@@ -1,4 +1,4 @@
-const { pool } = require('../db/pool')
+const { closePool } = require('../db/pool');
 const {
   getSnippetByType,
   getSnippetByLength,
@@ -6,8 +6,6 @@ const {
   createSnippet,
   deleteSnippetByID,
   getSnippetByLengthAndType,
-  closePool,
-  getPool
 } = require('../db/snippet-db')
 
 
@@ -73,12 +71,12 @@ describe('getSnippetByType', () => {
     expect(result.length).toBe(0);
   });
 
-  it('should handle edge cases gracefully (return empty array)', async () => {
+  it('should handle missing param', async () => {
     const type = null;
 
     const result = await getSnippetByType(type);
 
-    expect(result.length).toBe(0);
+    expect(result.success).toBe(false);
   });
 });
 
@@ -124,4 +122,4 @@ describe('getSnippetByType', () => {
 
 
 
-//afterAll(() => closePool())
+afterAll(() => closePool())

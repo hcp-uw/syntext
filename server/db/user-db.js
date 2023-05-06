@@ -11,7 +11,7 @@ const getUser = async (username) => {
         const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
-        connection.release();
+        await connection.release();
         if (rows.length > 0) {
             return rows[0];
         } else {
@@ -19,7 +19,7 @@ const getUser = async (username) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     }
 }
@@ -43,7 +43,7 @@ const getUserID = async (username) => {
         const query = 'SELECT userID FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
-        connection.release();
+        await connection.release();
         if (rows.length > 0) {
             return rows[0].userID;
         } else {
@@ -51,7 +51,7 @@ const getUserID = async (username) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     }
 }
@@ -66,12 +66,12 @@ const createUser = async (username, hash) => {
         const result = await connection.query(query, [username]);
         //checks if any rows were returned
         if (result[0].length > 0) {
-            connection.release();
+            await connection.release();
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
             const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'
             const result = await pool.query(insert, [username, hash]);
-            connection.release();
+            await connection.release();
             return {
                 success: true,
                 created: username
@@ -79,7 +79,7 @@ const createUser = async (username, hash) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }
 }
@@ -92,20 +92,21 @@ const authenticate = async (username, password) => {
         // Check if username exists in table
         const query = 'SELECT username, hash_password FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
+        
         //checks if any rows were returned
         if (result[0].length === 0) {
-            connection.release();
+            await connection.release();
             return {success: false, error: `User ${username} doesn't exist`}; 
         } else  {
             const user = result[0][0];
             const savedHash = user.hash_password;
-            connection.release();
+            await connection.release();
             const authResult = await bcrypt.compare(password, savedHash);
             return { success: authResult }
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     } 
 }
@@ -116,11 +117,11 @@ const updateLastLogin = async (username) => {
         const connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
         const result = await connection.query(insert, [username]);
-        connection.release();
+        await connection.release();
         return {success: true}
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }        
 }
@@ -142,12 +143,12 @@ const deleteUser = async (username, password) => {
         await connection.query(q[1], id);
         await connection.query(q[2], id);
         await connection.commit();
-        connection.release();
+        await connection.release();
         return {success: true, deleted: username};
     } catch (error) {
         console.error(error);
         connection.rollback();
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }
 } 

@@ -49,7 +49,5 @@ gameRouter.get('/get/game', jsonParser, async (req, res) => {
     }
 });   
 
-
-
 //Add in more about what frontend needs 
 
