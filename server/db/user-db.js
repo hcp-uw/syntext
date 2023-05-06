@@ -70,7 +70,7 @@ const createUser = async (username, hash) => {
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
             const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'
-            const result = await pool.query(insert, [username, hash]);
+            const result = await pool.execute(insert, [username, hash]);
             connection.release();
             return {
                 success: true,
@@ -115,7 +115,7 @@ const updateLastLogin = async (username) => {
     try {
         const connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
-        const result = await connection.query(insert, [username]);
+        const result = await connection.execute(insert, [username]);
         connection.release();
         return {success: true}
     } catch (error) {
@@ -138,9 +138,9 @@ const deleteUser = async (username, password) => {
         const deleteUser = "DELETE FROM users AS u WHERE u.userID=?;";
         q = [deleteSettings, deleteGames, deleteUser];
         await connection.beginTransaction();
-        await connection.query(q[0], id);
-        await connection.query(q[1], id);
-        await connection.query(q[2], id);
+        await connection.execute(q[0], id);
+        await connection.execute(q[1], id);
+        await connection.execute(q[2], id);
         await connection.commit();
         connection.release();
         return {success: true, deleted: username};

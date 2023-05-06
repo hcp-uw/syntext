@@ -15,11 +15,37 @@ const { pool } = require('./pool.js')
 //     time_stamp datetime,
 
 const createGameEntry = async game => {
-  const {userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes} = game;
+  const {
+    userID,
+    snippet_id,
+    total_time,
+    total_characters,
+    wpm_data,
+    wpm_avg,
+    accuracy,
+    num_mistakes
+  } = game
   try {
     const connection = await pool.getConnection()
-    const query = `INSERT INTO games ( id, userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes, time_stamp ) VALUES ( NULL,?,?,?,?,?,?,?,?, NOW() );`
-    const result = await connection.query(query, [userID, snippet_id, total_time, total_characters, wpm_data, wpm_avg, accuracy, num_mistakes])
+    const query = `
+      INSERT INTO games ( 
+        id, userID, snippet_id, 
+        total_time, total_characters, 
+        wpm_data, wpm_avg, accuracy, 
+        num_mistakes, time_stamp 
+      ) 
+      VALUES ( NULL,?,?,?,?,?,?,?,?, NOW() );
+    `
+    const result = await connection.execute(query, [
+      userID,
+      snippet_id,
+      total_time,
+      total_characters,
+      wpm_data,
+      wpm_avg,
+      accuracy,
+      num_mistakes
+    ])
     connection.release()
     return { success: true }
   } catch (error) {
@@ -30,15 +56,31 @@ const createGameEntry = async game => {
 
 const getGameEntry = async userID => {
   try {
-    const connection = pool.getConnection()
+    const connection = await pool.getConnection()
     const query = `
-            SELECT * FROM games WHERE userID=?;
-        `
-    const result = connection.query(query, [userID])
-  } catch (error) {}
+      SELECT * FROM games WHERE userID=?;
+    `
+    const result = await connection.query(query, [userID])
+  } catch (error) {
+    console.error(error)
+    return { error: error }
+  }
 }
 
+const clearGameEntries = async userID => {
+  try {
+    const connection = pool.getConnection()
+    const query = `
+      DELETE FROM games as g WHERE g.userID=?;
+    `
+    const result = await connection.execute(query, [userID])
+    return { success: true, result: result }
+  } catch (error) {
+    console.error(error)
+    return { success: false, error: error }
+  }
+}
 //Add in function that returns aggergate stats for leaderboard (JOINT for users.id & games.userID)\
 //Sub-query on user stats -> pull average stats and return stats ranked (WPM)
 
-module.exports = { createGameEntry, getGameEntry }
+module.exports = { createGameEntry, getGameEntry, clearGameEntries }
