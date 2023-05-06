@@ -7,22 +7,17 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 const Setting = (props) => {
   // const setUserSettings = useContext(UserSettingsContext)
-  const { instructions } = props;
+  const { settingName } = props;
   // setUserSettings('meow')
   return (
-    <>
-      {() => {
-        for (const settingElement in instructions) {
-          console.log(settingElement)
-      }}}
-    </>
-    // <div className="setting">
-    //   <h2>Setting name</h2>
-      
-    //   <RangeExample/>
-    //   {/* <SwitchExample/> */}
-    //   {/* <DropDownCreator settingTitle={"theme"} menuOptions={['white', 'green', 'pink', 'red']}/> */}
-    // </div>
+
+    <div className="setting">
+      <h2>{ settingName }</h2>
+
+      {/* <RangeExample/> */}
+      <SwitchExample/>
+      {/* <DropDownCreator settingTitle={"theme"} menuOptions={['white', 'green', 'pink', 'red']}/> */}
+    </div>
   )
 }
 

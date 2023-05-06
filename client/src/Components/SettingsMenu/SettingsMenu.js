@@ -39,6 +39,7 @@ const SettingsMenu = props => {
         <UserSettingsContext.Provider value={setUserSettings}>
           <h1>Settings</h1>
           <hr></hr>
+          <Setting settingName={'test'}/>
           <SettingMapper instructions={testing}/>
         </UserSettingsContext.Provider>
       </div>
@@ -58,7 +59,6 @@ const SettingMapper = (props) => {
 
   return (
     <>
-      {1}
     </>
   )
 }
