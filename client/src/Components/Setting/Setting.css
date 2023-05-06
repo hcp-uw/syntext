@@ -15,15 +15,33 @@ div.setting {
   margin-left: 15px;
 }
 
-.menu-option {
+.dropdown-option {
   margin-right: 15px;
-  color: white;
 }
 
-.menu-option a {
+.dropdown-option a {
   color: pink;
 }
 
-.menu-option button {
+.dropdown-option button {
   color: white;
+}
+
+.switch-option {
+  margin-right: 20px;
+}
+
+.range-option {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin-right: 20px;
+}
+
+.range-option input {
+  width: 150px;
+}
+
+.range-label {
+  margin: auto;
 }
