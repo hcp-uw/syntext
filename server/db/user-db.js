@@ -146,6 +146,7 @@ const deleteUser = async (username, password) => {
         await connection.release();
         return {success: true, deleted: username};
     } catch (error) {
+        console.log("hello", error)
         console.error(error);
         connection.rollback();
         await connection.release();

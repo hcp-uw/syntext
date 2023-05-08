@@ -85,11 +85,13 @@ const clearGamesTable = async () => {
     }
 }
 
-Promise.all([
-    clearDataTable(), 
-    clearRecordTable(),
-    clearGamesTable(),
-    clearSettingsTable(),
-    clearUserTable()
-]).then(() => pool.end())
+const clearAll = async () => {
+    await clearGamesTable()
+    await clearSettingsTable()
+    await clearDataTable()
+    await clearRecordTable()
+    await clearUserTable()
+}
+
+clearAll().then(() => pool.end())
 

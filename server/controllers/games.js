@@ -1,13 +1,79 @@
-const GameDBClient = require('../db/game-db') 
+const { getGameEntries, createGameEntry, clearGameEntries } = require('../db/game-db') 
 const gameRouter = require('express').Router();
-
 const bodyParser = require('body-parser');
+const { getUserID } = require('../db/user-db');
 
 const jsonParser = bodyParser.json();
 
+
 gameRouter.post('/create', jsonParser, async (req, res) => {
-    const {userID, snippet_id,total_time,total_characters, wpm_data, wpm_avg, accuracy, num_mistakes} = req.body;
-    const gameObject = {
+    const gameObject = extractGame(req.body);
+    const token = extractToken(req);
+
+
+    try {
+        console.log(gameObject)
+        const result = await createGameEntry(gameObject);
+        console.log(result)
+        if (result.success)
+            res.status(201).send({ success: true });
+        else 
+           return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+gameRouter.get('/games', jsonParser, async (req, res) => {
+    let {userID, username} = req.body;
+    if (!userID && !username) 
+        return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
+    
+    if (!userID)
+        userID = await getUserID(username);
+
+    
+    try {
+        const entries = await getGameEntries(userID);
+        res.status(200).send(entries);
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
+});   
+
+gameRouter.delete('/games', jsonParser, async (req, res) => {
+    let {userID, username} = req.body;
+    if (!userID && !username) 
+        return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
+    
+    if (!userID)
+        userID = await getUserID(username);
+
+    try {
+        const result = await clearGameEntries(userID);
+        if (result.success) res.status(200).send(result);
+        else res.status(400)
+    } catch (error) {
+        res.status(500).send({error: "Internal Server Error"});
+    }
+});   
+
+
+const extractGame = (body) => {
+    const {
+        userID, 
+        snippet_id,
+        total_time,
+        total_characters, 
+        wpm_data, 
+        wpm_avg, 
+        accuracy, 
+        num_mistakes
+    } = body;
+
+    return {
         userID: userID,
         snippet_id:snippet_id,
         total_time : total_time,
@@ -17,37 +83,14 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
         accuracy: accuracy,
         num_mistakes: num_mistakes,
     }
-    try {
-        await GameDBClient.createGameEntry(gameObject, GameDBClient.getPool());
-        res.status(201).send({ success: true });
-    } catch (error) {
-        res.status(500).send("Internal Server Error");
-    }
-});
+} 
 
-gameRouter.get('/get/game', jsonParser, async (req, res) => {
-    const {username} = req.body;
-    const userID = await getUserID (username);
-    try {
-        const {
-            total_time,
-            total_characters,
-            wpm_data,
-            wpm_avg,
-            accuracy,
-            num_mistakes,
-        } = await GameDBClient.getGameEntry(userID);
-        res.status(201).send({ success: true, 
-            total_time: total_time, 
-            total_characters: total_characters,
-            wpm_data: wpm_data,
-            wpm_avg: wpm_avg,
-            accuracy: accuracy,
-            num_mistakes: num_mistakes});
-    } catch (error) {
-        res.status(500).send("Internal Server Error");
-    }
-});   
+const extractToken = (req) => {
+    const tokenIndex =
+    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
+    return req.rawHeaders[tokenIndex];
+}
 
 //Add in more about what frontend needs 
 
+module.exports = gameRouter;

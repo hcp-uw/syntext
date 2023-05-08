@@ -1,5 +1,6 @@
 const axios = require('axios')
 const { verifyToken } = require('../controllers/users')
+const { getUserID } = require('../db/user-db')
 const baseURL = 'http://localhost:3001/api/user' // Update with the correct URL
 
 describe('POST /create', () => {
@@ -99,4 +100,48 @@ describe('POST /login', () => {
   //   // Check that the response includes the user's data
 
   // });
+})
+
+
+describe('GET /account', () => {
+  it('gets the token from the req and verifies it, returning account data', async () => {
+    const testUser = { username: 'getme', password: 'password123' }
+    const response = await axios.post(`${baseURL}/create`, testUser)
+    expect(response.status).toBe(201)
+   
+    const token = response.headers['authorization']
+  
+    const resGet = await axios.get(`${baseURL}/account`, {
+      headers: {
+        Authorization: token
+      }
+    })
+    console.log(resGet.data);
+    expect(resGet.status).toBe(200);
+    expect(resGet.data.username).toBe('getme');
+    expect(resGet.data.success).toBe(true);
+  })
+})
+
+
+describe('DELETE /account', () => {
+  it('gets the token from the req and verifies it, deleting account', async () => {
+    const testUser = { username: 'deleteme', password: 'password123' }
+    const response = await axios.post(`${baseURL}/create`, testUser)
+    expect(response.status).toBe(201)
+   
+    const token = response.headers['authorization']
+  
+    const resDelete = await axios.delete(`${baseURL}/account`, {
+      headers: {
+        Authorization: token
+      }
+    })
+
+    console.log(resDelete);
+    expect(resDelete.status).toBe(204);
+
+    const nonexistantUserID = await getUserID(testUser.username);
+    expect(nonexistantUserID.success).toBe(false);
+  })
 })

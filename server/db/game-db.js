@@ -8,7 +8,7 @@ const missingRequiredParams = (name, obj) => {
 }
 
 //id int primary key auto_increment,
-//     username varchar(256) references users(username),
+//     userID varchar(256) references users(id),
 //     snippet_id int,
 //     total_time int,
 //     total_characters int,
@@ -17,6 +17,7 @@ const missingRequiredParams = (name, obj) => {
 //     accuracy float,
 //     num_mistakes int,
 //     time_stamp datetime,
+
 
 const createGameEntry = async game => {
   const {
@@ -30,14 +31,16 @@ const createGameEntry = async game => {
     num_mistakes
   } = game
 
-  if (!(userID &&
-    snippet_id &&
-    total_time &&
-    total_characters &&
+  if (!(
+    typeof userID == "number" &&
+    typeof snippet_id == "number" &&
+    typeof total_time == "number" &&
+    typeof total_characters == "number" &&
     wpm_data &&
-    wpm_avg &&
-    accuracy &&
-    num_mistakes)) return missingRequiredParams("game", game);
+    typeof wpm_avg == "number" &&
+    typeof accuracy == "number" &&
+    typeof num_mistakes == "number"
+    )) return missingRequiredParams("game", game);
 
   try {
     const connection = await pool.getConnection();

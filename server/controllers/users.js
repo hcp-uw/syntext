@@ -163,13 +163,14 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
     req.rawHeaders.findIndex(header => header === 'Authorization') + 1
   const token = req.rawHeaders[tokenIndex]
   try {
-    if (!token) res.status(500).send({ success: false })
+    if (!token) res.status(401).send({ success: false })
     else {
       const decoded = await verifyToken(token)
       const result = await deleteUser(decoded.username, decoded.password)
-      const statusCode = result.success ? 204 : 401
-      res.status(statusCode).send({ success: statusCode === 204 })
-      return
+      if (result.success) 
+        res.status(204).send({ success: true })
+      else 
+        res.status(401).send({ success: false })
     }
   } catch (error) {
     console.error(error)
