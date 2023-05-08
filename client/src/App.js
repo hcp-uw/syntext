@@ -19,8 +19,8 @@ const App = () => {
         <Route path="/leaderboard" element={<LeaderboardPage/>}/>
       </Routes>
       <PopUpController
-          settingsFocus={settingsFocus}
-          setSettingsFocus={setSettingsFocus}
+        settingsFocus={settingsFocus}
+        setSettingsFocus={setSettingsFocus}
       />
     </div>
   );
