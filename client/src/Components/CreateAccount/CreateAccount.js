@@ -15,7 +15,7 @@ const CreateAccount = () => {
 
   const handlePasswordChange = event => setPassword(event.target.value)
 
-  const handleLogin = async event => {
+  const handleCreate = async event => {
     event.preventDefault()
     const createResult = await createUser(username, password)
     if (createResult.success) {
@@ -37,7 +37,7 @@ const CreateAccount = () => {
         create account
       </h2>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleCreate}>
         <div className='input-container'>
           <input
             className='input-textbox'
@@ -59,7 +59,7 @@ const CreateAccount = () => {
           />
         </div>
         <div className='button-container'>
-          <button className='submit-button' type='submit' onClick={handleLogin}>
+          <button className='submit-button' type='submit' onClick={handleCreate}>
             create
           </button>
         </div>
