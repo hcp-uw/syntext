@@ -56,6 +56,10 @@ const getUserID = async (username) => {
     }
 }
 
+
+
+
+
 // creates user 
 const createUser = async (username, hash) => {
     if (!username || !hash) return {success: false, error: 'missing required field'};
@@ -167,5 +171,5 @@ module.exports = {
     closePool,
     updateLastLogin,
     getUser,
-    updateUser
+    updateUser,
 }

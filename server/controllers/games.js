@@ -1,6 +1,8 @@
 const { getGameEntries, createGameEntry, clearGameEntries } = require('../db/game-db') 
+import { verifyToken } from './users';
 const gameRouter = require('express').Router();
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 const { getUserID } = require('../db/user-db');
 
 const jsonParser = bodyParser.json();
@@ -12,7 +14,11 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
 
 
     try {
+        const decodedToken = await verifyToken(token);
+        console.log(decodedToken)
         console.log(gameObject)
+        if (!decodedToken.success || gameObject.userID != decodedToken.userID)
+            res.status(401).send({success: false, error: 'Token unauthorized'});
         const result = await createGameEntry(gameObject);
         console.log(result)
         if (result.success)
@@ -45,11 +51,18 @@ gameRouter.get('/games', jsonParser, async (req, res) => {
 
 gameRouter.delete('/games', jsonParser, async (req, res) => {
     let {userID, username} = req.body;
+    const token = extractToken(req);
+
     if (!userID && !username) 
         return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
     
     if (!userID)
         userID = await getUserID(username);
+
+    const decodedToken = await verifyToken(token);
+    
+    if (!decodedToken.success || userID != decodedToken.userID)
+        res.status(401).send({success: false, error: 'Token unauthorized'});
 
     try {
         const result = await clearGameEntries(userID);

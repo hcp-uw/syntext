@@ -18,7 +18,7 @@ const saltRounds = 3
 const generateToken = async (username, password) => {
   const id = await getUserID(username)
   const token = jwt.sign(
-    { username: username, password: password, userID: id },
+    { username: username, userID: id },
     JWT_SECRET,
     {
       expiresIn: '1800s'
@@ -29,7 +29,7 @@ const generateToken = async (username, password) => {
 
 const verifyToken = async token => {
   const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
-  return res
+  return {...res, success: true}
 }
 
 /*
