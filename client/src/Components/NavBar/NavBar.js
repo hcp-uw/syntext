@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
-import Icon from '../Icon/Icon';
-import './NavBar.css';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom'
+import Icon from '../Icon/Icon'
+import './NavBar.css'
+import { useSelector } from 'react-redux'
 const NavBar = ({ setSettingsFocus }) => {
-
-  const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
+  const isLoggedIn = useSelector(s => s.userState.isLoggedIn)
   return (
     <div className='navbar-container'>
       <div className='navbar'>
@@ -21,7 +20,7 @@ const NavBar = ({ setSettingsFocus }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

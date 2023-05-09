@@ -1,29 +1,29 @@
 .create-container {
-    background: #fcdfdf;
-    border-radius: 8px;
-    margin: 80px auto;
-    max-width: 400px;
-    padding: 20px;
+  background: #fcdfdf;
+  border-radius: 8px;
+  margin: 80px auto;
+  max-width: 400px;
+  padding: 20px;
 }
 
 .create-title {
-    margin-bottom: 10%;
+  margin-bottom: 10%;
 }
 
 .input-container {
-    display: flex;
-    justify-content: center;
-    padding-bottom: 3.5%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 3.5%;
 }
 
 .input-textbox {
-    border-radius: 8px;
-    border-color: #fcdfdf;
-    background-color: #BC8785;
-    padding-left: 10px;
-    color: #fff;
-    width: 100%;
-    height: 40px;    
+  border-radius: 8px;
+  border-color: #fcdfdf;
+  background-color: #bc8785;
+  padding-left: 10px;
+  color: #fff;
+  width: 100%;
+  height: 40px;
 }
 
 .button-container {
@@ -33,11 +33,11 @@
 }
 
 .submit-button {
-    background: #ebc6c6;
-    border-color: transparent;
-    color: #7D615F;
-    justify-content: right;
-    border-radius: 5px;
+  background: #ebc6c6;
+  border-color: transparent;
+  color: #7d615f;
+  justify-content: right;
+  border-radius: 5px;
 }
 
 .input-textbox::placeholder {

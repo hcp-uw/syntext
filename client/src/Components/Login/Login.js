@@ -3,10 +3,10 @@ import { authenticate, getCurrentUser } from '../../services/userService'
 import './Login.css'
 import { useDispatch } from 'react-redux'
 
-import { setLoggedIn, setUserID } from './../../redux/user/userStateActions';
+import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
 
 const Login = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -29,13 +29,15 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container" style={{margin: "auto"}}>
-      <h2 style={{fontSize: "2em", color: "#7D615F"}}>log in</h2>
-      <p style={{fontSize: "1em", color: "#7D615F", textAlign: 'right'}}>forgot password?</p>
+    <div className='login-container' style={{ margin: 'auto' }}>
+      <h2 style={{ fontSize: '2em', color: '#7D615F' }}>log in</h2>
+      <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'right' }}>
+        forgot password?
+      </p>
       <form onSubmit={handleLogin}>
-        <div className="input-container">
+        <div className='input-container'>
           <input
-            className="input-textbox"
+            className='input-textbox'
             type='text'
             id='username'
             placeholder='username'
@@ -43,9 +45,9 @@ const Login = () => {
             onChange={handleUsernameChange}
           />
         </div>
-        <div className="input-container">
+        <div className='input-container'>
           <input
-            className="input-textbox"
+            className='input-textbox'
             type='password'
             id='password'
             placeholder='password'
@@ -54,14 +56,16 @@ const Login = () => {
           />
         </div>
         <div className='button-container'>
-          <button className="submit-button" type='submit' onClick={handleLogin}>
+          <button className='submit-button' type='submit' onClick={handleLogin}>
             login
           </button>
         </div>
         <div style={{ textAlign: 'center', paddingTop: '12px' }}>
-          {errorMessage && <span 
-              style={{ whiteSpace: "pre-line", 
-                       color: 'red' }}>{errorMessage}</span>}
+          {errorMessage && (
+            <span style={{ whiteSpace: 'pre-line', color: 'red' }}>
+              {errorMessage}
+            </span>
+          )}
         </div>
       </form>
     </div>
