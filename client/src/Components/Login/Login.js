@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { authenticate, getCurrentUser } from '../../services/userService'
+import './Login.css'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -23,33 +24,42 @@ const Login = () => {
   }
 
   return (
-    <>
-      <h2> Login to an existing account</h2>
+    <div className="login-container" style={{margin: "auto"}}>
+      <h2 style={{fontSize: "2em", color: "#7D615F"}}>log in</h2>
+      <p style={{fontSize: "1em", color: "#7D615F", textAlign: 'right'}}>forgot password?</p>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
+        <div className="input-container">
           <input
+            className="input-textbox"
             type='text'
             id='username'
+            placeholder='username'
             value={username}
             onChange={handleUsernameChange}
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="input-container">
           <input
+            className="input-textbox"
             type='password'
             id='password'
+            placeholder='password'
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
-        <button type='submit' onClick={handleLogin}>
-          Login
-        </button>
-        {errorMessage && <span style={{ color: 'red' }}>{errorMessage}</span>}
+        <div className='button-container'>
+          <button className="submit-button" type='submit' onClick={handleLogin}>
+            login
+          </button>
+        </div>
+        <div style={{ textAlign: 'center', paddingTop: '12px' }}>
+          {errorMessage && <span 
+              style={{ whiteSpace: "pre-line", 
+                       color: 'red' }}>{errorMessage}</span>}
+        </div>
       </form>
-    </>
+    </div>
   )
 }
 
