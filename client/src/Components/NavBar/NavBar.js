@@ -13,6 +13,7 @@ const NavBar = ({ setSettingsFocus }) => {
           <Link to='/leaderboard'>leaderboard</Link>
           <Link to='/'>game</Link>
           <Link to='/account'>account</Link>
+          <Link to='/login'>login</Link>
           <Icon setSettingsFocus={setSettingsFocus} />
         </div>
       </div>

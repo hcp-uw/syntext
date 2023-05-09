@@ -1,5 +1,6 @@
 .leaderboard-container {
-    background: linear-gradient(to bottom, #f9f9f9, #fcdfdf);
+    /* background: linear-gradient(to bottom, #f9f9f9, #fcdfdf); */
+    background: #fcdfdf;
     border-radius: 15px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     margin: 20px auto;
@@ -21,9 +22,11 @@
   }
   
   .leaderboard-table th {
-    background-color: #f7bfbf;
+    /* background-color: #f7bfbf; */
+    background-color: rgb(239, 177, 177);
     padding: 10px;
-    color: #999696;
+    /* color: #999696; */
+    color: rgba(125, 97, 95, 1);
     font-size: 100%;
     font-weight: 500;
     text-transform: uppercase;
@@ -34,7 +37,8 @@
   }
   
   .leaderboard-table tr:nth-child(even) td {
-    background-color: #f7bfbf;
+    /* background-color: #f7bfbf; */
+    background-color: rgb(239, 177, 177);
   }
   
   .leaderboard-table td:first-child {

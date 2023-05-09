@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1000px;
+    max-width: 92%;
     margin: 0 auto;
   }
   
@@ -10,6 +10,7 @@
     color: rgba(125, 97, 95, 1);
     font-size: 2.5em;
     text-decoration: none;
+    margin: 0;
   }
   
   .button-container {
@@ -18,7 +19,8 @@
   }
   
   .button-container a {
-    color: rgb(255, 232, 230);
+    /* color: rgb(255, 232, 230); */
+    color: #fff;
     background-color: rgb(219, 157, 157);
     text-decoration: none;
     margin-left: .5em;
@@ -29,7 +31,8 @@
   }
   
   .button-container a:hover {
-    background-color: rgb(255, 213, 213);
+    /* background-color: rgb(255, 213, 213); */
     color: #fff;
+    background-color: rgb(188, 127, 127);
   }
   
