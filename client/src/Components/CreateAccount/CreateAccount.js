@@ -19,7 +19,7 @@ const CreateAccount = () => {
     event.preventDefault()
     const createResult = await createUser(username, password)
     if (createResult.success) {
-      alert('logged in as ' + username)
+      alert('Created user ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', createResult.token)
       dispatch(setLoggedIn(true))
