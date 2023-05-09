@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { authenticate, getCurrentUser } from '../../services/userService'
 import './Login.css'
+import { useDispatch } from 'react-redux'
+
+import { setLoggedIn, setUserID } from './../../redux/user/userStateActions';
 
 const Login = () => {
+  const dispatch = useDispatch(); 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -18,6 +22,7 @@ const Login = () => {
       alert('logged in as ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', loginResult.token)
+      dispatch(setLoggedIn(true))
     } else {
       setErrorMessage('Invalid username or password')
     }
