@@ -1,7 +1,7 @@
-import Login from "../Components/Login/Login";
+import LoginForm from "../Components/Login/Login";
 import CreateAccount from "../Components/CreateAccount/CreateAccount";
 
-const LoginPage = () => {
+const Login = () => {
   return (
     <div className="login-container">
       <Login />
