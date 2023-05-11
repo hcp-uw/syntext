@@ -6,7 +6,7 @@ import {
   currWordHasMistake,
   allowedToOverflow,
   isMistake
-} from '../inputValidation'
+} from './inputValidation'
 import Cursor from '../Cursor/Cursor'
 import stylesheet from './TextArea.css'
 
