@@ -24,7 +24,7 @@ const CreateAccount = () => {
       window.localStorage.setItem('authToken', createResult.token)
       dispatch(setLoggedIn(true))
     } else {
-      setErrorMessage('Invalid username or password')
+      setErrorMessage(createResult.error)
     }
   }
 
