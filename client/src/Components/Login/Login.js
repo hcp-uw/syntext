@@ -4,9 +4,11 @@ import './Login.css'
 import { useDispatch } from 'react-redux'
 
 import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -19,15 +21,13 @@ const Login = () => {
     event.preventDefault()
     const loginResult = await authenticate(username, password)
     if (loginResult.success) {
-      alert('logged in as ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', loginResult.token)
-      const { userID, success }= await getCurrentUser()
+      const { userID, success } = await getCurrentUser();
       if (!success) return;
       dispatch(setUserID(userID))
       dispatch(setLoggedIn(true));
-      console.log("dispatched and set userID to: ", userID)
-      
+      navigate('/');
     } else {
       setErrorMessage('Invalid username or password')
     }
