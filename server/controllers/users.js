@@ -50,6 +50,7 @@ userRouter.post('/create', jsonParser, async (req, res) => {
   try {
     const hash = await bcrypt.hash(password, saltRounds)
     const result = await createUser(username, hash)
+    if (!result.success) return res.status(409).send({...result}) 
     const token = await generateToken(username, password)
     return res
       .set('Authorization', `Bearer ${token}`)
@@ -87,7 +88,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
         .set('Authorization', `Bearer ${token}`)
         .status(200)
         .json({ success: true })
-      updateLastLogin(username)
+      await updateLastLogin(username)
     }
   } catch (error) {
     console.error(error)

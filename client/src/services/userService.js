@@ -14,12 +14,12 @@ const createUser = async (username, password) => {
       username: username,
       password: password
     })
-    console.log('create POST response: ', res)
 
     return { ...res.data, token: res.headers['authorization'] }
   } catch (error) {
-    //console.error(error);
-    return { success: false }
+    console.error(error);
+    if (error.response.status === 409) return { success: false, error: `user ${username} already exists` } 
+    return { success: false, error: 'Error creating account' }
   }
 }
 
@@ -34,7 +34,6 @@ const authenticate = async (username, password) => {
       username: username,
       password: password
     })
-    console.log('login POST response: ', res)
 
     return { ...res.data, token: res.headers['authorization'] }
   } catch (error) {
@@ -55,7 +54,7 @@ const getCurrentUser = async () => {
     })
     return res.data
   } catch (error) {
-    console.log(error)
+    console.error(error);
   }
 }
 

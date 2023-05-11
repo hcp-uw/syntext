@@ -1,15 +1,21 @@
 import pfp from './pfpicon.png'
 import stylesheet from './Icon.css'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 const IconNavBar = props => {
-  const { setSettingsFocus } = props
+  const navigate = useNavigate();
+  
   return (
     <img
       className='icon'
       src={pfp}
       alt="profile"
       style={{ stylesheet }}
-      onClick={() => setSettingsFocus(true)}
+      onClick={ () => (props.isLoggedIn) ? 
+        navigate('/account') :
+        navigate('/login') 
+      }
     />
   )
 }

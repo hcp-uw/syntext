@@ -69,6 +69,7 @@ const createUser = async (username, hash) => {
         const result = await connection.query(query, [username]);
         //checks if any rows were returned
         if (result[0].length > 0) {
+            console.log(result[0]);
             connection.release();
             return {success: false, error: `User ${username} already exists`}; 
         } else  {

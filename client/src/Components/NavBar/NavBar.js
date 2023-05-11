@@ -13,10 +13,10 @@ const NavBar = ({ setSettingsFocus }) => {
         <div className='button-container'>
           <Link to='/leaderboard'>leaderboard</Link>
           <Link to='/'>game</Link>
-          <Link to='/account'>account</Link>
+          <Link onClick={() => setSettingsFocus(true)}>settings</Link>
           {!isLoggedIn && <Link to='/login'>login</Link>}
           {!isLoggedIn && <Link to='/join'>join</Link>}
-          <Icon setSettingsFocus={setSettingsFocus} />
+          <Icon isLoggedIn={isLoggedIn} />
         </div>
       </div>
     </div>
