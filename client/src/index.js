@@ -13,6 +13,5 @@ root.render(
     <Router>
       <App />
     </Router>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 )
