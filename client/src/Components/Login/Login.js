@@ -22,7 +22,12 @@ const Login = () => {
       alert('logged in as ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', loginResult.token)
-      dispatch(setLoggedIn(true))
+      const { userID, success }= await getCurrentUser()
+      if (!success) return;
+      dispatch(setUserID(userID))
+      dispatch(setLoggedIn(true));
+      console.log("dispatched and set userID to: ", userID)
+      
     } else {
       setErrorMessage('Invalid username or password')
     }
