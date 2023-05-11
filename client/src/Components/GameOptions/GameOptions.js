@@ -31,17 +31,11 @@ const GameOptions = props => {
   const [currSnippets, setCurrSnippets] = useState([])
 
   const onNewSnippetClick = () => {
-    // console.log('currSnippet', currSnippet)
-    // console.log('currSnippets', currSnippets)
-    // console.log('selLen', selectedLength)
-    // console.log('selType', selectedType)
     if (!selectedLength || !selectedType) return
     let nextIndex = currSnippets.findIndex(
       snippet => currSnippet.id === snippet.id
     )
     nextIndex = (nextIndex + 1) % currSnippets.length
-    console.log('nextIndex', nextIndex)
-    console.log('next snippet', currSnippets[nextIndex])
 
     setCurrSnippet(currSnippets[nextIndex])
     setLines(currSnippets[nextIndex].data)
