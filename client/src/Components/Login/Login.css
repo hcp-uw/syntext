@@ -1,7 +1,7 @@
 .login-container {
     background: #fcdfdf;
     border-radius: 8px;
-    margin: 80px auto;
+    margin: 7% auto;
     max-width: 400px;
     padding: 20px;
 }
@@ -16,7 +16,6 @@
     border-radius: 8px;
     border-color: #fcdfdf;
     background-color: #BC8785;
-    padding-left: 10px;
     color: #fff;
     width: 100%;
     height: 40px;    
@@ -38,4 +37,5 @@
 
 .input-textbox::placeholder {
   color: #fff9;
+  padding-left: 2px;
 }

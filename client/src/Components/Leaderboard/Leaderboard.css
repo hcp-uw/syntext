@@ -4,7 +4,7 @@
     border-radius: 15px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 70%;
     padding: 20px;
   }
   
@@ -23,25 +23,38 @@
   
   .leaderboard-table th {
     /* background-color: #f7bfbf; */
-    background-color: rgb(239, 177, 177);
+    /* background-color: rgb(239, 177, 177); */
+    background-color: #fcdfdf;
     padding: 10px;
     /* color: #999696; */
     color: rgba(125, 97, 95, 1);
     font-size: 100%;
     font-weight: 500;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
+
   }
   
   .leaderboard-table td {
     font-size: 16px;
   }
-  
-  .leaderboard-table tr:nth-child(even) td {
+
+  .leaderboard-table tr:nth-child(odd) td {
     /* background-color: #f7bfbf; */
-    background-color: rgb(239, 177, 177);
+    /* background-color: #d5b0af; */
+    background-color: #c99d9c;
+    color: #fff;
   }
-  
+
+  .leaderboard-table tr:nth-child(even) td {
+    color: rgba(125, 97, 95, 1);
+  }
+
   .leaderboard-table td:first-child {
     font-weight: bold;
+  }
+
+  .title-text {
+    color: rgba(125, 97, 95, 1);
+    font-size: 170%;
   }
   

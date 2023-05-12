@@ -29,12 +29,12 @@ const CreateAccount = () => {
   }
 
   return (
-    <div className='create-container' style={{ margin: 'auto' }}>
+    <div className='create-container'>
       <h2
         className='create-title'
         style={{ fontSize: '2em', color: '#7D615F' }}
       >
-        create account
+        sign up
       </h2>
 
       <form onSubmit={handleCreate}>
@@ -58,9 +58,19 @@ const CreateAccount = () => {
             onChange={handlePasswordChange}
           />
         </div>
+        <div className='input-container'>
+          <input
+            className='input-textbox'
+            type='confirmpassword'
+            id='confirmpassword'
+            placeholder='confirm password'
+            // value={password}
+            // onChange={handlePasswordChange}
+          />
+        </div>
         <div className='button-container'>
           <button className='submit-button' type='submit' onClick={handleCreate}>
-            create
+            create account
           </button>
         </div>
         <div style={{ textAlign: 'center', paddingTop: '12px' }}>

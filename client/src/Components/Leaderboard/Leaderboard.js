@@ -2,17 +2,19 @@ import './Leaderboard.css'
 
 const Leaderboard = ({ data }) => {
 
+
     return (
         <div className="leaderboard-container">
+            <h className="title-text">leaderboard</h>
             <table className="leaderboard-table">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Average WPM</th>
-                        <th>Time Played</th>
-                        <th>Characters Typed</th>
-                        <th>Average Accuracy</th>
+                        <th>#</th>
+                        <th>username</th>
+                        <th>average wpm</th>
+                        <th>time played</th>
+                        <th>characters typed</th>
+                        <th>average accuracy</th>
                     </tr>
                 </thead>
                 <tbody>

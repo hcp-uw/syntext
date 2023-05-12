@@ -45,7 +45,7 @@ const GameOptions = props => {
   return (
     <div className='game-options-container'>
       <Container fluid>
-        <Row>
+        <Row style={{paddingTop: '30px'}}>
           <Col md={{ span: 2, offset: 5 }} sm xs='auto'>
             <SnippetOptions
               selectedType={selectedType}
