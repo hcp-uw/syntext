@@ -1,4 +1,7 @@
 import './Leaderboard.css'
+import "rc-tooltip/assets/bootstrap.css";
+import Tooltip from "rc-tooltip";
+
 
 const Leaderboard = ({ data }) => {
 
@@ -8,13 +11,32 @@ const Leaderboard = ({ data }) => {
             <h className="title-text">leaderboard</h>
             <table className="leaderboard-table">
                 <thead>
+
                     <tr>
-                        <th>#</th>
+                        <Tooltip
+                        placement="top"
+                        overlay={<span>rank</span>}
+                        showArrow="false"
+                        >
+                            <th>#</th>
+                        </Tooltip>
                         <th>username</th>
                         <th>average wpm</th>
-                        <th>time played</th>
+                        <Tooltip
+                        placement="top"
+                        overlay={<span>mins</span>}
+                        showArrow="true"
+                        >
+                            <th>time played</th>
+                        </Tooltip>
                         <th>characters typed</th>
-                        <th>average accuracy</th>
+                        <Tooltip
+                        placement="top"
+                        overlay={<span>%</span>}
+                        showArrow="false"
+                        >
+                            <th>average accuracy</th>
+                        </Tooltip>
                     </tr>
                 </thead>
                 <tbody>

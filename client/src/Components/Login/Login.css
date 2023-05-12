@@ -6,16 +6,17 @@
     padding: 20px;
 }
 
-.input-container {
+.login-container .input-container {
     display: flex;
     justify-content: center;
     padding-bottom: 3.5%;
 }
 
-.input-textbox {
+.login-container .input-textbox {
     border-radius: 8px;
-    border-color: #fcdfdf;
+    border-color: transparent;
     background-color: #BC8785;
+    padding-left: 10px;
     color: #fff;
     width: 100%;
     height: 40px;    
@@ -35,7 +36,6 @@
     border-radius: 5px;
 }
 
-.input-textbox::placeholder {
+.login-container .input-textbox::placeholder {
   color: #fff9;
-  padding-left: 2px;
 }

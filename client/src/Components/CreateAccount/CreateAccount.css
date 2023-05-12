@@ -10,13 +10,13 @@
   margin-bottom: 8%;
 }
 
-.input-container {
+.create-container .input-container {
   display: flex;
   justify-content: center;
   padding-bottom: 3.5%;
 }
 
-.input-textbox {
+.create-container .input-textbox {
   border-radius: 8px;
   border-color: transparent;
   background-color: #bc8785;
@@ -40,6 +40,6 @@
   border-radius: 5px;
 }
 
-.input-textbox::placeholder {
+.create-container .input-textbox::placeholder {
   color: #fff9;
 }

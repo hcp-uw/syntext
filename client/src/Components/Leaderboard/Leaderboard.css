@@ -57,4 +57,24 @@
     color: rgba(125, 97, 95, 1);
     font-size: 170%;
   }
-  
+
+
+.rc-tooltip {
+  height: 15px;
+  align-items: center;
+  justify-content: center; 
+}
+
+.rc-tooltip-arrow {
+  visibility: hidden;
+}
+
+.rc-tooltip-content .rc-tooltip-inner {
+  background-color: #D6B2B0;
+  color: white;
+  display: inline-flexbox;
+  max-inline-size: auto;
+  max-height: min-content;
+  /* line-height: 2px; */
+  border-radius: 15px;
+}

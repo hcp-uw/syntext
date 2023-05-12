@@ -19,7 +19,7 @@
     margin-right: 10px;
   }
   
-  input[type="text"] {
+  .account-manager input[type="text"] {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
