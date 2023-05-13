@@ -26,7 +26,6 @@ const Leaderboard = ({ data }) => {
                         <Tooltip
                         placement="top"
                         overlay={<span>wpm</span>}
-                        showArrow="false"
                         >
                             <th>average speed</th>
                         </Tooltip>
@@ -40,7 +39,7 @@ const Leaderboard = ({ data }) => {
                         </Tooltip>
 
                         <th>characters typed</th>
-                        
+
                         <Tooltip
                         placement="top"
                         overlay={<span>%</span>}
@@ -53,12 +52,12 @@ const Leaderboard = ({ data }) => {
                 <tbody>
                     {data.map((user, index) => (
                         <tr key={index}>
-                            <td>{index + 1}</td>
+                            <td style={{borderTopLeftRadius: "5px", borderBottomLeftRadius: "5px"}}>{index + 1}</td>
                             <td>{user.username}</td>
                             <td>{user.wpm}</td>
                             <td>{user.time}</td>
                             <td>{user.typed}</td>
-                            <td>{user.accuracy}</td>
+                            <td style={{borderTopRightRadius: "5px", borderBottomRightRadius: "5px"}}>{user.accuracy*100}</td>
                         </tr>
                     ))}
                 </tbody>

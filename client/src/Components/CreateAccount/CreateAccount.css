@@ -3,7 +3,9 @@
   border-radius: 8px;
   margin: 6% auto;
   max-width: 400px;
+  /* padding: 40px; */
   padding: 40px;
+    padding-bottom: 20px;
 }
 
 .create-title {
@@ -42,4 +44,8 @@
 
 .create-container .input-textbox::placeholder {
   color: #fff9;
+}
+
+.create-container .input-textbox:focus {
+  outline: #fff 1px;
 }

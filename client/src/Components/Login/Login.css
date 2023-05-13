@@ -4,6 +4,7 @@
     margin: 7% auto;
     max-width: 400px;
     padding: 20px;
+    padding-bottom: 10px;
 }
 
 .login-container .input-container {
@@ -38,4 +39,14 @@
 
 .login-container .input-textbox::placeholder {
   color: #fff9;
+}
+
+.login-container .input-textbox:focus {
+  outline: #fff 1px;
+}
+
+.create-account-button {
+  margin: auto;
+  color: #7D615F;
+  font-size: 0.8em;
 }
