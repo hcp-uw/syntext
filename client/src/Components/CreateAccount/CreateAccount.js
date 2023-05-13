@@ -9,14 +9,21 @@ const CreateAccount = () => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
   const handleUsernameChange = event => setUsername(event.target.value)
 
   const handlePasswordChange = event => setPassword(event.target.value)
 
+  const handleConfirmPasswordChange = event => setConfirmPassword(event.target.value)
+
   const handleCreate = async event => {
     event.preventDefault()
+    if (password !== confirmPassword) {
+      setErrorMessage("passwords do not match!")
+      return;
+    }
     const createResult = await createUser(username, password)
     if (createResult.success) {
       alert('Created user ' + username)
@@ -61,11 +68,11 @@ const CreateAccount = () => {
         <div className='input-container'>
           <input
             className='input-textbox'
-            type='confirmpassword'
+            type='password'
             id='confirmpassword'
             placeholder='confirm password'
-            // value={password}
-            // onChange={handlePasswordChange}
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
           />
         </div>
         <div className='button-container'>

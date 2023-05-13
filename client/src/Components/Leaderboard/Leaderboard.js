@@ -20,8 +20,17 @@ const Leaderboard = ({ data }) => {
                         >
                             <th>#</th>
                         </Tooltip>
+
                         <th>username</th>
-                        <th>average wpm</th>
+
+                        <Tooltip
+                        placement="top"
+                        overlay={<span>wpm</span>}
+                        showArrow="false"
+                        >
+                            <th>average speed</th>
+                        </Tooltip>
+
                         <Tooltip
                         placement="top"
                         overlay={<span>mins</span>}
@@ -29,7 +38,9 @@ const Leaderboard = ({ data }) => {
                         >
                             <th>time played</th>
                         </Tooltip>
+
                         <th>characters typed</th>
+                        
                         <Tooltip
                         placement="top"
                         overlay={<span>%</span>}
