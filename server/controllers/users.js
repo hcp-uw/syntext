@@ -103,10 +103,9 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     or send error message if request fails or token is invalid.
   */
 userRouter.get('/account', async (req, res) => {
+  const token = extractToken(req)
+  
   try {
-    const tokenIndex =
-      req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-    const token = req.rawHeaders[tokenIndex]
     if (!token) res.status(500).send({ success: false })
     else {
       const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET)
@@ -131,7 +130,7 @@ userRouter.get('/account', async (req, res) => {
   */
 userRouter.put('/account', async (req, res) => {
   const { newUsername, newPassword } = req.body
-
+  const token = extractToken(req)
   try {
     const token = req.rawHeaders[3]
     if (!token) res.status(500).send({ success: false })
@@ -160,14 +159,13 @@ userRouter.put('/account', async (req, res) => {
   or send error message if request fails or token is invalid.
 */
 userRouter.delete('/account', jsonParser, async (req, res) => {
-  const tokenIndex =
-    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-  const token = req.rawHeaders[tokenIndex]
+  const { username, password } = req.body;
+  const token = extractToken(req)
   try {
     if (!token) res.status(401).send({ success: false })
     else {
       const decoded = await verifyToken(token)
-      const result = await deleteUser(decoded.username, decoded.password)
+      const result = await deleteUser(username, password)
       if (result.success) 
         res.status(204).send({ success: true })
       else 
@@ -178,6 +176,12 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
     res.status(500).json({ success: false, error: 'Server error' })
   }
 })
+
+const extractToken = (req) => {
+  const tokenIndex =
+  req.rawHeaders.findIndex(header => header === 'Authorization') + 1
+  return req.rawHeaders[tokenIndex];
+}
 
 module.exports = {
   userRouter,
