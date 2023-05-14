@@ -167,7 +167,7 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
       const decoded = await verifyToken(token)
       const result = await deleteUser(username, password)
       if (result.success) 
-        res.status(204).send({ success: true })
+        res.status(200).send({ success: true })
       else 
         res.status(401).send({ success: false })
     }
