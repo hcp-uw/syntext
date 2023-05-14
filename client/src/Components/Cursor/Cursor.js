@@ -11,7 +11,6 @@ const Cursor = (props) => {
   const throttledResizeHandler = throttle(() => {
     setTypingStatus(false);
     checkForMovability();
-    console.log('throttling')
   }, 10);
 
   function throttle(func, wait) {

@@ -24,14 +24,9 @@ const SnippetOptions = props => {
   }, [selectedLength, selectedType])
 
   const loadNewSnippets = (len, type) => {
-    console.log('len', len)
-    console.log(selectedLength)
-    console.log('type', type)
-    console.log(selectedType)
 
     getSnippet(len, type).then(snippets => {
       setCurrSnippets(snippets)
-      console.log(snippets)
     })
   }
 
