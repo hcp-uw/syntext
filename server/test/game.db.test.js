@@ -155,7 +155,8 @@ afterAll(async () => {
   const resDelete = await axios.delete(`${baseURL}/account`, {
     headers: {
       Authorization: token
-    }
+    }, 
+    data: user
   })
   expect(resDelete.status).toBe(204)
   const resDeleteSnippet = await deleteSnippetByID(snippet.id)
