@@ -16,7 +16,7 @@ describe('Snippet API', () => {
     )
 
     expect(res.status).toBe(201)
-    expect(res.data).toBe("Snippet created")
+    expect(res.data.success).toBe(true)
     await axios.delete(
       'http://localhost:3001/api/snippet/remove?id=6969'
     )
@@ -49,7 +49,7 @@ describe('Snippet API', () => {
     )
 
     expect(res.status).toBe(202)
-    expect(res.data).toBe("Snippet deleted")
+    expect(res.data.success).toBe(true)
   })
 
   test('get snippets by length', async () => {
@@ -116,7 +116,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Bad Request: Missing data in request body')
+      expect(error.response.data.success).toBe(false)
     }
   })
 
@@ -135,7 +135,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Bad Request: Invalid data in request body')
+      expect(error.response.data.success).toBe(false)
     }
   })
 
@@ -146,7 +146,7 @@ describe('Snippet API', () => {
       )
     } catch (error) {
       expect(error.response.status).toBe(400)
-      expect(error.response.data).toBe('Bad Request: Missing id parameter')
+      expect(error.response.data.success).toBe(false)
     }
   })
 

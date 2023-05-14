@@ -70,12 +70,7 @@ const createUser = async (username, hash) => {
         const result = await connection.query(query, [username]);
         //checks if any rows were returned
         if (result[0].length > 0) {
-<<<<<<< HEAD
             await connection.release();
-=======
-            console.log(result[0]);
-            connection.release();
->>>>>>> ac506198955b31638fe5f87228709314be0a3a2e
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
             const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'

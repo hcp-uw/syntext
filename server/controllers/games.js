@@ -1,5 +1,5 @@
 const { getGameEntries, createGameEntry, clearGameEntries } = require('../db/game-db') 
-import { verifyToken } from './users';
+const { verifyToken } = require('./users');
 const gameRouter = require('express').Router();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
