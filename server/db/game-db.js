@@ -74,7 +74,7 @@ const createGameEntry = async game => {
 }
 
 const getGameEntries = async userID => {
-  if (!userID || typeof userID != "number") return {success: false}
+  if (!userID) return {success: false}
   try {
     const connection = await pool.getConnection()
     const query = `
