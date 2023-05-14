@@ -35,7 +35,7 @@ describe('POST /create', () => {
         password: testUser.password
       }
     })
-    expect(resDelete.status).toBe(204)
+    expect(resDelete.status).toBe(200)
   })
 })
 
@@ -149,7 +149,7 @@ describe('DELETE /account', () => {
       }
     })
 
-    expect(resDelete.status).toBe(204);
+    expect(resDelete.status).toBe(200);
 
     const nonexistantUserID = await getUserID(testUser.username);
     expect(nonexistantUserID.success).toBe(false);
