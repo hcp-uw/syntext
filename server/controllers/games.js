@@ -1,136 +1,129 @@
-const { getGameEntries, createGameEntry, clearGameEntries } = require('../db/game-db') 
-const { verifyToken } = require('./users');
-const gameRouter = require('express').Router();
-const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const { getUserID } = require('../db/user-db');
+const { verifyToken } = require('../utils/auth');
+const { getUserID } = require('../db/user-db')
+const {
+  getGameEntries,
+  createGameEntry,
+  clearGameEntries
+} = require('../db/game-db')
 
-const jsonParser = bodyParser.json();
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
 
+const jwt = require('jsonwebtoken')
+const gameRouter = require('express').Router()
 
 gameRouter.post('/create', jsonParser, async (req, res) => {
-    const gameObject = extractGame(req.body);
-    if (gameObject.error) return res.status(400).send({success: false})
-    const token = extractToken(req);
+  const gameObject = extractGame(req.body)
 
+  if (gameObject.error) return res.status(400).send({ success: false })
 
+  const token = extractToken(req)
 
-    try {
-        const decodedToken = await verifyToken(token);
+  try {
+    const decodedToken = await verifyToken(token)
 
-        if (!decodedToken.success || gameObject.userID != decodedToken.userID)
-            res.status(401).send({success: false, error: 'Token unauthorized'});
-        const result = await createGameEntry(gameObject);
+    if (!decodedToken.success || gameObject.userID != decodedToken.userID)
+      res.status(401).send({ success: false, error: 'Token unauthorized' })
 
-        if (result.success)
-            res.status(201).send({ success: true });
-        else 
-           return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
+    const result = await createGameEntry(gameObject)
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+    if (result.success) res.status(201).send({ success: true })
+    else
+      return res
+        .status(400)
+        .send({ error: 'Bad Request: Missing data in request body' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).send('Internal Server Error')
+  }
+})
 
 gameRouter.get('/games', jsonParser, async (req, res) => {
-    let {userID, username} = req.query;
-    if (!userID && !username) 
-        return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
-    
-    if (!userID)
-        userID = await getUserID(username);
+  let { userID, username } = req.query
 
-    
-    try {
-        const entries = await getGameEntries(userID);
-        res.status(200).send(entries);
-    } catch (error) {
-        res.status(500).send({error: "Internal Server Error"});
-    }
-});   
+  if (!userID && !username)
+    return res
+      .status(400)
+      .send({ error: 'Bad Request: Missing data in request body' })
+
+  if (!userID) userID = await getUserID(username)
+
+  try {
+    const entries = await getGameEntries(userID)
+    res.status(200).send(entries)
+  } catch (error) {
+    res.status(500).send({ error: 'Internal Server Error' })
+  }
+})
 
 gameRouter.delete('/games', jsonParser, async (req, res) => {
-    let {userID, username} = req.body;
-    const token = extractToken(req);
-    console.log('params1: ', userID, username)
+  let { userID, username } = req.body
 
-    if (!userID && !username) 
-        return res.status(400).send({error: 'Bad Request: Missing data in request body'}); 
-    
-    if (!userID)
-        userID = await getUserID(username);
+  const token = extractToken(req)
 
-        console.log('params2: ', userID, username)
-    const decodedToken = await verifyToken(token);
-    
-    if (!decodedToken.success || userID != decodedToken.userID)
-        res.status(401).send({success: false, error: 'Token unauthorized'});
+  if (!userID && !username)
+    return res
+      .status(400)
+      .send({ error: 'Bad Request: Missing data in request body' })
 
-    try {
-        const result = await clearGameEntries(userID);
-        console.log(result);
-        if (result.success) res.status(200).send(result);
-        else res.status(400)
-    } catch (error) {
-        res.status(500).send({error: "Internal Server Error"});
-    }
-});   
+  if (!userID) userID = await getUserID(username)
 
+  const decodedToken = await verifyToken(token)
 
-const extractGame = (body) => {
-    if (!body.data) return {error: true};
-    
-    const {
-        userID, 
-        snippet_id,
-        total_time,
-        total_characters, 
-        wpm_data, 
-        wpm_avg, 
-        accuracy, 
-        num_mistakes
-    } = body.data;
+  if (!decodedToken.success || userID != decodedToken.userID)
+    res.status(401).send({ success: false, error: 'Token unauthorized' })
 
+  try {
+    const result = await clearGameEntries(userID)
+    if (result.success) res.status(200).send(result)
+    else res.status(400).send({ error: 'could not get game entries' })
+  } catch (error) {
+    res.status(500).send({ error: 'Internal Server Error' })
+  }
+})
 
+const extractGame = body => {
+  if (!body.data) return { error: true }
 
-    if (!(
-        typeof userID === typeof 2 &&
-        typeof snippet_id === typeof 2 &&
-        typeof total_time === typeof 2 &&
-        typeof total_characters === typeof 2 && 
-        wpm_data &&
-        typeof wpm_avg === typeof 2.2 &&
-        typeof accuracy === typeof 2.2 &&
-        typeof num_mistakes === typeof 2
-        )) return {error: true};
+  const {
+    userID,
+    snippet_id,
+    total_time,
+    total_characters,
+    wpm_data,
+    wpm_avg,
+    accuracy,
+    num_mistakes
+  } = body.data
 
-    return {
-        userID: userID,
-        snippet_id:snippet_id,
-        total_time : total_time,
-        total_characters: total_characters, 
-        wpm_data: wpm_data.toString(),
-        wpm_avg: wpm_avg,
-        accuracy: accuracy,
-        num_mistakes: num_mistakes,
-    }
-} 
+  if (
+    !(
+      typeof userID === typeof 2 &&
+      typeof snippet_id === typeof 2 &&
+      typeof total_time === typeof 2 &&
+      typeof total_characters === typeof 2 &&
+      wpm_data &&
+      typeof wpm_avg === typeof 2.2 &&
+      typeof accuracy === typeof 2.2 &&
+      typeof num_mistakes === typeof 2
+    )
+  )
+    return { error: true }
 
-const extractToken = (req) => {
-    if (
-        req.method === 'POST' &&
-        req.body !== undefined && 
-        req.body.headers !== undefined &&
-        req.body.headers.Authorization !== undefined
-    ) {
-        return req.body.headers.Authorization
-    }
-    const tokenIndex =
-    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-    return req.rawHeaders[tokenIndex];
+  return {
+    userID: userID,
+    snippet_id: snippet_id,
+    total_time: total_time,
+    total_characters: total_characters,
+    wpm_data: wpm_data.toString(),
+    wpm_avg: wpm_avg,
+    accuracy: accuracy,
+    num_mistakes: num_mistakes
+  }
 }
 
-//Add in more about what frontend needs 
 
-module.exports = gameRouter;
+
+//Add in more about what frontend needs
+
+module.exports = gameRouter
