@@ -16,7 +16,7 @@ const grantPrivs = async (user, host) => {
             GRANT ALL PRIVILEGES ON *.* TO '${user}'@'${host}';
         `;
         const result = await connection.execute(query);
-        connection.release();
+        await connection.release();
         console.log('granted privileges to ' + user)
         return result[0];
     } catch (error) {

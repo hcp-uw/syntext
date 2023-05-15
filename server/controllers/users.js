@@ -1,36 +1,20 @@
 const userRouter = require('express').Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
-const { JWT_SECRET } = require('../utils/config')
+const { verifyToken, generateToken, extractToken, generateHash, saltRounds } = require('../utils/auth');
+
 const {
   createUser,
+  isUser,
   deleteUser,
   authenticate,
   updateLastLogin,
   getUser,
-  getUserID
+  getUserID,
+  updateUser
 } = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
-const saltRounds = 3
 
-const generateToken = async (username, password) => {
-  const id = await getUserID(username)
-  const token = jwt.sign(
-    { username: username, password: password, userID: id },
-    JWT_SECRET,
-    {
-      expiresIn: '1800s'
-    }
-  )
-  return token
-}
-
-const verifyToken = async token => {
-  const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
-  return res
-}
 
 /*
   retrieve username and password from request body.
@@ -44,18 +28,19 @@ userRouter.post('/create', jsonParser, async (req, res) => {
   if (!username || !password) {
     return res
       .status(400)
-      .json({ success: false, error: 'Missing required fields' })
+      .send({ success: false, error: 'Missing required fields' })
   }
 
   try {
-    const hash = await bcrypt.hash(password, saltRounds)
+    const hash = await generateHash(password);
     const result = await createUser(username, hash)
+    const userID = await getUserID(username);
     if (!result.success) return res.status(409).send({...result}) 
-    const token = await generateToken(username, password)
+    const token = await generateToken(userID, username, password)
     return res
       .set('Authorization', `Bearer ${token}`)
       .status(201)
-      .json({ success: true })
+      .send({ success: true })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ success: false, ...error })
@@ -78,12 +63,13 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
   try {
     const authorized = await authenticate(username, password)
-    if (!authorized.success)
+    if (!authorized.success){
       res
         .status(401)
         .send({ success: false, error: 'Invalid username or password' })
-    else {
-      const token = await generateToken(username, password)
+    }else {
+      const userID = await getUserID(username);
+      const token = await generateToken(userID, username, password)
       res
         .set('Authorization', `Bearer ${token}`)
         .status(200)
@@ -103,13 +89,12 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     or send error message if request fails or token is invalid.
   */
 userRouter.get('/account', async (req, res) => {
+  const token = extractToken(req)
+  
   try {
-    const tokenIndex =
-      req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-    const token = req.rawHeaders[tokenIndex]
     if (!token) res.status(500).send({ success: false })
     else {
-      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+      const decoded = await verifyToken(token);
       const result = await getUser(decoded.username)
       if (result.username && decoded.username)
         res.status(200).send({ ...result, success: true })
@@ -125,27 +110,34 @@ userRouter.get('/account', async (req, res) => {
 /*
     verify JWT token in authorization header.
     find user in database based on decoded token.
-    update user data and save to database.
-    send updated user object in response if successful,
-    or send error message if request fails or token is invalid.
+    update user data and save to database. send 
+    error message if request fails or token is invalid.
   */
 userRouter.put('/account', async (req, res) => {
-  const { newUsername, newPassword } = req.body
-
+  const { userID, key, value } = req.body
+  const token = extractToken(req)
+  if (!token) return res.status(500).send({ success: false })
   try {
-    const token = req.rawHeaders[3]
-    if (!token) res.status(500).send({ success: false })
-    else {
-      const decoded = await jwt.verify(token.split(' ')[1], JWT_SECRET)
-      const result = await updateUser(
-        decoded.username,
-        newUsername,
-        await bcrypt.hash(newPassword, saltRounds)
-      )
-      const statusCode = result.success ? 204 : 401
-      res.status(statusCode)
-      return
+    const decoded = verifyToken(token)
+    if (!decoded.success) return res.status(401).send({success: false, error: 'unauthorized'})
+    
+    switch (key) {
+      case "password":
+        await handlePasswordChange(userID, value)
+        break;
+      case "username":
+        await handleUsernameChange(userID, value)
+        break;
+      case "private":
+        await handleAccountPrivateChange(userID, value)
+        break;
+      default: 
+        await handleUnknownUpdate(userID, key, value);
+        break;
     }
+    
+
+
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
@@ -160,17 +152,17 @@ userRouter.put('/account', async (req, res) => {
   or send error message if request fails or token is invalid.
 */
 userRouter.delete('/account', jsonParser, async (req, res) => {
-  const tokenIndex =
-    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-  const token = req.rawHeaders[tokenIndex]
+  const { username, password } = req.body;
+  const token = extractToken(req)
   try {
-    if (!token) res.status(500).send({ success: false })
+    if (!token) res.status(401).send({ success: false })
     else {
       const decoded = await verifyToken(token)
-      const result = await deleteUser(decoded.username, decoded.password)
-      const statusCode = result.success ? 204 : 401
-      res.status(statusCode).send({ success: statusCode === 204 })
-      return
+      const result = await deleteUser(username, password)
+      if (result.success) 
+        res.status(200).send({ success: true })
+      else 
+        res.status(401).send({ success: false })
     }
   } catch (error) {
     console.error(error)
@@ -178,9 +170,34 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
   }
 })
 
+
+const handlePasswordChange = async (userID, newPassword) => {
+  const newHash = await generateHash(value);
+  const result = await updateUser(userID, "hash_password", newHash);
+  if (!result.success) return res.status(400).send({success: false, error: "error while changing password"});
+  if (result.success) return res.status(201).send({success: true});
+}
+
+const handleUsernameChange = async (userID, newUsername) => {
+  const existingID = await getUserID(newUsername);
+  if (typeof Number(existingID) === 'number') return res.status(409).send({success: false, error: "username already taken"});
+  const result = await updateUser(userID, "username", newUsername);
+  if (!result.success) return res.status(400).send({success: false, error: "error while changing username"});
+  if (result.success) return res.status(201).send({success: true});
+}
+
+const handleAccountPrivateChange = async (userID, isPrivate) => {
+  const result = await updateUser(userID, "private", isPrivate);
+  if (!result.success) return res.status(400).send({success: false, error: "error while changing username"});
+  if (result.success) return res.status(201).send({success: true});
+}
+
+const handleUnknownUpdate = async (userID, key, value) => {
+  res.status(400).send({success: false, error: `unknown update ${key} ${value}`});
+}
+
+
+
 module.exports = {
-  userRouter,
-  verifyToken,
-  generateToken,
-  saltRounds
+  userRouter
 }

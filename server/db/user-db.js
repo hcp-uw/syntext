@@ -1,22 +1,34 @@
 const mysql = require('mysql2');
 const config = require('../utils/config.js')
-const bcrypt = require('bcrypt')
-const { pool } = require('./pool.js')
+const { pool } = require('./pool.js');
+const { verifyHash } = require('../utils/auth.js');
 
-// const pool = mysql.createPool({
-//     host: config.MYSQL_HOST, 
-//     user: config.MYSQL_USER,
-//     password: config.MYSQL_ROOT_PASSWORD,
-//     database: config.MYSQL_DATABASE
-// }).promise()
+const isUser = async userID => {
+    if (!userID) return {success: false, error: 'missing required field'};
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const query = 'SELECT username FROM users WHERE userID = ?';
+        const result = await connection.query(query, [username]);
+        const rows = result[0];
+        await connection.release();
+        return rows.length > 0 
+    } catch (error) {
+        console.error(error);
+        await connection.release();
+        return error;
+    }
+}
 
 const getUser = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
-        connection.release();
+        await connection.release();
         if (rows.length > 0) {
             return rows[0];
         } else {
@@ -24,17 +36,26 @@ const getUser = async (username) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     }
 }
 
 // this function depends on how we store user information. If we only use an id 
 // to identify the user, then we won't have cascading changes!
-const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
-    throw new Error({message: "not yet implemented"})
+const updateUser = async (userID, key, value) => {
+    if (!userID || !key || !value) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        
+        const exists = await isUser(userID);
+        if (!exists) return {success: false, error: `User not found`}
+        connection = await pool.getConnection();
+        const query = `
+        UPDATE users
+        SET ? = ?
+        WHERE userID = ?;`;
+        const result = await connection.query(query, [key, value, userID]);
+        return {success: true};
     } catch (error) {
         console.error(error);
         return ({success: false, ...error})
@@ -42,12 +63,13 @@ const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
 }
 
 const getUserID = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         const query = 'SELECT userID FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
-        connection.release();
+        await connection.release();
         if (rows.length > 0) {
             return rows[0].userID;
         } else {
@@ -55,13 +77,18 @@ const getUserID = async (username) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     }
 }
 
+
+
+
+
 // creates user 
 const createUser = async (username, hash) => {
+    if (!username || !hash) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         // Check if username exists in table
@@ -69,13 +96,12 @@ const createUser = async (username, hash) => {
         const result = await connection.query(query, [username]);
         //checks if any rows were returned
         if (result[0].length > 0) {
-            console.log(result[0]);
-            connection.release();
+            await connection.release();
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
             const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'
             const result = await pool.query(insert, [username, hash]);
-            connection.release();
+            await connection.release();
             return {
                 success: true,
                 created: username
@@ -83,51 +109,56 @@ const createUser = async (username, hash) => {
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }
 }
 
 
 const authenticate = async (username, password) => {
+    if (!username || ! password) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         // Check if username exists in table
         const query = 'SELECT username, hash_password FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
+        
         //checks if any rows were returned
         if (result[0].length === 0) {
-            connection.release();
+            await connection.release();
             return {success: false, error: `User ${username} doesn't exist`}; 
         } else  {
             const user = result[0][0];
             const savedHash = user.hash_password;
-            connection.release();
-            const authResult = await bcrypt.compare(password, savedHash);
+            await connection.release();
+            const authResult = await verifyHash(password, savedHash);
             return { success: authResult }
         }
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return error;
     } 
 }
 
 const updateLastLogin = async (username) => {
+    if (!username) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
         const result = await connection.query(insert, [username]);
-        connection.release();
+        await connection.release();
         return {success: true}
     } catch (error) {
         console.error(error);
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }        
 }
 
+
 const deleteUser = async (username, password) => {
+    if (!username || !password) return {success: false, error: 'missing required field'};
     const connection = await pool.getConnection();
     try {
         const isAuthorized = await authenticate(username, password);
@@ -142,12 +173,13 @@ const deleteUser = async (username, password) => {
         await connection.query(q[1], id);
         await connection.query(q[2], id);
         await connection.commit();
-        connection.release();
+        await connection.release();
         return {success: true, deleted: username};
     } catch (error) {
+        console.log("hello", error)
         console.error(error);
         connection.rollback();
-        connection.release();
+        await connection.release();
         return {...error, success: false};
     }
 } 
@@ -165,5 +197,6 @@ module.exports = {
     closePool,
     updateLastLogin,
     getUser,
-    updateUser
+    isUser,
+    updateUser,
 }

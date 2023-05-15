@@ -33,7 +33,7 @@ snippetRouter.post('/create', jsonParser, async (req, res) => {
     };
 
     try {
-        await createSnippet(snippetObject, getPool());
+        await createSnippet(snippetObject);
         res.status(201).send({success: true});
     } catch (error) {
         console.error('Error creating snippet:', error);
