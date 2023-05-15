@@ -1,13 +1,30 @@
 const mysql = require('mysql2');
 const config = require('../utils/config.js')
-const bcrypt = require('bcrypt')
-const { pool } = require('./pool.js')
+const { pool } = require('./pool.js');
+const { verifyHash } = require('../utils/auth.js');
 
+const isUser = async userID => {
+    if (!userID) return {success: false, error: 'missing required field'};
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const query = 'SELECT username FROM users WHERE userID = ?';
+        const result = await connection.query(query, [username]);
+        const rows = result[0];
+        await connection.release();
+        return rows.length > 0 
+    } catch (error) {
+        console.error(error);
+        await connection.release();
+        return error;
+    }
+}
 
 const getUser = async (username) => {
     if (!username) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
@@ -26,10 +43,19 @@ const getUser = async (username) => {
 
 // this function depends on how we store user information. If we only use an id 
 // to identify the user, then we won't have cascading changes!
-const updateUser = async (oldUsername, newUsername, newPasswordHash) => {
-    throw new Error({message: "not yet implemented"})
+const updateUser = async (userID, key, value) => {
+    if (!userID || !key || !value) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        
+        const exists = await isUser(userID);
+        if (!exists) return {success: false, error: `User not found`}
+        connection = await pool.getConnection();
+        const query = `
+        UPDATE users
+        SET ? = ?
+        WHERE userID = ?;`;
+        const result = await connection.query(query, [key, value, userID]);
+        return {success: true};
     } catch (error) {
         console.error(error);
         return ({success: false, ...error})
@@ -105,7 +131,7 @@ const authenticate = async (username, password) => {
             const user = result[0][0];
             const savedHash = user.hash_password;
             await connection.release();
-            const authResult = await bcrypt.compare(password, savedHash);
+            const authResult = await verifyHash(password, savedHash);
             return { success: authResult }
         }
     } catch (error) {
@@ -171,5 +197,6 @@ module.exports = {
     closePool,
     updateLastLogin,
     getUser,
+    isUser,
     updateUser,
 }

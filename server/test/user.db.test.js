@@ -13,7 +13,7 @@ const {
     updateUser
 } = require('../db/user-db');
 
-const { saltRounds } = require('../controllers/users');
+const { saltRounds } = require('../utils/auth');
 
 test("user-db functions: createUser, getUserID, removeUser work as intended", async () => {
     const testUser = {
@@ -129,6 +129,27 @@ test("getUser, updateLastLogin works as intended", async () => {
 })
 
 // write test for updateUser!!!
+test("getUser, updateLastLogin works as intended", async () => {
+    const testUser = {
+        user: "eli", 
+        pw: "ohno"
+    }
 
+    const hash = await bcrypt.hash(testUser.pw, saltRounds);
+    const resCreate = await createUser(testUser.user, hash);
+
+    expect(resCreate).toMatchObject({success: true, created: testUser.user});  
+
+    const resGetUser = await getUser(testUser.user);
+    expect(resGetUser.username).toBe(testUser.user);
+    expect(resGetUser.last_login === null).toBe(true);
+
+    const resUpdateLastLogin = await updateLastLogin(testUser.user);
+    expect(resUpdateLastLogin.success).toBe(true);
+
+    const resGetUserAgain = await getUser(testUser.user);
+    expect(resGetUserAgain.username).toBe(testUser.user);
+    expect(resGetUserAgain.last_login === null).toBe(false);
+})
 
 afterAll(() => closePool());

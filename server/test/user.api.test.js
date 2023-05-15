@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { verifyToken } = require('../controllers/users')
+const { verifyToken } = require('../utils/auth')
 const { getUserID, getUser } = require('../db/user-db')
 const baseURL = 'http://localhost:3001/api/user' // Update with the correct URL
 
