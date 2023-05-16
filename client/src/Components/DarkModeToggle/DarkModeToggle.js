@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 
 const DarkModeToggle = ({ theme, setTheme }) => {
   useEffect(() => {}, [theme]);
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.body.className = theme;
+  }, [theme]);
 
   const toggleTheme = () => {
     if (theme === 'light') {

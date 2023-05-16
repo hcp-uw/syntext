@@ -16,7 +16,9 @@ const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
   const [settingsFocus, setSettingsFocus] = useState(false);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(
+    localStorage.getItem('theme') || 'light'
+  );
   
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
