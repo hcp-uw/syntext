@@ -5,13 +5,16 @@ import RestartButton from '../RestartButton/RestartButton'
 import GameOptions from '../GameOptions/GameOptions'
 import GameSummary from '../GameSummary/GameSummary'
 import Timer from '../Timer/Timer'
+import { useSelector } from 'react-redux'
+import { createGame } from '../../services/gameService'
 
 const Game = ({ defaultSnippet }) => {
+  const userID = useSelector(s => s.userState.userID); 
   // what the user has typed so far for the current word
   // cleared with wordIndex changes
-  const [currSnippet, setCurrSnippet] = useState({})
+  const [currSnippet, setCurrSnippet] = useState(defaultSnippet)
 
-  const [lines, setLines] = useState(defaultSnippet)
+  const [lines, setLines] = useState(defaultSnippet.data)
 
   const [userInput, setUserInput] = useState('')
   // the actual current word.
@@ -56,6 +59,14 @@ const Game = ({ defaultSnippet }) => {
     currLine.current = lines[0].split(' ')
     setCurrWord(lines[0].split(' ')[0])
   }, [lines])
+
+  // use to integrate gameService
+  useEffect( () => {
+    if (gameFinished) {
+      // calculate game object
+      // createGame(game).then(res => console.log(res)); 
+    }
+  }, [gameFinished])
 
   const tickTime = () => {
     snapshot.current[time.current + 1] = typingProgress.current
