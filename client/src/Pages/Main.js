@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
 import Game from "../Components/Game/Game";
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "../index.css";
-import MainPopupController from "../Components/PopupController/PopUpController";
 
-const Main = () => {
+const Main = ({ theme }) => {
+
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
   
   /*
   const someData = [

@@ -18,14 +18,6 @@ const App = () => {
   const [settingsFocus, setSettingsFocus] = useState(false);
   const [theme, setTheme] = useState('light');
   
-  const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
-  };
-  
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
     if (!token) return;
@@ -36,12 +28,11 @@ const App = () => {
     });
   }, [])
 
-
   return (
     <div className='app-container'>
       <NavBar setSettingsFocus={setSettingsFocus} theme={theme} setTheme={setTheme} />
       <Routes>
-        <Route path='/' element={<Main />} />
+        <Route path='/' element={<Main theme={theme}/>} />
         <Route path='/account' element={isLoggedIn ? <AccountPage /> : <LoginPage/>} />
         <Route path='/join' element={<SignUpPage />} />
         <Route path='/login' element={<LoginPage />} />

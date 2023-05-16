@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
-body {
+.light {
   background-color: #EAD1D0;
+  overflow: hidden;
+  font-family: 'Roboto Mono', monospace;
+}
+
+
+.dark {
+  background-color: #393848;
   overflow: hidden;
   font-family: 'Roboto Mono', monospace;
 }
