@@ -39,7 +39,7 @@ const App = () => {
 
   return (
     <div className='app-container'>
-      <NavBar setSettingsFocus={setSettingsFocus} />
+      <NavBar setSettingsFocus={setSettingsFocus} theme={theme} setTheme={setTheme} />
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/account' element={isLoggedIn ? <AccountPage /> : <LoginPage/>} />

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 const DarkModeToggle = ({ theme, setTheme }) => {
+  useEffect(() => {}, [theme]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+  const toggleTheme = () => {
+    setTheme(!theme);
   };
 
   return (

@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom'
 import Icon from '../Icon/Icon'
 import './NavBar.css'
 import { useSelector } from 'react-redux'
-const NavBar = ({ setSettingsFocus }) => {
+import DarkModeToggle from '../DarkModeToggle/DarkModeToggle'
+
+const NavBar = ({ setSettingsFocus, theme, setTheme }) => {
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn)
   return (
     <div className='navbar-container'>
@@ -10,6 +12,7 @@ const NavBar = ({ setSettingsFocus }) => {
         <Link className='logo' to='/'>
           Synte&gt;&lt;t
         </Link>
+        <DarkModeToggle theme={theme} setTheme={setTheme} />
         <div className='button-container'>
           <Link to='/leaderboard'>leaderboard</Link>
           <Link to='/'>game</Link>

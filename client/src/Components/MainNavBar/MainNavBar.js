@@ -4,9 +4,10 @@ import Row from 'react-bootstrap/Row'
 import Navbar from 'react-bootstrap/Navbar'
 import stylesheet from './MainNavBar'
 import 'bootstrap/dist/css/bootstrap-grid.min.css'
+import DarkModeToggle from '../DarkModeToggle/DarkModeToggle'
 
 const NewNavBar = props => {
-  const { setSettingsFocus } = props
+  const { setSettingsFocus, theme, setTheme } = props
   return (
     <div className='navbar-container' style={{ stylesheet }}>
       <Container fluid>
@@ -20,6 +21,7 @@ const NewNavBar = props => {
               >
                 Synte&gt;&lt;t
               </Navbar.Brand>
+              <DarkModeToggle theme={theme} setTheme={setTheme} />
               <Navbar.Text>
                 <Icon setSettingsFocus={setSettingsFocus} />
               </Navbar.Text>
