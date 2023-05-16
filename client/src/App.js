@@ -15,7 +15,16 @@ import { getCurrentUser } from './services/userService'
 const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
-  const [settingsFocus, setSettingsFocus] = useState(false) 
+  const [settingsFocus, setSettingsFocus] = useState(false);
+  const [theme, setTheme] = useState('light');
+  
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  };
   
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
@@ -46,4 +55,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
