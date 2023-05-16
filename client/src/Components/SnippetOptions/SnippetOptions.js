@@ -4,7 +4,7 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import getSnippet from '../../services/snippetService'
+import { getSnippet } from '../../services/snippetService'
 import style from './SnippetOptions.css'
 import 'bootstrap/dist/css/bootstrap.css'
 

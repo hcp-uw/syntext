@@ -32,7 +32,7 @@ const Main = () => {
   return (
     <div className="page-container">
 
-      <Game defaultSnippet={defaultSnippet.data} />
+      <Game defaultSnippet={defaultSnippet} />
       
     </div>
   );
