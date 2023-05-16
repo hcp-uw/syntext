@@ -1,4 +1,4 @@
-const { verifyToken } = require('../utils/auth');
+const { verifyToken, extractToken } = require('../utils/auth');
 const { getUserID } = require('../db/user-db')
 const {
   getGameEntries,

@@ -170,6 +170,18 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
   }
 })
 
+userRouter.get('/id', jsonParser, async (req, res) => {
+  const { username } = req.body;
+  try {
+    const id = await getUserID(username);
+    if (id.error) return res.status(400).send({success: false})
+    else res.status(200).send({userID: id})
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({success: false, error: 'internal server error'})
+  }
+})
+
 
 const handlePasswordChange = async (userID, newPassword) => {
   const newHash = await generateHash(value);
