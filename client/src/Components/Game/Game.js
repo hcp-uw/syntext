@@ -101,10 +101,8 @@ const Game = ({ defaultSnippet }) => {
 
   const RestartShortcut = ({ restartGame }) => {
     useEffect(() => {
-      console.log("MyComponent mounted");
       const handleKeyDown = (event) => {
         if (event.key === "Enter" && event.ctrlKey) {
-          console.log("Ctrl + Enter pressed to reset game");
           restartGame()
         }
         };
