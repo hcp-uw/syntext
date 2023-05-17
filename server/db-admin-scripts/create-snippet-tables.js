@@ -17,7 +17,7 @@ const createRecordTable = async () => {
         const connection = await pool.getConnection();
         const query = 'CREATE TABLE IF NOT EXISTS snippet_records (id int NOT NULL, snippet_type varchar(30) DEFAULT NULL, snippet_length varchar(10) DEFAULT NULL, PRIMARY KEY (id));';
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('created snippet_records')
         return result[0];
     } catch (error) {
@@ -30,7 +30,7 @@ const createDataTable = async () => {
         const connection = await pool.getConnection();
         const query = 'CREATE TABLE IF NOT EXISTS snippet_data (id int DEFAULT NULL, line_index int DEFAULT NULL, line_text text);';
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('created snippet_data')
         return result[0];
     } catch (error) {

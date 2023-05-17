@@ -1,7 +1,7 @@
 import axios from 'axios'
-//const axios = require('axios');
+// const axios = require('axios');
 
-const baseURL = 'http://localhost:3001'
+const baseURL = 'http://localhost:3001/api/snippet'
 
 const errSnippet = {
   id: -1,
@@ -14,14 +14,33 @@ const errSnippet = {
   ]
 }
 
-const getSnippet = (len, type) => {
-  const req = axios.get(
-    `${baseURL}/api/read/get/lengthandtype?length=${len}&type=${type}`
-  )
-  return req.then(res => {
-    return res.status === 200 && res.data.length !== 0 ? res.data : [errSnippet]
-  })
+const createSnippet = async (snippet) => {
+  try {
+    const res = await axios.post(
+      'http://localhost:3001/api/snippet/create',
+      snippet
+    )
+    
+    if (res.status === 201) return {success: true}
+  } catch (error) {
+    console.error(error);
+    return {success: false}
+  }
+  
 }
 
-export default getSnippet
-//module.exports = {getSnippet};
+const getSnippet = async (len, type) => {
+  try {
+    const res = await axios.get(
+      `${baseURL}/get/lengthandtype?length=${len}&type=${type}`
+    )
+  
+    return (res.status === 200 && res.data.length !== 0) ? res.data : [errSnippet];
+  } catch (error) {
+    console.error(error)
+    return {success: false}
+  }
+}
+
+export { getSnippet, createSnippet }
+// module.exports = { getSnippet, createSnippet };

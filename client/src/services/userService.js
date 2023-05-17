@@ -15,7 +15,7 @@ const createUser = async (username, password) => {
       password: password
     })
 
-    return { ...res.data, token: res.headers['authorization'] }
+    return { ...res.data, success: true, token: res.headers['authorization'] }
   } catch (error) {
     console.error(error);
     if (error.response.status === 409) return { success: false, error: `user ${username} already exists` } 
@@ -39,6 +39,16 @@ const authenticate = async (username, password) => {
   } catch (error) {
     //console.error(error);
     return { success: false }
+  }
+}
+
+const getUserID = async (username) => {
+  try {
+    const res = await axios.get(`${baseURL}/id`, {data: {username: username}})
+    if (res.status === 200) return res.data.userID;
+  } catch (error) {
+    console.error(error)
+    return false;
   }
 }
 
@@ -82,5 +92,6 @@ export {
   authenticate,
   getCurrentUser,
   updateCurrentUser,
-  deleteCurrentUser
+  deleteCurrentUser,
+  getUserID
 }

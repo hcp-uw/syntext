@@ -1,6 +1,7 @@
 const express = require('express');
 const snippetRouter = require('./controllers/snippets');
 const { userRouter } = require('./controllers/users');
+const gameRouter  = require('./controllers/games');
 
 const cors = require('cors');
 const path = require("path");
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "..", "client", "build")));
 // routers
 app.use('/api/snippet', snippetRouter);
 app.use('/api/user', userRouter);
+app.use('/api/game', gameRouter);
 
 
 // test endpoint

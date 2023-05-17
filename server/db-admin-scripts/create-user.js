@@ -16,7 +16,7 @@ const createUser = async (user, pw, host) => {
         CREATE USER '${user}'@'${host}' IDENTIFIED BY '${pw}';
         `
         const result = await connection.execute(query);
-        connection.release();
+        await connection.release();
         console.log('created user' + user)
         return result[0]
     } catch (error) {
