@@ -6,33 +6,49 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import 'bootstrap/dist/css/bootstrap.css'
 
 const Setting = (props) => {
-  // const setUserSettings = useContext(UserSettingsContext)
-  const { settingName } = props;
+  const userSettingController = useContext(UserSettingsContext)
+  const userSettings = userSettingController[0];
+  const setUserSettings = userSettingController[1];
+  const { settingName, menuType, menuOptions } = props;
   // setUserSettings('meow')
+
+  const settingPicker = () => {
+    if (menuType === 'dropdown') {
+      return (<DropDownCreator settingName={settingName} menuOptions={menuOptions} userSettings={userSettings} setUserSettings={setUserSettings}/>)
+    } else if (menuType === 'switch') {
+      return <SwitchCreator settingName={settingName} userSettings={userSettings} setUserSettings={setUserSettings}/>
+    } else {
+      return <RangeCreator settingName={settingName} userSettings={userSettings} setUserSettings={setUserSettings}/>
+    }
+  }
+
   return (
-
     <div className="setting">
-      <h2>{ settingName }</h2>
-
-      {/* <RangeExample/> */}
-      <SwitchExample/>
-      {/* <DropDownCreator settingTitle={"theme"} menuOptions={['white', 'green', 'pink', 'red']}/> */}
+      <h2>{settingName}</h2>
+      {settingPicker()}
     </div>
   )
 }
 
+
+
 const DropDownCreator = (props) => {
   // settingTitle = string
   // menuOptions array of dropdown options
-  const { settingTitle, menuOptions } = props;
+  const { settingName, menuOptions, userSettings, setUserSettings } = props;
 
   return (
     <Dropdown className="dropdown-option">
       <DropdownButton
-        title={settingTitle}
+        title={userSettings[settingName]}
         menuVariant="dark"
         variant='custom'
-        onSelect={(option) => {console.log("you chose: ", option)}}
+        onSelect={(option) => {
+          setUserSettings({
+            ...userSettings,
+            [settingName]: option
+          })
+        }}
       >
         {menuOptions.map((option, i) => <Dropdown.Item key={i} eventKey={option}>{option}</Dropdown.Item>)}
       </DropdownButton>
@@ -40,27 +56,40 @@ const DropDownCreator = (props) => {
   )
 }
 
-function SwitchExample() {
+function SwitchCreator(props) {
+  const { settingName, userSettings, setUserSettings } = props;
+
   return (
     <Form className="switch-option">
       <Form.Check
         type="switch"
         // id="custom-switch"
         label=""
-        onChange={(e) => console.log(e.target.checked)}
+        onChange={(e) => {
+          setUserSettings({
+            ...userSettings,
+            [settingName]: e.target.checked
+          })
+        }}
       />
     </Form>
   );
 }
 
-function RangeExample() {
-  let currentVal = 0;
-  console.log(currentVal)
+function RangeCreator(props) {
+  const { settingName, userSettings, setUserSettings } = props;
   return (
     <Form className="range-option">
-      <Form.Label className="range-label">0</Form.Label>
+      <Form.Label className="range-label">{userSettings[settingName]}</Form.Label>
       <Form.Range
-        onChange={function (e) {e.target.previousSibling.textContent = e.target.value}}/>
+        value={(parseFloat(userSettings[settingName]) * 100).toFixed(0)}
+        onChange={(e) => {
+          e.target.previousSibling.textContent = (e.target.value/100).toFixed(2);
+          setUserSettings({
+            ...userSettings,
+            [settingName]: (e.target.value/100).toFixed(2)
+          })
+          }}/>
     </Form>
   );
 }
