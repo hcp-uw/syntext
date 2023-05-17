@@ -7,9 +7,10 @@ div.settings-container {
   top: 5vh;
   width: 750px;
   height: 500px;
-  background-color: rgb(42, 42, 42);
+  /* background-color: rgb(42, 42, 42); */
+  background-color: #ead1d0;
   border-radius: 3%/4.5%;
-  color: rgb(255, 253, 219);
+  color: rgba(125, 97, 95, 1);
   /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
   filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
   animation: fadeIn 0.1s;
@@ -37,7 +38,7 @@ div.settings-container {
 }
 
 h1 {
-  font-size: 30pt;
+  font-size: 25pt;
   margin-left: 40px;
   margin-top: 20px;
 }
