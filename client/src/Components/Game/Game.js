@@ -7,7 +7,7 @@ import GameSummary from '../GameSummary/GameSummary'
 import Timer from '../Timer/Timer'
 import { useSelector } from 'react-redux'
 import { createGame } from '../../services/gameService'
-import './Game.css'
+import './Game'
 const Game = ({ defaultSnippet }) => {
   const userID = useSelector(s => s.userState.userID); 
   // what the user has typed so far for the current word
