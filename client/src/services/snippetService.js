@@ -29,13 +29,17 @@ const createSnippet = async (snippet) => {
   
 }
 
-const getSnippet = (len, type) => {
-  const req = axios.get(
-    `${baseURL}/get/lengthandtype?length=${len}&type=${type}`
-  )
-  return req.then(res => {
-    return res.status === 200 && res.data.length !== 0 ? res.data : [errSnippet]
-  })
+const getSnippet = async (len, type) => {
+  try {
+    const res = await axios.get(
+      `${baseURL}/get/lengthandtype?length=${len}&type=${type}`
+    )
+  
+    return (res.status === 200 && res.data.length !== 0) ? res.data : [errSnippet];
+  } catch (error) {
+    console.error(error)
+    return {success: false}
+  }
 }
 
 export { getSnippet, createSnippet }
