@@ -1,15 +1,21 @@
 import './Leaderboard.css'
 import "rc-tooltip/assets/bootstrap.css";
 import Tooltip from "rc-tooltip";
-
+import React, {useState} from 'react';
 
 const Leaderboard = ({ data }) => {
 
+    const [sortedField, setSortedField] = useState('wpm');
+
+    const handleClick = (colName) => {
+        setSortedField(colName);
+        console.log(sortedField);
+    }
 
     return (
         <div className="leaderboard-container">
             <h className="title-text">leaderboard</h>
-            <table className="leaderboard-table">
+            <table className="leaderboard-table"> 
                 <thead>
 
                     <tr>
@@ -27,7 +33,11 @@ const Leaderboard = ({ data }) => {
                         placement="top"
                         overlay={<span>wpm</span>}
                         >
-                            <th>average speed</th>
+                            <th>
+                                <button className="header" type="button" onClick = {() => handleClick('wpm')}>
+                                    average speed {sortedField==='wpm'? '▼' : '▽'}
+                                </button>
+                            </th>
                         </Tooltip>
 
                         <Tooltip
@@ -35,17 +45,29 @@ const Leaderboard = ({ data }) => {
                         overlay={<span>mins</span>}
                         showArrow="true"
                         >
-                            <th>time played</th>
+                            <th>
+                                <button className="header" type="button" onClick = {() => handleClick('time')}>
+                                    time played {sortedField==='time'? '▼' : '▽'}
+                                </button>
+                            </th>
                         </Tooltip>
 
-                        <th>characters typed</th>
+                        <th>
+                            <button className="header" type="button" onClick = {() => handleClick('typed')}>
+                            characters typed {sortedField==='typed'? '▼' : '▽'}
+                            </button>
+                        </th>
 
                         <Tooltip
                         placement="top"
                         overlay={<span>%</span>}
                         showArrow="false"
                         >
-                            <th>average accuracy</th>
+                            <th>
+                                <button className="header" type="button" onClick = {() => handleClick('accuracy')}>
+                                    average accuracy {sortedField==='accuracy'? '▼' : '▽'}
+                                </button>
+                            </th>
                         </Tooltip>
                     </tr>
                 </thead>

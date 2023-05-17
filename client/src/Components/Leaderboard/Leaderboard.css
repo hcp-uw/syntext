@@ -84,3 +84,9 @@
   /* line-height: 6px; */
   border-radius: 15px;
 }
+
+.header {
+  border-color: transparent;
+  background-color: #fcdfdf;
+  color: rgba(125, 97, 95, 1);
+}
