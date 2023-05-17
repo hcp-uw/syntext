@@ -15,11 +15,14 @@ const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
 
+const missingParamsError = {success: false, message: 'Bad Request: Missing data in request body'};
+const internalServerError = {success: false, message: 'Internal Server Error'};
+
 snippetRouter.post('/create', jsonParser, async (req, res) => {
     const { id, type, length, data } = req.body;
 
     if (!id || !type || !length || !data) {
-        return res.status(400).send('Bad Request: Missing data in request body');
+        return res.status(400).send(missingParamsError);
     }
 
     const snippetObject = {
@@ -30,11 +33,11 @@ snippetRouter.post('/create', jsonParser, async (req, res) => {
     };
 
     try {
-        await createSnippet(snippetObject, getPool());
-        res.status(201).send('Snippet created');
+        await createSnippet(snippetObject);
+        res.status(201).send({success: true});
     } catch (error) {
         console.error('Error creating snippet:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(internalServerError);
     }
 });
 
@@ -42,20 +45,20 @@ snippetRouter.delete('/remove', async (req, res) => {
     const id = Number(req.query.id);
 
     if (!id) {
-        return res.status(400).send('Bad Request: Missing id parameter');
+        return res.status(400).send(missingParamsError);
     }
 
     try {
         const result = await deleteSnippetByID(id);
 
         if (result && result.success) {
-            return res.status(202).send('Snippet deleted');
+            return res.status(202).send({success: true});
         } else {
-            return res.status(404).send('Not Found: Snippet not found');
+            return res.status(404).send({success: false, message: 'Not Found: Snippet not found'});
         }
     } catch (error) {
         console.error('Error deleting snippet:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(internalServerError);
     }
 });
 
@@ -63,7 +66,7 @@ snippetRouter.get('/get/length', async (req, res) => {
     const length = req.query.length;
 
     if (!length) {
-        return res.status(400).send('Bad Request: Missing length parameter');
+        return res.status(400).send(missingParamsError);
     }
 
     try {
@@ -76,7 +79,7 @@ snippetRouter.get('/get/length', async (req, res) => {
         return res.send(result);
     } catch (error) {
         console.error('Error retrieving snippets by length:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(internalServerError);
     }
 });
 
@@ -86,7 +89,7 @@ snippetRouter.get('/get/lengthandtype', async (req, res) => {
     const type = req.query.type;
 
     if (!length || !type) {
-        return res.status(400).send('Bad Request: Missing length or type parameter');
+        return res.status(400).send(missingParamsError);
     }
 
     try {
@@ -99,7 +102,7 @@ snippetRouter.get('/get/lengthandtype', async (req, res) => {
         return res.send(result);
     } catch (error) {
         console.error('Error retrieving snippets by length and type:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(internalServerError);
     }
 });
 
@@ -109,7 +112,7 @@ snippetRouter.get('/get/type', async (req, res) => {
     const type = req.query.type;
 
     if (!type) {
-        return res.status(400).send('Bad Request: Missing type parameter');
+        return res.status(400).send(missingParamsError);
     }
 
     try {
@@ -122,7 +125,7 @@ snippetRouter.get('/get/type', async (req, res) => {
         return res.json(result);
     } catch (error) {
         console.error('Error retrieving snippets by type:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send(internalServerError);
     }
 });
 
@@ -131,7 +134,7 @@ snippetRouter.get('/get/id', async (req, res) => {
     const id = Number(req.query.id);
 
     if (!id) {
-        return res.status(400).send('Bad Request: Missing id parameter');
+        return res.status(400).send(missingParamsError);
     }
 
     try {
@@ -144,22 +147,10 @@ snippetRouter.get('/get/id', async (req, res) => {
         }
     } catch (error) {
         console.error(`Error retrieving snippet with id ${id}:`, error);
-        return res.status(500).json("Internal Server Error");
+        return res.status(500).json(internalServerError);
     }
 });
 
 
 
-module.exports = snippetRouter
-
-/*
-unprocessed result : [
-  {
-    id: int,
-    snippet_type: string,
-    snippet_length: string,
-    line_index: int,
-    line_text: string
-  }
-]
-*/
+module.exports = snippetRouter;

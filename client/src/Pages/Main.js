@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 
 import Game from "../Components/Game/Game";
-import MainNavBar from "../Components/MainNavBar/MainNavBar";
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "../index.css";
-import MainPopupController from "../Components/MainPopupController/MainPopupController";
+import MainPopupController from "../Components/PopupController/PopUpController";
 
 const Main = () => {
-  const [settingsFocus, setSettingsFocus] = useState(false);
+  
   /*
   const someData = [
     'int j = 20;',
@@ -31,13 +30,10 @@ const Main = () => {
   };
 
   return (
-    <div className="app-container">
-      <MainNavBar setSettingsFocus={setSettingsFocus} />
-      <Game defaultSnippet={defaultSnippet.data} />
-      <MainPopupController
-        settingsFocus={settingsFocus}
-        setSettingsFocus={setSettingsFocus}
-      />
+    <div className="page-container">
+
+      <Game defaultSnippet={defaultSnippet} />
+      
     </div>
   );
 };

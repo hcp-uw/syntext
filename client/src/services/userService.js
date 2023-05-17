@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const baseURL = 'http://localhost:3001/api/user'
 
 let authToken = window.localStorage.getItem('authToken')
@@ -15,12 +14,12 @@ const createUser = async (username, password) => {
       username: username,
       password: password
     })
-    console.log('create POST response: ', res)
 
-    return { ...res.data, token: res.headers['authorization'] }
+    return { ...res.data, success: true, token: res.headers['authorization'] }
   } catch (error) {
-    //console.error(error);
-    return { success: false }
+    console.error(error);
+    if (error.response.status === 409) return { success: false, error: `user ${username} already exists` } 
+    return { success: false, error: 'Error creating account' }
   }
 }
 
@@ -35,12 +34,21 @@ const authenticate = async (username, password) => {
       username: username,
       password: password
     })
-    console.log('login POST response: ', res)
 
     return { ...res.data, token: res.headers['authorization'] }
   } catch (error) {
     //console.error(error);
     return { success: false }
+  }
+}
+
+const getUserID = async (username) => {
+  try {
+    const res = await axios.get(`${baseURL}/id`, {data: {username: username}})
+    if (res.status === 200) return res.data.userID;
+  } catch (error) {
+    console.error(error)
+    return false;
   }
 }
 
@@ -56,7 +64,7 @@ const getCurrentUser = async () => {
     })
     return res.data
   } catch (error) {
-    console.log(error)
+    console.error(error);
   }
 }
 
@@ -84,5 +92,6 @@ export {
   authenticate,
   getCurrentUser,
   updateCurrentUser,
-  deleteCurrentUser
+  deleteCurrentUser,
+  getUserID
 }

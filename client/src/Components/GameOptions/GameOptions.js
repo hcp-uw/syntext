@@ -3,7 +3,7 @@ import SnippetOptions from '../SnippetOptions/SnippetOptions.js'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import '../../index.css'
-import getSnippet from '../../services/snippetService.js'
+import { getSnippet } from '../../services/snippetService.js'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -31,17 +31,11 @@ const GameOptions = props => {
   const [currSnippets, setCurrSnippets] = useState([])
 
   const onNewSnippetClick = () => {
-    // console.log('currSnippet', currSnippet)
-    // console.log('currSnippets', currSnippets)
-    // console.log('selLen', selectedLength)
-    // console.log('selType', selectedType)
     if (!selectedLength || !selectedType) return
     let nextIndex = currSnippets.findIndex(
       snippet => currSnippet.id === snippet.id
     )
     nextIndex = (nextIndex + 1) % currSnippets.length
-    console.log('nextIndex', nextIndex)
-    console.log('next snippet', currSnippets[nextIndex])
 
     setCurrSnippet(currSnippets[nextIndex])
     setLines(currSnippets[nextIndex].data)

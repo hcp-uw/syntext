@@ -4,7 +4,8 @@ import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import getSnippet from '../../services/snippetService'
+import { getSnippet } from '../../services/snippetService'
+import style from './SnippetOptions.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import './SnippetOptions.css'
 
@@ -24,14 +25,9 @@ const SnippetOptions = props => {
   }, [selectedLength, selectedType])
 
   const loadNewSnippets = (len, type) => {
-    console.log('len', len)
-    console.log(selectedLength)
-    console.log('type', type)
-    console.log(selectedType)
 
     getSnippet(len, type).then(snippets => {
       setCurrSnippets(snippets)
-      console.log(snippets)
     })
   }
 

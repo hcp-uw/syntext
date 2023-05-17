@@ -5,13 +5,9 @@ const {toAscii, toChar} = require('./betweenASCIIValues')
 const { pool } = require('./pool.js')
 
 
-// const pool = mysql.createPool({
-//     host: config.MYSQL_HOST, 
-//     user: config.MYSQL_USER,
-//     password: config.MYSQL_ROOT_PASSWORD,
-//     database: config.MYSQL_DATABASE
-// }).promise()
-
+const missingRequiredParams = (name, obj) => {
+    return {success: false, error: `missing required params in ${name}: ${obj}`};
+}
 
 const getSnippetByLengthAndType = async (length, type) => {
     const result = await getSnippetByType(type)
@@ -19,7 +15,8 @@ const getSnippetByLengthAndType = async (length, type) => {
 }
 
 const getSnippetByType = async (type) => {
-    if (!type || typeof type !== "string") return [];
+    if (!type || typeof type !== "string") 
+        return missingRequiredParams("type", type);
     try {
         const connection = await pool.getConnection();
         const query = `
@@ -64,11 +61,13 @@ const getSnippetByType = async (type) => {
 
 const createSnippet = async (snippet) => {
 
-    let connection;
     const { id, type, length, data } = snippet;
 
+    if (!(id && type && length && data)) 
+        return missingRequiredParams("snippet", snippet);
+
     try {
-        connection = await pool.getConnection();
+        const connection = await pool.getConnection();
         const recordQuery = "INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
         await connection.query(recordQuery, [id, type, length]);
         const preparedValues = [];
@@ -104,6 +103,7 @@ const createSnippet = async (snippet) => {
 };
 
 const deleteSnippetByID = async (id) => {
+    if (!id) return missingRequiredParams("id", id);
     const connection = await pool.getConnection();
     try {
         const query1 = 'DELETE FROM snippet_records WHERE id = ?';
@@ -123,6 +123,7 @@ const deleteSnippetByID = async (id) => {
 };
 
 const getSnippetByLength = async (length) => {
+    if (!length) return missingRequiredParams("length", length);
     try {
         const connection = await pool.getConnection();
         const query = `
@@ -133,7 +134,7 @@ const getSnippetByLength = async (length) => {
             ORDER BY data.line_index ASC;
         `;
         const result = await connection.query(query, [length]);
-        connection.release();
+        await connection.release();
         const characterConvertedData = result[0].map(line_data => {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')}
         });
@@ -169,6 +170,7 @@ const getSnippetByLength = async (length) => {
 
 
 const getSnippetByID = async (id) => {
+    if (!id) return missingRequiredParams("id", id);
     const connection = await pool.getConnection();
     const query = `
             SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text 
@@ -192,20 +194,15 @@ const getSnippetByID = async (id) => {
             length: length,
             data: processedSnippetText
         };
-        connection.release();
+        await connection.release();
         return processedResult;
     } catch (error) {
         return {};
         console.error(error);
-    } finally {
-        connection.release();
-    }
+    } 
 };
 
-const getPool = () => pool;
 
-
-const closePool = async () => { pool.end(); }
 
 
 module.exports = {
@@ -215,6 +212,4 @@ module.exports = {
     createSnippet, 
     deleteSnippetByID,
     getSnippetByLengthAndType,
-    getPool,
-    closePool
 }
