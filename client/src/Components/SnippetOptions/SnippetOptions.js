@@ -24,9 +24,7 @@ const SnippetOptions = props => {
   }, [selectedLength, selectedType])
 
   const loadNewSnippets = async (len, type) => {
-
     const snippets = await getSnippet(len, type);
-    console.log(snippets);
     setCurrSnippets(snippets);
   }
 
@@ -50,7 +48,7 @@ const SnippetOptions = props => {
         return 'methods'
       case 'FOR':
         return 'for loop'
-      case 'WHILE_LOOP':
+      case 'WHILE':
         return 'while loop'
       case 'COLLECTIONS':
         return 'collections'
@@ -73,7 +71,7 @@ const SnippetOptions = props => {
             >
               <Dropdown.Item eventKey='METHOD'>methods</Dropdown.Item>
               <Dropdown.Item eventKey='FOR'>for loop</Dropdown.Item>
-              <Dropdown.Item eventKey='WHILE_LOOP'>while loop</Dropdown.Item>
+              <Dropdown.Item eventKey='WHILE'>while loop</Dropdown.Item>
               <Dropdown.Item eventKey='COLLECTIONS'>collections</Dropdown.Item>
             </DropdownButton>
           </Dropdown>
