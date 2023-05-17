@@ -4,9 +4,11 @@ import './CreateAccount.css'
 import { useDispatch } from 'react-redux'
 
 import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
+import { useNavigate } from 'react-router-dom';
 
 const CreateAccount = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate(); 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -25,11 +27,13 @@ const CreateAccount = () => {
       return;
     }
     const createResult = await createUser(username, password)
+
     if (createResult.success) {
       alert('Created user ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', createResult.token)
       dispatch(setLoggedIn(true))
+      navigate('/')
     } else {
       setErrorMessage(createResult.error)
     }
@@ -76,7 +80,7 @@ const CreateAccount = () => {
           />
         </div>
         <div className='button-container'>
-          <button className='submit-button' type='submit' onClick={handleCreate}>
+          <button className='submit-button' type='submit'>
             create account
           </button>
         </div>

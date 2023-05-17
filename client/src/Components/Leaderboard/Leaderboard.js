@@ -9,7 +9,6 @@ const Leaderboard = ({ data }) => {
 
     const handleClick = (colName) => {
         setSortedField(colName);
-        console.log(sortedField);
     }
 
     return (

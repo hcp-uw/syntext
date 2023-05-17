@@ -9,6 +9,7 @@ let authToken = window.localStorage.getItem('authToken')
     reject with error message if request fails.
 */
 const createUser = async (username, password) => {
+
   try {
     const res = await axios.post(`${baseURL}/create`, {
       username: username,
@@ -37,7 +38,7 @@ const authenticate = async (username, password) => {
 
     return { ...res.data, token: res.headers['authorization'] }
   } catch (error) {
-    //console.error(error);
+    console.error(error);
     return { success: false }
   }
 }
