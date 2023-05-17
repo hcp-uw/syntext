@@ -21,6 +21,7 @@
     "jest": "npm run localDBinit && NODE_ENV=test jest --verbose --runInBand --detectOpenHandles",
     "create-tables": "node ./db-admin-scripts/create-snippet-tables && node ./db-admin-scripts/create-user-tables && node ./db-admin-scripts/create-settings-tables && node ./db-admin-scripts/create-games-tables",
     "localDBinit": " npm run create-tables && node ./db-admin-scripts/clear-tables",
+    "localDBfill": "npm run localDBinit && node ./db-admin-scripts/fill-tables",
     "grant-privs": "node ./db-admin-scripts/create-user && node ./db-admin-scripts/grant-privs",
     "start": "nodemon server"
   },

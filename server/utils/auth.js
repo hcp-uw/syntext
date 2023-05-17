@@ -16,7 +16,7 @@ const verifyHash = async (password, hash) => {
 
 const generateToken = async (userID, username, password) => {
   const token = jwt.sign({ username: username, userID: userID }, JWT_SECRET, {
-    expiresIn: '1800s'
+    expiresIn: '1800000000000s'
   })
   return token
 }
