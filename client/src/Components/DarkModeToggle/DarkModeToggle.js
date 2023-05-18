@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
+import Toggle from "react-toggle";
 
 const DarkModeToggle = ({ theme, setTheme }) => {
-  useEffect(() => {}, [theme]);
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-    document.body.className = theme;
-  }, [theme]);
 
   const toggleTheme = () => {
     if (theme === 'light') {
@@ -19,6 +15,13 @@ const DarkModeToggle = ({ theme, setTheme }) => {
     <button onClick={toggleTheme}>
       {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
     </button>
+      // <Toggle
+      //   checked={ theme === 'light' }
+      //   onChange={({ target }) => setTheme(target.checked)}
+      //   icons={{ checked: "🌙", unchecked: "🔆" }}
+      //   aria-label="Dark mode toggle"
+      // />
+    
   );
 };
 

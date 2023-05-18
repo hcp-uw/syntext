@@ -1,3 +1,4 @@
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -18,7 +19,7 @@
     align-items: center;
   }
    
-  .button-container a {
+  .light a {
     /* color: rgb(255, 232, 230); */
     color: #fff;
     background-color: rgb(219, 157, 157);
@@ -29,7 +30,19 @@
     border-radius: 50px;
     transition: all 0.2s ease-in-out;
   }
-  
+
+  .dark a {
+    /* color: rgb(255, 232, 230); */
+    color: black;
+    background-color: #6FFF04;
+    text-decoration: none;
+    margin-left: .5em;
+    padding: 0.25em 1em;
+    border: none;
+    border-radius: 50px;
+    transition: all 0.2s ease-in-out;
+  }
+
   .button-container a:hover {
     /* background-color: rgb(255, 213, 213); */
     color: #fff;

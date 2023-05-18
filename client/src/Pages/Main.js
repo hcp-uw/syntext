@@ -8,9 +8,14 @@ import "../index.css";
 const Main = ({ theme }) => {
 
   useEffect(() => {
-    document.body.className = theme;
+    localStorage.setItem('theme', theme);
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
   }, [theme]);
-  
+
   /*
   const someData = [
     'int j = 20;',
