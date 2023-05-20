@@ -7,16 +7,16 @@ import React, { useEffect } from "react";
 
 const NavBar = ({ setSettingsFocus, theme, setTheme }) => {
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-    if (theme === 'dark') {
-      let div = document.querySelector('#butt');
-      div.className = 'dark';
-    } else {
-      let div = document.querySelector('#butt');
-      div.className = 'light';
-    }
-  }, [theme]);
+  // useEffect(() => {
+  //   localStorage.setItem('theme', theme);
+  //   if (theme === 'dark') {
+  //     let div = document.querySelector('#button');
+  //     div.className = 'dark';
+  //   } else {
+  //     let div = document.querySelector('#button');
+  //     div.className = 'light';
+  //   }
+  // }, [theme]);
 
   return (
     <div className='navbar-container'>
@@ -25,7 +25,7 @@ const NavBar = ({ setSettingsFocus, theme, setTheme }) => {
           Synte&gt;&lt;t
         </Link>
         <DarkModeToggle theme={theme} setTheme={setTheme} />
-        <div id='butt' className='button-container'>
+        <div className='button-container'>
           <Link to='/leaderboard'>leaderboard</Link>
           <Link to='/'>game</Link>
           <Link onClick={() => setSettingsFocus(true)}>settings</Link>

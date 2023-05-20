@@ -17,9 +17,26 @@ const App = () => {
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
   const [settingsFocus, setSettingsFocus] = useState(false);
   const [theme, setTheme] = useState(
-    localStorage.getItem('theme') || 'light'
+    localStorage.getItem('theme') || 'cherry'
   );
-  
+
+  useEffect(() => {
+    console.log('testing meow');
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `themes/${theme}.css`;
+    const head = document.head  || document.getElementsByTagName('head')[0];
+    const prevLink = head.querySelector('link[data-theme]');
+    if (prevLink) {
+      head.removeChild(prevLink);
+    }
+    link.setAttribute('data-theme', theme);
+    head.appendChild(link);
+    return () => {
+      head.removeChild(link);
+    };
+  }, [theme])
+
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
     if (!token) return;

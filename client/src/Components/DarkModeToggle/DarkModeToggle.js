@@ -5,7 +5,7 @@ const DarkModeToggle = ({ theme, setTheme }) => {
 
   const toggleTheme = () => {
     if (theme === 'light') {
-      setTheme('dark');
+      setTheme('cherry');
     } else {
       setTheme('light');
     }
@@ -13,7 +13,7 @@ const DarkModeToggle = ({ theme, setTheme }) => {
 
   return (
     <button onClick={toggleTheme}>
-      {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+      {theme === 'cherry' ? 'Cherry Blossom' : 'Light Mode'}
     </button>
       // <Toggle
       //   checked={ theme === 'light' }
