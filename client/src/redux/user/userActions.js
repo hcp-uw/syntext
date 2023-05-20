@@ -1,4 +1,4 @@
-import { SET_USER_ID, SET_LOGGED_IN } from "./userStateTypes"
+import { SET_USER_ID, SET_LOGGED_IN } from "./userTypes"
 
 export const setUserID = (userID) => {
   return {

@@ -1,11 +1,11 @@
-import { SET_USER_ID, SET_LOGGED_IN } from "./userStateTypes"
+import { SET_USER_ID, SET_LOGGED_IN } from "./userTypes"
 
 const initialState = {
   userID: "",
   isLoggedIn: false
 }
 
-const userStateReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case SET_USER_ID: return {
@@ -23,4 +23,4 @@ const userStateReducer = (state = initialState, action) => {
   
 }
 
-export default userStateReducer;
+export default userReducer;

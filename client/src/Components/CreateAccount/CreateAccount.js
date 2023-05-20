@@ -3,7 +3,7 @@ import { createUser } from '../../services/userService'
 import './CreateAccount.css'
 import { useDispatch } from 'react-redux'
 
-import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
+import { setLoggedIn, setUserID } from './../../redux/user/userActions'
 
 const CreateAccount = () => {
   const dispatch = useDispatch()

@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoggedIn, setUserID } from './redux/user/userStateActions'
+import { setLoggedIn, setUserID } from './redux/user/userActions'
 import NavBar from './Components/NavBar/NavBar'
 import Main from './Pages/Main'
 import AccountPage from './Pages/AccountPage'

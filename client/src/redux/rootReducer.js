@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
-import userStateReducer from './user/userStateReducer'
+import userReducer from './user/userReducer'
+import settingsReducer from './settings/settingsReducer'
 
 const rootReducer = combineReducers({
-  userState: userStateReducer
+  settingsState: settingsReducer,
+  userState: userReducer
 })
 
 export default rootReducer

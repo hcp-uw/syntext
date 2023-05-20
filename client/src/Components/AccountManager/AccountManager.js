@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './AccountManager.css'
 import { useDispatch } from 'react-redux'
-import { setLoggedIn, setUserID } from '../../redux/user/userStateActions'
+import { setLoggedIn, setUserID } from '../../redux/user/userActions'
 import { useNavigate } from 'react-router-dom'
 
 const AccountManager = (props) => {
