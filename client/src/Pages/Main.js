@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
 import Game from "../Components/Game/Game";
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "../index.css";
-import MainPopupController from "../Components/PopupController/PopUpController";
 
-const Main = () => {
-  
+const Main = ({ theme }) => {
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [theme]);
+
   /*
   const someData = [
     'int j = 20;',

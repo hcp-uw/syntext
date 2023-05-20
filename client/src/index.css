@@ -4,4 +4,12 @@ body {
   background-color: #EAD1D0;
   overflow: hidden;
   font-family: 'Roboto Mono', monospace;
+  color: #D1918F;
+}
+
+body.dark {
+  background-color: #232222;
+  overflow: hidden;
+  font-family: 'Roboto Mono', monospace;
+  color: #6FFF04;
 }

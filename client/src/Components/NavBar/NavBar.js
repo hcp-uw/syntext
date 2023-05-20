@@ -2,15 +2,30 @@ import { Link } from 'react-router-dom'
 import Icon from '../Icon/Icon'
 import './NavBar.css'
 import { useSelector } from 'react-redux'
-const NavBar = ({ setSettingsFocus }) => {
-  const isLoggedIn = useSelector(s => s.userState.isLoggedIn)
+import DarkModeToggle from '../DarkModeToggle/DarkModeToggle'
+import React, { useEffect } from "react";
+
+const NavBar = ({ setSettingsFocus, theme, setTheme }) => {
+  const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    if (theme === 'dark') {
+      let div = document.querySelector('#butt');
+      div.className = 'dark';
+    } else {
+      let div = document.querySelector('#butt');
+      div.className = 'light';
+    }
+  }, [theme]);
+
   return (
     <div className='navbar-container'>
       <div className='navbar'>
         <Link className='logo' to='/'>
           Synte&gt;&lt;t
         </Link>
-        <div className='button-container'>
+        <DarkModeToggle theme={theme} setTheme={setTheme} />
+        <div id='butt' className='button-container'>
           <Link to='/leaderboard'>leaderboard</Link>
           <Link to='/'>game</Link>
           <Link onClick={() => setSettingsFocus(true)}>settings</Link>

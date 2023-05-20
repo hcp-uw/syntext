@@ -15,7 +15,10 @@ import { getCurrentUser } from './services/userService'
 const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
-  const [settingsFocus, setSettingsFocus] = useState(false) 
+  const [settingsFocus, setSettingsFocus] = useState(false);
+  const [theme, setTheme] = useState(
+    localStorage.getItem('theme') || 'light'
+  );
   
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
@@ -27,12 +30,11 @@ const App = () => {
     });
   }, [])
 
-
   return (
     <div className='app-container'>
-      <NavBar setSettingsFocus={setSettingsFocus} />
+      <NavBar setSettingsFocus={setSettingsFocus} theme={theme} setTheme={setTheme} />
       <Routes>
-        <Route path='/' element={<Main />} />
+        <Route path='/' element={<Main theme={theme}/>} />
         <Route path='/account' element={isLoggedIn ? <AccountPage /> : <LoginPage/>} />
         <Route path='/join' element={<SignUpPage />} />
         <Route path='/login' element={<LoginPage />} />
@@ -46,4 +48,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
