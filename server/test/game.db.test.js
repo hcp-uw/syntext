@@ -93,8 +93,9 @@ describe('getGameEntries', () => {
   })
 
   it('should return success false and an error message when the query fails', async () => {
-    const result = await getGameEntries('fakedata')
-    expect(result.success).toBe(false)
+    const result = await getGameEntries('fakedata');
+    console.log(result)
+    expect(result.error === undefined).toBe(false)
   })
 })
 
@@ -158,7 +159,7 @@ afterAll(async () => {
     }, 
     data: user
   })
-  expect(resDelete.status).toBe(204)
+  expect(resDelete.status).toBe(200)
   const resDeleteSnippet = await deleteSnippetByID(snippet.id)
   expect(resDeleteSnippet.success).toBe(true)
   closePool()

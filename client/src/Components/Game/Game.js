@@ -7,9 +7,10 @@ import GameSummary from '../GameSummary/GameSummary'
 import Timer from '../Timer/Timer'
 import { useSelector } from 'react-redux'
 import { createGame } from '../../services/gameService'
+import './Game.css';
 
 const Game = ({ defaultSnippet }) => {
-  const userID = useSelector(s => s.userState.userID); 
+  const userID = useSelector(s => s.userState.userID)
   // what the user has typed so far for the current word
   // cleared with wordIndex changes
   const [currSnippet, setCurrSnippet] = useState(defaultSnippet)
@@ -61,10 +62,10 @@ const Game = ({ defaultSnippet }) => {
   }, [lines])
 
   // use to integrate gameService
-  useEffect( () => {
+  useEffect(() => {
     if (gameFinished) {
       // calculate game object
-      // createGame(game).then(res => console.log(res)); 
+      // createGame(game).then(res => console.log(res));
     }
   }, [gameFinished])
 
@@ -98,6 +99,24 @@ const Game = ({ defaultSnippet }) => {
     snapshot.current = ['']
   }
 
+  const RestartShortcut = ({ restartGame }) => {
+    useEffect(() => {
+      const handleKeyDown = event => {
+        if (event.key === 'Enter' && event.ctrlKey) {
+          restartGame()
+        }
+      }
+
+      window.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown)
+      }
+    }, [])
+
+    return <p className='shortcut-text'>ctrl + enter to restart</p>
+  }
+
   return !gameFinished ? (
     <div className='game-container'>
       <Timer recording={recording} tickTime={tickTime} />
@@ -123,6 +142,7 @@ const Game = ({ defaultSnippet }) => {
         typingTarget={typingTarget}
       />
       <RestartButton restartGame={restartGame} />
+      <RestartShortcut restartGame={restartGame} />
       <GameOptions
         restartGame={() => restartGame()}
         setLines={setLines}

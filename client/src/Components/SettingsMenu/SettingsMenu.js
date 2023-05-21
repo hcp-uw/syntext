@@ -9,7 +9,7 @@ const SettingsMenu = props => {
         onClick={() => setSettingsFocus(false)}
       ></div>
       <div className='settings-container'>
-        <h1>Settings</h1>
+        <h1>settings</h1>
         <hr></hr>
       </div>
     </>

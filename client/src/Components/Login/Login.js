@@ -4,7 +4,7 @@ import './Login.css'
 import { useDispatch } from 'react-redux'
 
 import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -29,7 +29,7 @@ const Login = () => {
       dispatch(setLoggedIn(true));
       navigate('/');
     } else {
-      setErrorMessage('Invalid username or password')
+      setErrorMessage('invalid username or password')
     }
   }
 
@@ -64,6 +64,16 @@ const Login = () => {
           <button className='submit-button' type='submit' onClick={handleLogin}>
             login
           </button>
+        </div>
+        <div>
+        <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'center' }}>
+              - OR -
+          </p>
+        </div>
+        <div style={{width: "100%", textAlign: 'center'}}>
+          <Link className='create-account-button' type='submit' to={"/join"}>
+            don't have an account? sign up!
+          </Link>
         </div>
         <div style={{ textAlign: 'center', paddingTop: '12px' }}>
           {errorMessage && (

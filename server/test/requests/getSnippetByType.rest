@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/snippet/get/type?type=WHILE_LOOP

@@ -14,16 +14,36 @@ const verifyHash = async (password, hash) => {
     return authResult
 }
 
-const generateToken = async (userID, username, password) => {
-  const token = jwt.sign({ username: username, userID: userID }, JWT_SECRET, {
-    expiresIn: '1800s'
+const generateRefreshToken = async (userSecret) => {
+  const date = Date.now()
+
+  const token = jwt.sign({ stamp: date }, userSecret, {
+    expiresIn: '1800000000000s'
+  })
+  return token;
+}
+
+const verifyRefreshToken = async (userSecret, token) => {
+  const res = await jwt.verify(token.split(' '[1], userSecret));
+  return {...res, success: true}
+}
+
+const generateAccessToken = async (userID) => {
+  const token = jwt.sign({ userID: userID }, JWT_SECRET, {
+    expiresIn: '1800000s'
   })
   return token
 }
 
-const verifyToken = async token => {
-  const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
-  return { ...res, success: true }
+const verifyAccessToken = async (token, userID) => {
+  try {
+    const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+    return { ...res, success: true }
+  } catch (error) {
+    if (error.name == 'TokenExpiredError') {
+
+    }
+  }
 }
 
 const extractToken = req => {
@@ -44,8 +64,10 @@ const extractToken = req => {
 
 module.exports = { 
     extractToken, 
-    verifyToken, 
-    generateToken, 
+    verifyAccessToken, 
+    generateAccessToken, 
+    generateRefreshToken,
+    verifyRefreshToken,
     generateHash, 
     verifyHash,
     saltRounds 

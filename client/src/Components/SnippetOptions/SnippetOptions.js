@@ -23,12 +23,12 @@ const SnippetOptions = props => {
     }
   }, [selectedLength, selectedType])
 
-  const loadNewSnippets = (len, type) => {
-
-    getSnippet(len, type).then(snippets => {
-      setCurrSnippets(snippets)
-    })
+  const loadNewSnippets = async (len, type) => {
+    const snippets = await getSnippet(len, type);
+    setCurrSnippets(snippets);
   }
+
+
 
   const handleLengthChange = value => {
     if (value === selectedLength) return

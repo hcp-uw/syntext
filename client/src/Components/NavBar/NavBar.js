@@ -15,7 +15,6 @@ const NavBar = ({ setSettingsFocus }) => {
           <Link to='/'>game</Link>
           <Link onClick={() => setSettingsFocus(true)}>settings</Link>
           {!isLoggedIn && <Link to='/login'>login</Link>}
-          {!isLoggedIn && <Link to='/join'>join</Link>}
           <Icon isLoggedIn={isLoggedIn} />
         </div>
       </div>
