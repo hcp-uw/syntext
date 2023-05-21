@@ -16,12 +16,12 @@ gameRouter.get('/topPlayers', jsonParser, async (req, res) => {
 
     for (const user of users) {
       const playerData = await getUserID(user.userID);
-      userScores({
+      userScores.push({
         name: playerData.name,
-        wpm_avg: user.wpm_avg,
-        accuracy: user.accuracy,
-        total_time: user.total_time,
-        total_characters: user.total_characters
+        wpm_avg: playerData.wpm_avg,
+        accuracy: playerData.accuracy,
+        total_time: playerData.total_time,
+        total_characters: playerData.total_characters
       });
     }
     res.status(200).send(userScores);
