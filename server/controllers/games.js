@@ -1,4 +1,4 @@
-const { verifyToken, extractToken } = require('../utils/auth');
+const { verifyAccessToken, extractToken } = require('../utils/auth');
 const { getUserID } = require('../db/user-db')
 const {
   getGameEntries,
@@ -20,7 +20,7 @@ gameRouter.post('/create', jsonParser, async (req, res) => {
   const token = extractToken(req)
 
   try {
-    const decodedToken = await verifyToken(token)
+    const decodedToken = await verifyAccessToken(token, gameObject.userID);
 
     if (!decodedToken.success || gameObject.userID != decodedToken.userID)
       res.status(401).send({ success: false, error: 'Token unauthorized' })
@@ -68,7 +68,7 @@ gameRouter.delete('/games', jsonParser, async (req, res) => {
 
   if (!userID) userID = await getUserID(username)
 
-  const decodedToken = await verifyToken(token)
+  const decodedToken = await verifyAccessToken(token, userID)
 
   if (!decodedToken.success || userID != decodedToken.userID)
     res.status(401).send({ success: false, error: 'Token unauthorized' })

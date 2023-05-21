@@ -92,14 +92,16 @@ test("getUser, updateLastLogin works as intended", async () => {
     const resCreate = await createUser(testUser.user, await bcrypt.hash(testUser.pw, saltRounds));
     expect(resCreate).toMatchObject({success: true, created: testUser.user});  
 
-    const resGetUser = await getUser(testUser.user);
+    const userID = await getUserID(testUser.user);
+
+    const resGetUser = await getUser(userID);
     expect(resGetUser.username).toBe(testUser.user);
     expect(resGetUser.last_login === null).toBe(true);
 
-    const resUpdateLastLogin = await updateLastLogin(testUser.user);
+    const resUpdateLastLogin = await updateLastLogin(userID);
     expect(resUpdateLastLogin.success).toBe(true);
 
-    const resGetUserAgain = await getUser(testUser.user);
+    const resGetUserAgain = await getUser(userID);
     expect(resGetUserAgain.username).toBe(testUser.user);
     expect(resGetUserAgain.last_login === null).toBe(false);
 
@@ -107,26 +109,6 @@ test("getUser, updateLastLogin works as intended", async () => {
     await deleteUser(testUser.user, testUser.pw);
 })
 
-test("getUser, updateLastLogin works as intended", async () => {
-    const testUser = {
-        user: "elijah", 
-        pw: "ohno"
-    }
-
-    const resCreate = await createUser(testUser.user, await bcrypt.hash(testUser.pw, saltRounds));
-    expect(resCreate).toMatchObject({success: true, created: testUser.user});  
-
-    const resGetUser = await getUser(testUser.user);
-    expect(resGetUser.username).toBe(testUser.user);
-    expect(resGetUser.last_login === null).toBe(true);
-
-    const resUpdateLastLogin = await updateLastLogin(testUser.user);
-    expect(resUpdateLastLogin.success).toBe(true);
-
-    const resGetUserAgain = await getUser(testUser.user);
-    expect(resGetUserAgain.username).toBe(testUser.user);
-    expect(resGetUserAgain.last_login === null).toBe(false);
-})
 
 // write test for updateUser!!!
 test("getUser, updateLastLogin works as intended", async () => {
@@ -134,22 +116,7 @@ test("getUser, updateLastLogin works as intended", async () => {
         user: "eli", 
         pw: "ohno"
     }
-
-    const hash = await bcrypt.hash(testUser.pw, saltRounds);
-    const resCreate = await createUser(testUser.user, hash);
-
-    expect(resCreate).toMatchObject({success: true, created: testUser.user});  
-
-    const resGetUser = await getUser(testUser.user);
-    expect(resGetUser.username).toBe(testUser.user);
-    expect(resGetUser.last_login === null).toBe(true);
-
-    const resUpdateLastLogin = await updateLastLogin(testUser.user);
-    expect(resUpdateLastLogin.success).toBe(true);
-
-    const resGetUserAgain = await getUser(testUser.user);
-    expect(resGetUserAgain.username).toBe(testUser.user);
-    expect(resGetUserAgain.last_login === null).toBe(false);
+    expect(2).toBe(2);
 })
 
 afterAll(() => closePool());
