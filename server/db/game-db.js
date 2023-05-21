@@ -74,8 +74,11 @@ const createGameEntry = async game => {
 }
 
 const getGameEntries = async userID => {
-  if (!userID) return {success: false}
+
   try {
+    if (!userID || isNaN(userID)) 
+      return {success: false, error: 'invalid userID'}
+    
     const connection = await pool.getConnection()
     const query = `
       SELECT * FROM games WHERE userID=?;

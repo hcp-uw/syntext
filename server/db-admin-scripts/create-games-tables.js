@@ -24,7 +24,22 @@ const pool = mysql.createPool({
 const createGamesTable = async () => {
     try {
         const connection = await pool.getConnection();
-        const query = 'CREATE TABLE IF NOT EXISTS games (id int primary key auto_increment NOT NULL, userID int NOT NULL, snippet_id int NOT NULL, total_time int NOT NULL, total_characters int NOT NULL, wpm_data text NOT NULL, wpm_avg float NOT NULL, accuracy float NOT NULL, num_mistakes int NOT NULL, time_stamp datetime NOT NULL, foreign key (snippetID) references snippet_records(id),foreign key (userID) references users(userID));';
+        const query = `
+            CREATE TABLE IF NOT EXISTS games (
+                id int primary key auto_increment NOT NULL, 
+                userID int NOT NULL, 
+                snippet_id int NOT NULL, 
+                total_time int NOT NULL, 
+                total_characters int NOT NULL, 
+                wpm_data text NOT NULL, 
+                wpm_avg float NOT NULL, 
+                accuracy float NOT NULL, 
+                num_mistakes int NOT NULL, 
+                time_stamp datetime NOT NULL, 
+                foreign key (snippet_id) references snippet_records(id),
+                foreign key (userID) references users(userID)
+            );
+        `;
         const result = await connection.query(query);
         await connection.release();
         console.log('created games')

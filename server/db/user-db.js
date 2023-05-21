@@ -1,7 +1,27 @@
 const mysql = require('mysql2');
 const config = require('../utils/config.js')
 const { pool } = require('./pool.js');
-const { verifyHash } = require('../utils/auth.js');
+const { verifyHash, generateRefreshToken } = require('../utils/auth.js');
+
+const getRefreshToken = async (userID) => {
+    if (!userID) return {success: false, error: 'missing required field'};
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT refresh_token FROM users WHERE username = ?';
+        const result = await connection.query(query, [userID]);
+        const rows = result[0];
+        await connection.release();
+        if (rows.length > 0) {
+            return rows[0].refresh_token;
+        } else {
+            return {success: false, error: `User ${username} not found`};
+        }
+    } catch (error) {
+        console.error(error);
+        await connection.release();
+        return error;
+    }
+}
 
 const isUser = async userID => {
     if (!userID) return {success: false, error: 'missing required field'};
@@ -20,19 +40,19 @@ const isUser = async userID => {
     }
 }
 
-const getUser = async (username) => {
-    if (!username) return {success: false, error: 'missing required field'};
+const getUser = async (userID) => {
+    if (!userID) return {success: false, error: 'missing required field'};
     let connection;
     try {
         connection = await pool.getConnection();
-        const query = 'SELECT username, userID, last_login FROM users WHERE username = ?';
-        const result = await connection.query(query, [username]);
+        const query = 'SELECT username, userID, last_login FROM users WHERE userID = ?';
+        const result = await connection.query(query, [userID]);
         const rows = result[0];
         await connection.release();
         if (rows.length > 0) {
             return rows[0];
         } else {
-            return {success: false, error: `User ${username} not found`};
+            return {success: false, error: `User ${userID} not found`};
         }
     } catch (error) {
         console.error(error);
@@ -84,9 +104,6 @@ const getUserID = async (username) => {
 
 
 
-
-
-// creates user 
 const createUser = async (username, hash) => {
     if (!username || !hash) return {success: false, error: 'missing required field'};
     try {
@@ -99,8 +116,18 @@ const createUser = async (username, hash) => {
             await connection.release();
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
-            const insert = 'INSERT INTO users (userID, username, hash_password, date_created, last_login) VALUES (NULL, ?, ?, CURRENT_DATE, NULL)'
-            const result = await pool.query(insert, [username, hash]);
+            const refreshToken = await generateRefreshToken(hash);
+            const insert = `
+                INSERT INTO users (
+                    userID, 
+                    username, 
+                    hash_password, 
+                    date_created,
+                    refresh_token,
+                    last_login
+                ) VALUES (NULL, ?, ?, CURRENT_DATE, ? , NULL);
+            `
+            const result = await pool.query(insert, [username, hash, refreshToken]);
             await connection.release();
             return {
                 success: true,
@@ -141,12 +168,12 @@ const authenticate = async (username, password) => {
     } 
 }
 
-const updateLastLogin = async (username) => {
-    if (!username) return {success: false, error: 'missing required field'};
+const updateLastLogin = async (userID) => {
+    if (!userID) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
-        const insert = 'UPDATE users SET last_login= NOW() where username = ?'; 
-        const result = await connection.query(insert, [username]);
+        const insert = 'UPDATE users SET last_login= NOW() where userID = ?'; 
+        const result = await connection.query(insert, [userID]);
         await connection.release();
         return {success: true}
     } catch (error) {
@@ -198,4 +225,5 @@ module.exports = {
     getUser,
     isUser,
     updateUser,
+    getRefreshToken
 }
