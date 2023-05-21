@@ -121,18 +121,18 @@ describe('GET /account', () => {
     const testUser = { username: 'getme', password: 'password123' }
     const response = await axios.post(`${baseURL}/create`, testUser)
     expect(response.status).toBe(201)
-    console.log(response);
+
    
     const token = response.headers['authorization']
     const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
-    console.log(idRes);
+
     userID = idRes.data.userID
     const resGet = await axios.get(`${baseURL}/account?userID=${userID}`, {
       headers: {
         Authorization: token
       }
     })
-    console.log(resGet)
+
     expect(resGet.status).toBe(200);
     expect(resGet.data.username).toBe('getme');
     expect(resGet.data.success).toBe(true);
