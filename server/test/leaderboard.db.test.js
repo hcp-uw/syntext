@@ -36,7 +36,7 @@ beforeAll(async () => {
         const res = await axios.post(`${baseURL}/snippet/create`, snippet);
         expect(res.status).toBe(201);
     }
-
+    //need a token`1
     for (let i = 0; i < users.length; i++) {
         const u = users[i];
         for (let j = 0; j < snippets.length; j++) {
@@ -51,6 +51,7 @@ beforeAll(async () => {
                 accuracy: i + j,
                 num_mistakes: (i * j + i * j)
             });
+            console.log(res); //Error is here 
             expect(res.status).toBe(201);
         }
     }
