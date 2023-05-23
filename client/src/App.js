@@ -16,8 +16,7 @@ import { getCurrentUser } from './services/userService'
 const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
-  // const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isMobile = true;
+  const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const [settingsFocus, setSettingsFocus] = useState(false) 
   
   useEffect(() => {
@@ -33,7 +32,7 @@ const App = () => {
 
   return (
     <div className='app-container'>
-      <NavBar setSettingsFocus={setSettingsFocus} />
+      {isMobile ? null : <NavBar setSettingsFocus={setSettingsFocus} />}
       <Routes>
         <Route path='/' element={isMobile ? <MobilePage /> : <Main />} />
         <Route path='/account' element={isLoggedIn ? <AccountPage /> : <LoginPage/>} />
