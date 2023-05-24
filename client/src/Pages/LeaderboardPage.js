@@ -39,7 +39,6 @@ const mock = [
     }
 ]
 
-
 const LeaderboardPage = () => {
 
 

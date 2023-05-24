@@ -5,11 +5,12 @@ const { getLeaderboardData } = require('../db/leaderboard-db');
 const axios = require('axios');
 
 const baseURL = 'http://localhost:3001/api'
+let token; 
 
 beforeAll(async () => {
 
     const usernames = ['elijah', 'kai', 'harshi'];
-    let users = await usernames.map(u => { return {username: u, password: 'passWord'} })
+    let users = await usernames.map(u => { return {username: u, password: 'passWord', token: 'authorization'} })
 
     for (let user of users) {
         const res = await axios.post(`${baseURL}/user/create`, user);
