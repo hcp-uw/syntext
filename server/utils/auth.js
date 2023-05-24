@@ -62,6 +62,31 @@ const extractToken = req => {
   return req.rawHeaders[tokenIndex]
 }
 
+
+const handleAuth = async (req, res, next) => {
+  const { userID } = req.query;
+  const token = extractToken(req);
+
+  try {
+    if (!token) {
+      return res.status(401).send({ success: false });
+    }
+    console.log("hi from auth", token)
+    const decoded = await verifyAccessToken(token, userID);
+    console.log("!decoded", !decoded);
+    console.log(decoded.userID, userID)
+    if (!decoded || Number(decoded.userID) !== Number(userID)) {
+      return res.status(402).send({ success: false });
+    }
+
+    req.decodedUserID = decoded.userID; // store  decoded userID in req 
+    next(); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+};
+
 module.exports = { 
     extractToken, 
     verifyAccessToken, 
@@ -70,5 +95,6 @@ module.exports = {
     verifyRefreshToken,
     generateHash, 
     verifyHash,
+    handleAuth,
     saltRounds 
 }
