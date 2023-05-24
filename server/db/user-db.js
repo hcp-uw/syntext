@@ -7,14 +7,14 @@ const getRefreshToken = async (userID) => {
     if (!userID) return {success: false, error: 'missing required field'};
     try {
         const connection = await pool.getConnection();
-        const query = 'SELECT refresh_token FROM users WHERE username = ?';
+        const query = 'SELECT refresh_token FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
         const rows = result[0];
         await connection.release();
         if (rows.length > 0) {
             return rows[0].refresh_token;
         } else {
-            return {success: false, error: `User ${username} not found`};
+            return {success: false, error: `User ${userID} not found`};
         }
     } catch (error) {
         console.error(error);
@@ -23,13 +23,35 @@ const getRefreshToken = async (userID) => {
     }
 }
 
+const getSecret = async (userID) => {
+    if (!userID) return {success: false, error: 'missing required field'};
+    try {
+        const connection = await pool.getConnection();
+        const query = 'SELECT secret FROM users WHERE userID = ?';
+        const result = await connection.query(query, [userID]);
+        const rows = result[0];
+        await connection.release();
+        if (rows.length > 0) {
+            return rows[0].refresh_token;
+        } else {
+            return {success: false, error: `User ${userID} not found`};
+        }
+    } catch (error) {
+        console.error(error);
+        await connection.release();
+        return error;
+    }
+}
+
+
+
 const isUser = async userID => {
     if (!userID) return {success: false, error: 'missing required field'};
     let connection;
     try {
         connection = await pool.getConnection();
         const query = 'SELECT username FROM users WHERE userID = ?';
-        const result = await connection.query(query, [username]);
+        const result = await connection.query(query, [userID]);
         const rows = result[0];
         await connection.release();
         return rows.length > 0 
@@ -61,8 +83,7 @@ const getUser = async (userID) => {
     }
 }
 
-// this function depends on how we store user information. If we only use an id 
-// to identify the user, then we won't have cascading changes!
+// The key must be sanitized!!! only ever hard code string values (never use client input)
 const updateUser = async (userID, key, value) => {
     if (!userID || !key || !value) return {success: false, error: 'missing required field'};
     let connection;
@@ -72,9 +93,9 @@ const updateUser = async (userID, key, value) => {
         connection = await pool.getConnection();
         const query = `
         UPDATE users
-        SET ? = ?
+        SET ${key} = ?    
         WHERE userID = ?;`;
-        const result = await connection.query(query, [key, value, userID]);
+        const result = await connection.query(query, [value, userID]);
         return {success: true};
     } catch (error) {
         console.error(error);
@@ -124,8 +145,9 @@ const createUser = async (username, hash) => {
                     hash_password, 
                     date_created,
                     refresh_token,
+                    secret,
                     last_login
-                ) VALUES (NULL, ?, ?, CURRENT_DATE, ? , NULL);
+                ) VALUES (NULL, ?, ?, CURRENT_DATE, ?, NULL, NULL);
             `
             const result = await pool.query(insert, [username, hash, refreshToken]);
             await connection.release();
@@ -225,5 +247,6 @@ module.exports = {
     getUser,
     isUser,
     updateUser,
-    getRefreshToken
+    getRefreshToken,
+    getSecret
 }

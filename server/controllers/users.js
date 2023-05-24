@@ -1,7 +1,6 @@
 const userRouter = require('express').Router()
 const bodyParser = require('body-parser')
 const {
-  verifyAccessToken,
   generateAccessToken,
   generateRefreshToken,
   extractToken,
@@ -19,7 +18,8 @@ const {
   getUser,
   getUserID,
   updateUser,
-  getRefreshToken
+  getRefreshToken,
+  getSecret
 } = require('../db/user-db')
 const jsonParser = bodyParser.json()
 
@@ -43,9 +43,11 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     const result = await createUser(username, hash)
     const userID = await getUserID(username)
     if (!result.success) return res.status(409).send({ ...result })
-    const token = await generateAccessToken(userID)
+    const accessToken = await generateAccessToken(userID)
+    const refreshToken = await generateRefreshToken(userID);
+    await updateUser(userID, "secret", accessToken);
     return res
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .status(201)
       .send({ success: true })
   } catch (error) {
@@ -77,11 +79,12 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     } else {
       const userID = await getUserID(username)
       const token = await generateAccessToken(userID)
-      res
+      await updateUser(userID, "secret", token);
+      await updateLastLogin(userID)
+      return res
         .set('Authorization', `Bearer ${token}`)
         .status(200)
         .json({ success: true })
-      await updateLastLogin(userID)
     }
   } catch (error) {
     console.error(error)
@@ -91,7 +94,13 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
 userRouter.post('/refresh', jsonParser, async (req, res) => {
   const { userID } = req.body
-  const oldAccessToken = extractToken(req)
+  const oldAccessToken = extractToken(req);
+  const secret = await getSecret(userID);
+  if (oldAccessToken !== secret) 
+    return res.status(401).send({success: false})
+  
+  const refreshToken = await getRefreshToken(userID);
+  const refresValidity = await verifyRefreshToken(userID, refreshToken);
 })
 
 /*
@@ -102,10 +111,8 @@ userRouter.post('/refresh', jsonParser, async (req, res) => {
   */
 userRouter.get('/account', handleAuth, async (req, res) => {
   const { userID } = req.query
-  console.log('hi', userID);
   try {
     const result = await getUser(userID)
-
     result.userID === req.decodedUserID
       ? res.status(200).send({ ...result, success: true })
       : res.status(401).send({ success: false })
@@ -121,15 +128,9 @@ userRouter.get('/account', handleAuth, async (req, res) => {
     update user data and save to database. send 
     error message if request fails or token is invalid.
   */
-userRouter.put('/account', async (req, res) => {
+userRouter.put('/account', handleAuth, async (req, res) => {
   const { userID, key, value } = req.body
-  const token = extractToken(req)
-  if (!token) return res.status(500).send({ success: false })
   try {
-    const decoded = verifyAccessToken(token, userID)
-    if (!decoded.success)
-      return res.status(401).send({ success: false, error: 'unauthorized' })
-
     switch (key) {
       case 'password':
         await handlePasswordChange(userID, value)
@@ -157,26 +158,13 @@ userRouter.put('/account', async (req, res) => {
   send success message in response if successful,
   or send error message if request fails or token is invalid.
 */
-userRouter.delete('/account', jsonParser, async (req, res) => {
-  const { username, password } = req.body
-  const token = extractToken(req)
+userRouter.delete('/account', [jsonParser, handleAuth], async (req, res) => {
+  const { username, password, userID } = req.body // takes userID for handleAuth
   try {
-    if (!token) return res.status(401).send({ success: false })
-    else {
-      const userID = await getUserID(username)
+    const result = await deleteUser(username, password)
 
-      if (userID.error) return res.status(400).send({ success: false })
-
-      const decoded = await verifyAccessToken(token, userID)
-
-      if (!decoded || !decoded.success)
-        return res.status(401).send({ success: false })
-
-      const result = await deleteUser(username, password)
-
-      if (result.success) return res.status(200).send({ success: true })
-      else return res.status(401).send({ success: false })
-    }
+    if (result.success) return res.status(200).send({ success: true })
+    else return res.status(401).send({ success: false })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })

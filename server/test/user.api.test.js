@@ -35,7 +35,8 @@ describe('POST /create', () => {
       },
       data: {
         username: testUser.username,
-        password: testUser.password
+        password: testUser.password,
+        userID: resTokenVerify.userID
       }
     })
     expect(resDelete.status).toBe(200)
@@ -66,7 +67,8 @@ describe('POST /login', () => {
       },
       data: {
         username: validUser.username,
-        password: validUser.password
+        password: validUser.password,
+        userID: userID
       }
     })
   })
@@ -148,13 +150,18 @@ describe('DELETE /account', () => {
    
     const token = response.headers['authorization']
   
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
+
+    userID = idRes.data.userID
+
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
         Authorization: token
       },
       data: {
         username: testUser.username,
-        password: testUser.password
+        password: testUser.password,
+        userID: userID
       }
     })
 
