@@ -29,10 +29,11 @@ const getSecret = async (userID) => {
         const connection = await pool.getConnection();
         const query = 'SELECT secret FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
+    
         const rows = result[0];
         await connection.release();
         if (rows.length > 0) {
-            return rows[0].refresh_token;
+            return rows[0].secret;
         } else {
             return {success: false, error: `User ${userID} not found`};
         }
