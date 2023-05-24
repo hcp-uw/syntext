@@ -44,8 +44,9 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     const userID = await getUserID(username)
     if (!result.success) return res.status(409).send({ ...result })
     const accessToken = await generateAccessToken(userID)
-    const refreshToken = await generateRefreshToken(userID);
+    const refreshToken = await generateRefreshToken();
     await updateUser(userID, "secret", accessToken);
+    await updateUser(userID, "refresh_token", refreshToken);
     return res
       .set('Authorization', `Bearer ${accessToken}`)
       .status(201)
@@ -97,10 +98,16 @@ userRouter.post('/refresh', jsonParser, async (req, res) => {
   const oldAccessToken = extractToken(req);
   const secret = await getSecret(userID);
   if (oldAccessToken !== secret) 
-    return res.status(401).send({success: false})
+    return res.status(401).send({success: false, error: "invalid access token"})
   
   const refreshToken = await getRefreshToken(userID);
   const refresValidity = await verifyRefreshToken(userID, refreshToken);
+  if (!refresValidity.success && refresValidity.error.name === 'TokenExpiredError') 
+    return res.status(401).send({success: false, error: "session expired"})
+  
+  const newAccessToken = await generateAccessToken(userID);
+  await updateUser(userID, "secret", newAccessToken);
+  return res.status(200).set('Authorization', `Bearer ${newAccessToken}`)
 })
 
 /*
@@ -111,6 +118,7 @@ userRouter.post('/refresh', jsonParser, async (req, res) => {
   */
 userRouter.get('/account', handleAuth, async (req, res) => {
   const { userID } = req.query
+  console.log(userID)
   try {
     const result = await getUser(userID)
     result.userID === req.decodedUserID

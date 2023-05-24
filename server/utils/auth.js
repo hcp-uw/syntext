@@ -14,22 +14,21 @@ const verifyHash = async (password, hash) => {
     return authResult
 }
 
-const generateRefreshToken = async (userSecret) => {
+const generateRefreshToken = async () => {
   const date = Date.now()
-
-  const token = jwt.sign({ stamp: date }, userSecret, {
-    expiresIn: '1800000000000s'
+  const token = jwt.sign({ stamp: date }, JWT_SECRET, {
+    expiresIn: '1800000000000s',
   })
   return token;
 }
 
 const verifyRefreshToken = async (userSecret, token) => {
   try {
-    const res = await jwt.verify(token.split(' '[1], userSecret));
+    const res = await jwt.verify(token.split(' ')[1], userSecret*2048);
     return {...res, success: true}  
   } catch (error) {
     if (error.name == 'TokenExpiredError') {
-      return {...error, success: false}
+      return {error: error, success: false}
     }
   }
   
@@ -37,7 +36,7 @@ const verifyRefreshToken = async (userSecret, token) => {
 
 const generateAccessToken = async (userID) => {
   const token = jwt.sign({ userID: userID }, JWT_SECRET, {
-    expiresIn: '1800000s'
+    expiresIn: '10s'
   })
   return token
 }
@@ -48,12 +47,14 @@ const verifyAccessToken = async (token, userID) => {
     return { ...res, success: true }
   } catch (error) {
     if (error.name == 'TokenExpiredError') {
-      return {...error, success: false}
+      return {error: error, success: false}
     }
   }
 }
 
 const extractToken = req => {
+  if (req.headers && req.headers.Authorization) return req.headers.Authorization
+  if (req.headers && req.headers.authorization) return req.headers.authorization 
   if (
     req.method === 'POST' &&
     req.body !== undefined &&
@@ -82,17 +83,16 @@ const extractUserID = req => {
 const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
-
+  console.log('input: ', userID, token)
   try {
     if (!token) {
       return res.status(401).send({ success: false });
     }
     //console.log("hi from auth", token)
     const decoded = await verifyAccessToken(token, userID);
-    //console.log("!decoded", !decoded);
-    //console.log(decoded.userID, userID)
+
     if (!decoded || Number(decoded.userID) !== Number(userID)) {
-      return res.status(402).send({ success: false });
+      return res.status(401).send({ success: false, error: "TokenExpired" });
     }
 
     req.decodedUserID = decoded.userID; // store  decoded userID in req 

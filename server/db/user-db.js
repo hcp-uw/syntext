@@ -137,7 +137,6 @@ const createUser = async (username, hash) => {
             await connection.release();
             return {success: false, error: `User ${username} already exists`}; 
         } else  {
-            const refreshToken = await generateRefreshToken(hash);
             const insert = `
                 INSERT INTO users (
                     userID, 
@@ -147,9 +146,9 @@ const createUser = async (username, hash) => {
                     refresh_token,
                     secret,
                     last_login
-                ) VALUES (NULL, ?, ?, CURRENT_DATE, ?, NULL, NULL);
+                ) VALUES (NULL, ?, ?, CURRENT_DATE, NULL, NULL, NULL);
             `
-            const result = await pool.query(insert, [username, hash, refreshToken]);
+            const result = await pool.query(insert, [username, hash]);
             await connection.release();
             return {
                 success: true,
