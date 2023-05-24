@@ -20,6 +20,7 @@ const createUserTable = async () => {
             last_login date, 
             private BOOL DEFAULT 0,
             refresh_token varchar(256) NOT NULL,
+            secret varchar(256),
             primary key (userID)
         );`;
         const result = await connection.query(query);
