@@ -23,11 +23,14 @@ const generateRefreshToken = async () => {
 }
 
 const verifyRefreshToken = async (userSecret, token) => {
+  console.log("input: ", userSecret, token)
   try {
-    const res = await jwt.verify(token.split(' ')[1], userSecret*2048);
+    const res = await jwt.verify(token.split(' ')[1], JWT_SECRET);
     return {...res, success: true}  
   } catch (error) {
     if (error.name == 'TokenExpiredError') {
+      return {error: error, success: false}
+    } else {
       return {error: error, success: false}
     }
   }
@@ -83,7 +86,6 @@ const extractUserID = req => {
 const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
-  console.log('input: ', userID, token)
   try {
     if (!token) {
       return res.status(401).send({ success: false });
