@@ -24,8 +24,15 @@ const generateRefreshToken = async (userSecret) => {
 }
 
 const verifyRefreshToken = async (userSecret, token) => {
-  const res = await jwt.verify(token.split(' '[1], userSecret));
-  return {...res, success: true}
+  try {
+    const res = await jwt.verify(token.split(' '[1], userSecret));
+    return {...res, success: true}  
+  } catch (error) {
+    if (error.name == 'TokenExpiredError') {
+      return {...error, success: false}
+    }
+  }
+  
 }
 
 const generateAccessToken = async (userID) => {
@@ -41,7 +48,7 @@ const verifyAccessToken = async (token, userID) => {
     return { ...res, success: true }
   } catch (error) {
     if (error.name == 'TokenExpiredError') {
-
+      return {...error, success: false}
     }
   }
 }
@@ -63,18 +70,27 @@ const extractToken = req => {
 }
 
 
+const extractUserID = req => {
+  let userID;
+  if (req.query)
+     userID = req.query.userID;
+  if (userID === undefined) 
+    userID = req.body.userID;
+  return userID;
+}
+
 const handleAuth = async (req, res, next) => {
-  const { userID } = req.query;
+  const userID = extractUserID(req);
   const token = extractToken(req);
 
   try {
     if (!token) {
       return res.status(401).send({ success: false });
     }
-    console.log("hi from auth", token)
+    //console.log("hi from auth", token)
     const decoded = await verifyAccessToken(token, userID);
-    console.log("!decoded", !decoded);
-    console.log(decoded.userID, userID)
+    //console.log("!decoded", !decoded);
+    //console.log(decoded.userID, userID)
     if (!decoded || Number(decoded.userID) !== Number(userID)) {
       return res.status(402).send({ success: false });
     }
