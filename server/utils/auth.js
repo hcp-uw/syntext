@@ -39,7 +39,7 @@ const verifyRefreshToken = async (userSecret, token) => {
 
 const generateAccessToken = async (userID) => {
   const token = jwt.sign({ userID: userID }, JWT_SECRET, {
-    expiresIn: '10s'
+    expiresIn: '150s'
   })
   return token
 }
