@@ -174,7 +174,6 @@ userRouter.delete('/account', [jsonParser, handleAuth], async (req, res) => {
   const { username, password, userID } = req.body // takes userID for handleAuth
   try {
     const result = await deleteUser(username, password)
-
     if (result.success) return res.status(200).send({ success: true })
     else return res.status(401).send({ success: false })
   } catch (error) {
@@ -185,10 +184,12 @@ userRouter.delete('/account', [jsonParser, handleAuth], async (req, res) => {
 
 userRouter.get('/id', jsonParser, async (req, res) => {
   const { username } = req.query
+  console.log('username: ', username)
   try {
     const id = await getUserID(username)
+    console.log('id: ', id);
     if (id.error) return res.status(400).send({ success: false })
-    else res.status(200).json({ userID: id })
+    else return res.status(200).send({ success: true, userID: id })
   } catch (error) {
     console.error(error)
     res.status(500).send({ success: false, error: 'internal server error' })
