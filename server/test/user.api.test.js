@@ -144,16 +144,19 @@ describe('GET /account', () => {
 
 describe('DELETE /account', () => {
   it('gets the token from the req and verifies it, deleting account', async () => {
-    const testUser = { username: 'deleteme', password: 'password123' }
+    console.log("point 2")
+    expect(2).toBe(2);
+    
+    const testUser = { username: 'rip', password: 'password123' }
     const response = await axios.post(`${baseURL}/create`, testUser)
     expect(response.status).toBe(201)
    
     const token = response.headers['authorization']
-  
+    console.log(`${baseURL}/id?username=${testUser.username}`)
     const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
-
+    
     userID = idRes.data.userID
-
+    
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
         Authorization: token
@@ -165,6 +168,7 @@ describe('DELETE /account', () => {
       }
     })
 
+    
     expect(resDelete.status).toBe(200);
 
     const nonexistantUserID = await getUserID(testUser.username);
