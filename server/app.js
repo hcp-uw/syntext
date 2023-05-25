@@ -8,7 +8,6 @@ const path = require("path");
 const { unknownEndpoint, errorHandler } = require('./utils/middleware');
 
 const app = express();
-
 const corsOptions = {
     exposedHeaders: 'Authorization',
 };
@@ -31,6 +30,7 @@ app.get('/test', (req, res) => {res.send('hello')})
 // error handling
 app.use(unknownEndpoint)
 app.use(errorHandler)
+
 
 module.exports = app;
 
