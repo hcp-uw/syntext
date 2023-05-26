@@ -86,10 +86,13 @@ const extractUserID = req => {
 const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
-  console.log(userID, token);
+  //============================================================================================================================================================
+  // console.log(req.body)
+  //============================================================================================================================================================
+  if (!userID) return res.status(401).send({ success: false, error: 'missing userID'});
   try {
     if (!token) {
-      return res.status(401).send({ success: false });
+      return res.status(401).send({ success: false, error: 'missing token' });
     }
     //console.log("hi from auth", token)
     const decoded = await verifyAccessToken(token, userID);
