@@ -76,9 +76,9 @@ const extractToken = req => {
 
 const extractUserID = req => {
   let userID;
-  if (req.query)
+  if (req.query && req.query.userID)
      userID = req.query.userID;
-  if (userID === undefined) 
+  if (userID === undefined && req.body && req.body.userID) 
     userID = req.body.userID;
   return userID;
 }
@@ -86,6 +86,7 @@ const extractUserID = req => {
 const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
+  console.log(userID, token);
   try {
     if (!token) {
       return res.status(401).send({ success: false });

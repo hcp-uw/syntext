@@ -153,14 +153,18 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  const resDelete = await axios.delete(`${baseURL}/account`, {
-    headers: {
-      Authorization: token
-    }, 
-    data: user
-  })
-  expect(resDelete.status).toBe(200)
-  const resDeleteSnippet = await deleteSnippetByID(snippet.id)
-  expect(resDeleteSnippet.success).toBe(true)
-  closePool()
+  try {
+    const resDelete = await axios.delete(`${baseURL}/account`, {
+      headers: {
+        Authorization: token
+      }, 
+      data: { ...user, userID }
+    })
+    expect(resDelete.status).toBe(200)
+    const resDeleteSnippet = await deleteSnippetByID(snippet.id)
+    expect(resDeleteSnippet.success).toBe(true)
+    closePool()
+  } catch (error) {
+    console.error(error)
+  }
 })
