@@ -51,7 +51,7 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     return res
       .set('Authorization', `Bearer ${accessToken}`)
       .status(201)
-      .send({ success: true })
+      .send({ success: true, userID: userID })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ success: false, ...error })
@@ -74,6 +74,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
   try {
     const authorized = await authenticate(username, password)
+    console.log(authorized)
     if (!authorized.success) {
       res
         .status(401)
@@ -86,7 +87,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
       return res
         .set('Authorization', `Bearer ${token}`)
         .status(200)
-        .json({ success: true })
+        .json({ success: true, userID: userID })
     }
   } catch (error) {
     console.error(error)

@@ -39,7 +39,7 @@ const verifyRefreshToken = async (userSecret, token) => {
 
 const generateAccessToken = async (userID) => {
   const token = jwt.sign({ userID: userID }, JWT_SECRET, {
-    expiresIn: '150s'
+    expiresIn: '5s'
   })
   return token
 }
@@ -87,7 +87,7 @@ const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
   //============================================================================================================================================================
-  // console.log('in handleAuth', req.body)
+  // console.log('in handleAuth', req)
   //============================================================================================================================================================
   if (userID === undefined) return res.status(401).send({ success: false, error: 'missing userID'});
   try {
