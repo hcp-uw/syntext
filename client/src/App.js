@@ -9,24 +9,42 @@ import LoginPage from './Pages/LoginPage'
 import SignUpPage from './Pages/SignUpPage'
 import LeaderboardPage from './Pages/LeaderboardPage'
 import PopUpController from './Components/PopupController/PopUpController'
-import { getCurrentUser } from './services/userService'
+import { getCurrentUser, refreshCurrentSession } from './services/userService'
 
 
 const App = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(s => s.userState.isLoggedIn);
-  const [settingsFocus, setSettingsFocus] = useState(false) 
+  const [settingsFocus, setSettingsFocus] = useState(false);
+  const [refresh, setRefresh] = useState(false); //just a dummy variable...will fix later 
+  console.log('above ', isLoggedIn)
   
+  // TODO:
+  // need to figure out a way to refresh better
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
-    if (!token) return;
-    getCurrentUser().then( u => {
-      if (!u.success) return;
-      dispatch(setUserID(u.userID))
-      dispatch(setLoggedIn(true));
+    const userID = window.localStorage.getItem('userID');
+    console.log(userID, token)
+    if (!token || !userID) return;
+    getCurrentUser(userID).then( async u => {
+      if (u && u.success) {
+        dispatch(setUserID(u.userID))
+        dispatch(setLoggedIn(true));
+      } else {
+        const refresh = await refreshCurrentSession(token, userID);
+        if (refresh.success) {
+          window.localStorage.setItem('authToken', refresh.token);
+          dispatch(setUserID(u.userID))
+          dispatch(setLoggedIn(true));
+          setRefresh(refresh => !refresh);
+        } else {
+          dispatch(setUserID(undefined))
+          dispatch(setLoggedIn(false));
+        }
+      }
     });
   }, [])
-
+  console.log('below ', isLoggedIn)
 
   return (
     <div className='app-container'>
