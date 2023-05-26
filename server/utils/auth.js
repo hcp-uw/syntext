@@ -87,7 +87,7 @@ const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
   //============================================================================================================================================================
-  console.log('in handleAuth', req.body)
+  // console.log('in handleAuth', req.body)
   //============================================================================================================================================================
   if (userID === undefined) return res.status(401).send({ success: false, error: 'missing userID'});
   try {
