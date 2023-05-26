@@ -43,6 +43,18 @@ const authenticate = async (username, password) => {
   }
 }
 
+const refreshCurrentSession = async (token, userID) => {
+  try {
+    const res = await axios.post(`${baseURL}/refresh?userID=${userID}`, {
+      headers: { Authorization: token }
+    });
+
+    return { ...res.data, token: res.headers['authorization'] }
+  } catch (error) {
+    return {success: false}
+  }
+}
+
 const getUserID = async (username) => {
   try {
     const res = await axios.get(`${baseURL}/id`, {data: {username: username}})
