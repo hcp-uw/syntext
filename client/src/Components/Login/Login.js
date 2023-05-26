@@ -21,11 +21,11 @@ const Login = () => {
     event.preventDefault()
     const loginResult = await authenticate(username, password)
     if (loginResult.success) {
+      console.log('result: ', loginResult)
       setErrorMessage(null)
-      window.localStorage.setItem('authToken', loginResult.token)
-      const { userID, success } = await getCurrentUser();
-      if (!success) return;
-      dispatch(setUserID(userID))
+      window.localStorage.setItem('authToken', loginResult.token);
+      window.localStorage.setItem('userID', loginResult.userID);
+      dispatch(setUserID(loginResult.userID))
       dispatch(setLoggedIn(true));
       navigate('/');
     } else {
