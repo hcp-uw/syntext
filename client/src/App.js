@@ -24,26 +24,30 @@ const App = () => {
   useEffect(() => {
     const token = window.localStorage.getItem('authToken');
     const userID = window.localStorage.getItem('userID');
-    console.log(userID, token)
+    console.log("in useEffect",userID, token);
     if (!token || !userID) return;
-    getCurrentUser(userID).then( async u => {
+    const fetchData = async () => {
+      const u = await getCurrentUser(userID);
       if (u && u.success) {
-        dispatch(setUserID(u.userID))
+        dispatch(setUserID(u.userID));
         dispatch(setLoggedIn(true));
-      } else {
+      } else if (u && u.error === "TokenExpired") {
         const refresh = await refreshCurrentSession(token, userID);
         if (refresh.success) {
+          console.log("success", refresh)
           window.localStorage.setItem('authToken', refresh.token);
-          dispatch(setUserID(u.userID))
+          dispatch(setUserID(refresh.userID));
           dispatch(setLoggedIn(true));
           setRefresh(refresh => !refresh);
         } else {
-          dispatch(setUserID(undefined))
+          console.log("fail", refresh)
+          dispatch(setUserID(undefined));
           dispatch(setLoggedIn(false));
         }
       }
-    });
-  }, [])
+    };
+    fetchData();
+  }, []);
   console.log('below ', isLoggedIn)
 
   return (

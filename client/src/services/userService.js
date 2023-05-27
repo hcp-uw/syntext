@@ -79,6 +79,8 @@ const getCurrentUser = async (userID) => {
     return res.data
   } catch (error) {
     console.error(error);
+    if (error.response.data.error === "TokenExpired")
+      return {success: false, error: "TokenExpired"}
   }
 }
 
