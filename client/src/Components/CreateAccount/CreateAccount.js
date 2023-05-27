@@ -4,11 +4,11 @@ import './CreateAccount.css'
 import { useDispatch } from 'react-redux'
 
 import { setLoggedIn, setUserID } from './../../redux/user/userStateActions'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
 const CreateAccount = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate(); 
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -18,13 +18,14 @@ const CreateAccount = () => {
 
   const handlePasswordChange = event => setPassword(event.target.value)
 
-  const handleConfirmPasswordChange = event => setConfirmPassword(event.target.value)
+  const handleConfirmPasswordChange = event =>
+    setConfirmPassword(event.target.value)
 
   const handleCreate = async event => {
     event.preventDefault()
     if (password !== confirmPassword) {
-      setErrorMessage("passwords do not match!")
-      return;
+      setErrorMessage('passwords do not match!')
+      return
     }
     const createResult = await createUser(username, password)
 
@@ -32,6 +33,7 @@ const CreateAccount = () => {
       alert('Created user ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', createResult.token)
+      window.localStorage.setItem('userID', createResult.userID)
       dispatch(setLoggedIn(true))
       navigate('/')
     } else {
