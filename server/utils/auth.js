@@ -17,7 +17,7 @@ const verifyHash = async (password, hash) => {
 const generateRefreshToken = async () => {
   const date = Date.now()
   const token = jwt.sign({ stamp: date }, JWT_SECRET, {
-    expiresIn: '1800000000000s'
+    expiresIn: '864000s'
   })
   return token
 }
@@ -37,7 +37,7 @@ const verifyRefreshToken = async (userSecret, token) => {
 
 const generateAccessToken = async userID => {
   const token = jwt.sign({ userID: userID }, JWT_SECRET, {
-    expiresIn: '5s'
+    expiresIn: '7200s'
   })
   return token
 }
