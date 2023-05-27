@@ -17,8 +17,9 @@ const getSnippetByLengthAndType = async (length, type) => {
 const getSnippetByType = async (type) => {
     if (!type || typeof type !== "string") 
         return missingRequiredParams("type", type);
+        let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = `
             SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text
             FROM snippet_records AS rec, snippet_data AS data 
@@ -67,9 +68,9 @@ const createSnippet = async (snippet) => {
 
     if (!(id && type && length && data)) 
         return missingRequiredParams("snippet", snippet);
-
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const recordQuery = "INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);";
         await connection.query(recordQuery, [id, type, length]);
         const preparedValues = [];
@@ -101,8 +102,9 @@ const createSnippet = async (snippet) => {
 
 const deleteSnippetByID = async (id) => {
     if (!id) return missingRequiredParams("id", id);
-    const connection = await pool.getConnection();
+    let connection;
     try {
+        connection = await pool.getConnection();
         const query1 = 'DELETE FROM snippet_records WHERE id = ?';
         const query2 = 'DELETE FROM snippet_data WHERE id = ?';
         await connection.beginTransaction();
@@ -121,8 +123,9 @@ const deleteSnippetByID = async (id) => {
 
 const getSnippetByLength = async (length) => {
     if (!length) return missingRequiredParams("length", length);
+    connection = await pool.getConnection();
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = `
             SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text 
             FROM snippet_records rec INNER JOIN snippet_data data 
@@ -169,7 +172,7 @@ const getSnippetByLength = async (length) => {
 
 const getSnippetByID = async (id) => {
     if (!id) return missingRequiredParams("id", id);
-    const connection = await pool.getConnection();
+    
     const query = `
             SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text 
             FROM snippet_records rec, snippet_data data 
@@ -177,7 +180,9 @@ const getSnippetByID = async (id) => {
             rec.id = data.id 
             ORDER BY data.line_index ASC;
     `;
+    let connection;
     try {
+        connection = await pool.getConnection();
         const data = await connection.query(query, [id]);
         const  result = data[0].map(line_data =>  {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')} 

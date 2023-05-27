@@ -5,8 +5,9 @@ const { verifyHash, generateRefreshToken } = require('../utils/auth.js');
 
 const getRefreshToken = async (userID) => {
     if (!userID) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = 'SELECT refresh_token FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
         const rows = result[0];
@@ -26,8 +27,9 @@ const getRefreshToken = async (userID) => {
 
 const getSecret = async (userID) => {
     if (!userID) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = 'SELECT secret FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
     
@@ -115,8 +117,9 @@ const updateUser = async (userID, key, value) => {
 
 const getUserID = async (username) => {
     if (!username) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const query = 'SELECT userID FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
@@ -137,8 +140,9 @@ const getUserID = async (username) => {
 
 const createUser = async (username, hash) => {
     if (!username || !hash) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         // Check if username exists in table
         const query = 'SELECT username FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
@@ -175,8 +179,9 @@ const createUser = async (username, hash) => {
 
 const authenticate = async (username, password) => {
     if (!username || ! password) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         // Check if username exists in table
         const query = 'SELECT username, hash_password FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
@@ -200,8 +205,9 @@ const authenticate = async (username, password) => {
 
 const updateLastLogin = async (userID) => {
     if (!userID) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where userID = ?'; 
         const result = await connection.query(insert, [userID]);
         return {success: true}
@@ -216,8 +222,9 @@ const updateLastLogin = async (userID) => {
 
 const deleteUser = async (username, password) => {
     if (!username || !password) return {success: false, error: 'missing required field'};
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
         const isAuthorized = await authenticate(username, password);
         if (!isAuthorized.success) return {...isAuthorized, success: false};
         const id = await getUserID(username);

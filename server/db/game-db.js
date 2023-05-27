@@ -18,8 +18,6 @@ const missingRequiredParams = (name, obj) => {
 //     num_mistakes int,
 //     time_stamp datetime,
 
-
-
 const createGameEntry = async game => {
   const {
     userID,
@@ -42,9 +40,9 @@ const createGameEntry = async game => {
     typeof accuracy == "number" &&
     typeof num_mistakes == "number"
     )) return missingRequiredParams("game", game);
-
+  let connection;
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
     
     const query = `
       INSERT INTO games ( 
@@ -76,12 +74,12 @@ const createGameEntry = async game => {
 }
 
 const getGameEntries = async userID => {
-
+  let connection;
   try {
     if (!userID || isNaN(userID)) 
       return {success: false, error: 'invalid userID'}
     
-    const connection = await pool.getConnection()
+    connection = await pool.getConnection()
     const query = `
       SELECT * FROM games WHERE userID=?;
     `
@@ -97,8 +95,9 @@ const getGameEntries = async userID => {
 }
 
 const clearGameEntries = async userID => {
+  let connection;
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection();
     const query = `
       DELETE FROM games as g WHERE g.userID=?;
     `
