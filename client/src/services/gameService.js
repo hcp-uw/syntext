@@ -27,6 +27,7 @@ const createGame = async game => {
     console.error(error);
   }
 };
+
 const getAllGames = async userID => {
   if (!userID) return {
     success: false,
@@ -50,6 +51,7 @@ const getAllGames = async userID => {
     };
   }
 };
+
 const deleteAllGames = async userID => {
   if (!userID) return {
     success: false,
@@ -78,6 +80,7 @@ const deleteAllGames = async userID => {
     };
   }
 };
+
 const verifyGameData = game => {
   const {
     userID,
