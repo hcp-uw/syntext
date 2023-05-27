@@ -43,7 +43,7 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     const hash = await generateHash(password)
     const result = await createUser(username, hash)
     const userID = await getUserID(username)
-    if (!result.success) return res.status(409).send({ ...result })
+    if (!result.success) return res.status(409).send({ success: false, error: result.error })
     const accessToken = await generateAccessToken(userID)
     const refreshToken = await generateRefreshToken()
     await updateUser(userID, 'secret', accessToken)
