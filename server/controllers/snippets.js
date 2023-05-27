@@ -21,7 +21,7 @@ const internalServerError = { success: false, message: 'Internal Server Error' }
 snippetRouter.post('/create', jsonParser, async (req, res) => {
   const { id, type, length, data } = req.body
 
-  if (!id || !type || !length || !data) {
+  if (!id || !type || !length || !data || typeof data != typeof [] ) {
     return res.status(400).send(missingParamsError)
   }
 
