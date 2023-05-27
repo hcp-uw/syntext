@@ -79,14 +79,14 @@ const getUser = async userID => {
     const rows = result[0]
 
     if (rows.length > 0) {
-      return rows[0]
+      return { success: true, user: rows[0] }
     } else {
       return { success: false, error: `User ${userID} not found` }
     }
   } catch (error) {
     console.error(error)
 
-    return error
+    return { success: false, error: error }
   } finally {
     await connection.release()
   }

@@ -133,13 +133,13 @@ userRouter.get('/account', handleAuth, async (req, res) => {
   const { userID } = req.query
   try {
     const result = await getUser(userID)
-    Number(result.userID) === Number(req.decodedUserID)
-      ? res.status(200).send({ ...result, success: true })
+    return Number(result.user.userID) === Number(req.decodedUserID)
+      ? res.status(200).send({ ...result.user, success: true })
       : res
           .status(401)
           .send({
             success: false,
-            error: `userID ${result.userID} !== ${req.decodedUserID}`
+            error: 'invalid userID or token'
           })
   } catch (error) {
     console.error(error)

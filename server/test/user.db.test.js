@@ -124,15 +124,15 @@ test('getUser, updateLastLogin works as intended', async () => {
   const userID = await getUserID(testUser.user)
 
   const resGetUser = await getUser(userID)
-  expect(resGetUser.username).toBe(testUser.user)
-  expect(resGetUser.last_login === null).toBe(true)
+  expect(resGetUser.user.username).toBe(testUser.user)
+  expect(resGetUser.user.last_login === null).toBe(true)
 
   const resUpdateLastLogin = await updateLastLogin(userID)
   expect(resUpdateLastLogin.success).toBe(true)
 
   const resGetUserAgain = await getUser(userID)
-  expect(resGetUserAgain.username).toBe(testUser.user)
-  expect(resGetUserAgain.last_login === null).toBe(false)
+  expect(resGetUserAgain.user.username).toBe(testUser.user)
+  expect(resGetUserAgain.user.last_login === null).toBe(false)
 
   await deleteUser(testUser.user, testUser.pw)
 })

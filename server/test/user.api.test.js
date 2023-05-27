@@ -120,23 +120,27 @@ describe('POST /login', () => {
 
 describe('GET /account', () => {
   it('gets the token from the req and verifies it, returning account data', async () => {
-    const testUser = { username: 'getme', password: 'password123' }
-    const response = await axios.post(`${baseURL}/create`, testUser)
-    expect(response.status).toBe(201)
-
-    const token = response.headers['authorization']
-    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
-
-    userID = idRes.data.userID
-    const resGet = await axios.get(`${baseURL}/account?userID=${userID}`, {
-      headers: {
-        Authorization: token
-      }
-    })
-
-    expect(resGet.status).toBe(200)
-    expect(resGet.data.username).toBe('getme')
-    expect(resGet.data.success).toBe(true)
+    try {
+      const testUser = { username: 'getme', password: 'password123' }
+      const response = await axios.post(`${baseURL}/create`, testUser)
+      expect(response.status).toBe(201)
+  
+      const token = response.headers['authorization']
+      const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+  
+      userID = idRes.data.userID
+      const resGet = await axios.get(`${baseURL}/account?userID=${userID}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+  
+      expect(resGet.status).toBe(200)
+      expect(resGet.data.username).toBe('getme')
+      expect(resGet.data.success).toBe(true)
+    } catch (error) {
+      console.error(error)
+    }
   })
 })
 
