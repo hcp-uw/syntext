@@ -8,9 +8,7 @@ const pool = mysql.createPool({
     database: config.MYSQL_DATABASE
 }).promise()
 
-const getPool = () => pool;
-
 
 const closePool = async () => { pool.end(); }
 
-module.exports = { pool, closePool, getPool };
+module.exports = { pool, closePool };

@@ -7,8 +7,6 @@ const {
     createSnippet,
     deleteSnippetByID,
     getSnippetByLengthAndType,
-    closePool,
-    getPool
   } = require('../db/snippet-db')
 
 const bodyParser = require('body-parser');

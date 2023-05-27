@@ -1,7 +1,7 @@
 const mysql = require('mysql2')
 const config = require('../utils/config.js')
 const bcrypt = require('bcrypt')
-const { pool, closePool, getPool } = require('./pool.js')
+const { pool } = require('./pool.js')
 
 const missingRequiredParams = (name, obj) => {
   return {success: false, error: `missing required params in ${name}: ${obj}`};
@@ -17,6 +17,7 @@ const missingRequiredParams = (name, obj) => {
 //     accuracy float,
 //     num_mistakes int,
 //     time_stamp datetime,
+
 
 
 const createGameEntry = async game => {
@@ -65,11 +66,12 @@ const createGameEntry = async game => {
       num_mistakes
     ])
     
-    await connection.release();
     return { success: true };
   } catch (error) {
     console.error(error)
     return { success: false, error: error };
+  } finally {
+    await connection.release();
   }
 }
 
@@ -89,6 +91,8 @@ const getGameEntries = async userID => {
   } catch (error) {
     console.error(error)
     return { error: error }
+  } finally {
+    await connection.release();
   }
 }
 
@@ -99,11 +103,12 @@ const clearGameEntries = async userID => {
       DELETE FROM games as g WHERE g.userID=?;
     `
     const result = await connection.query(query, [userID]);
-    await connection.release();
     return { success: true, result: result }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
+  } finally {
+    await connection.release();
   }
 }
 //Add in function that returns aggergate stats for leaderboard (JOINT for users.id & games.userID)\

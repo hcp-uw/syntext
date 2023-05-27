@@ -55,6 +55,8 @@ const getSnippetByType = async (type) => {
         return processedResult
     } catch (error) {
         console.error(error);
+    } finally {
+        await connection.release();
     } 
 };
 
@@ -78,20 +80,13 @@ const createSnippet = async (snippet) => {
             index++;
         }  
 
-        // const dataQueries = await data.map((array, arrayIndex) => {
-        //     preparedValues[arrayIndex] = ({id:id, i:arrayIndex, d: toAscii(array)})
-        //     return "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');";
-        // });
-
         index = 0;
         let values;
         for (const values of preparedValues) { 
-            //values = preparedValues[index]
             await connection.query(insertQuery, [values.id, values.i, values.d]);
             index++;
         }
 
-        await connection.release()
         return {
             success: true,
             created: {id, type, length}
@@ -99,6 +94,8 @@ const createSnippet = async (snippet) => {
     } catch (error) {
         console.error(error);
         return { ...error, success: false };
+    } finally {
+        await connection.release();
     } 
 };
 
@@ -112,14 +109,14 @@ const deleteSnippetByID = async (id) => {
         await connection.query(query1, [id]);
         await connection.query(query2, [id]);
         await connection.commit();
-        await connection.release();
         return { success: true }
     } catch (error) {
         console.error(error);
         await connection.rollback();
-        await connection.release()
         return {...error, success: false};
-    } 
+    }  finally {
+        await connection.release();
+    }
 };
 
 const getSnippetByLength = async (length) => {
@@ -134,7 +131,6 @@ const getSnippetByLength = async (length) => {
             ORDER BY data.line_index ASC;
         `;
         const result = await connection.query(query, [length]);
-        await connection.release();
         const characterConvertedData = result[0].map(line_data => {
             return {...line_data, line_text: toChar(JSON.parse(line_data.line_text)).join('')}
         });
@@ -165,7 +161,9 @@ const getSnippetByLength = async (length) => {
     } catch (error) {
         connection.release()
         console.error(error);
-    } 
+    } finally {
+        await connection.release();
+    }
 };
 
 
@@ -194,12 +192,13 @@ const getSnippetByID = async (id) => {
             length: length,
             data: processedSnippetText
         };
-        await connection.release();
         return processedResult;
     } catch (error) {
         return {};
         console.error(error);
-    } 
+    } finally {
+        await connection.release();
+    }
 };
 
 

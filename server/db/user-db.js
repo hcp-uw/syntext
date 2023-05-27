@@ -10,7 +10,7 @@ const getRefreshToken = async (userID) => {
         const query = 'SELECT refresh_token FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
         const rows = result[0];
-        await connection.release();
+
         if (rows.length > 0) {
             return rows[0].refresh_token;
         } else {
@@ -18,8 +18,9 @@ const getRefreshToken = async (userID) => {
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
         return error;
+    } finally {
+        await connection.release();
     }
 }
 
@@ -31,7 +32,7 @@ const getSecret = async (userID) => {
         const result = await connection.query(query, [userID]);
     
         const rows = result[0];
-        await connection.release();
+
         if (rows.length > 0) {
             return rows[0].secret;
         } else {
@@ -39,8 +40,10 @@ const getSecret = async (userID) => {
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
+
         return error;
+    } finally {
+        await connection.release();
     }
 }
 
@@ -54,12 +57,14 @@ const isUser = async userID => {
         const query = 'SELECT username FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
         const rows = result[0];
-        await connection.release();
+
         return rows.length > 0 
     } catch (error) {
         console.error(error);
-        await connection.release();
+
         return error;
+    } finally {
+        await connection.release();
     }
 }
 
@@ -71,7 +76,7 @@ const getUser = async (userID) => {
         const query = 'SELECT username, userID, last_login FROM users WHERE userID = ?';
         const result = await connection.query(query, [userID]);
         const rows = result[0];
-        await connection.release();
+
         if (rows.length > 0) {
             return rows[0];
         } else {
@@ -79,8 +84,10 @@ const getUser = async (userID) => {
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
+
         return error;
+    } finally {
+        await connection.release();
     }
 }
 
@@ -101,6 +108,8 @@ const updateUser = async (userID, key, value) => {
     } catch (error) {
         console.error(error);
         return ({success: false, ...error})
+    } finally {
+        await connection.release();
     }
 }
 
@@ -111,7 +120,6 @@ const getUserID = async (username) => {
         const query = 'SELECT userID FROM users WHERE username = ?';
         const result = await connection.query(query, [username]);
         const rows = result[0];
-        await connection.release();
         if (rows.length > 0) {
             return rows[0].userID;
         } else {
@@ -119,8 +127,9 @@ const getUserID = async (username) => {
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
         return error;
+    } finally {
+        await connection.release();
     }
 }
 
@@ -150,7 +159,6 @@ const createUser = async (username, hash) => {
                 ) VALUES (NULL, ?, ?, CURRENT_DATE, NULL, NULL, NULL);
             `
             const result = await pool.query(insert, [username, hash]);
-            await connection.release();
             return {
                 success: true,
                 created: username
@@ -158,8 +166,9 @@ const createUser = async (username, hash) => {
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
         return {...error, success: false};
+    } finally {
+        await connection.release();
     }
 }
 
@@ -174,20 +183,19 @@ const authenticate = async (username, password) => {
         
         //checks if any rows were returned
         if (result[0].length === 0) {
-            await connection.release();
             return {success: false, error: `User ${username} doesn't exist`}; 
         } else  {
             const user = result[0][0];
             const savedHash = user.hash_password;
-            await connection.release();
             const authResult = await verifyHash(password, savedHash);
             return { success: authResult }
         }
     } catch (error) {
         console.error(error);
-        await connection.release();
         return error;
-    } 
+    } finally {
+        await connection.release();
+    }
 }
 
 const updateLastLogin = async (userID) => {
@@ -196,20 +204,20 @@ const updateLastLogin = async (userID) => {
         const connection = await pool.getConnection();
         const insert = 'UPDATE users SET last_login= NOW() where userID = ?'; 
         const result = await connection.query(insert, [userID]);
-        await connection.release();
         return {success: true}
     } catch (error) {
         console.error(error);
-        await connection.release();
         return {...error, success: false};
-    }        
+    } finally {
+        await connection.release();
+    }
 }
 
 
 const deleteUser = async (username, password) => {
     if (!username || !password) return {success: false, error: 'missing required field'};
-    const connection = await pool.getConnection();
     try {
+        const connection = await pool.getConnection();
         const isAuthorized = await authenticate(username, password);
         if (!isAuthorized.success) return {...isAuthorized, success: false};
         const id = await getUserID(username);
@@ -222,27 +230,22 @@ const deleteUser = async (username, password) => {
         await connection.query(q[1], id);
         await connection.query(q[2], id);
         await connection.commit();
-        await connection.release();
         return {success: true, deleted: username};
     } catch (error) {
         console.error(error);
         connection.rollback();
-        await connection.release();
         return {...error, success: false};
+    } finally {
+        await connection.release();
     }
 } 
 
-const getPool = () => pool;
-
-const closePool = () => { pool.end(); }
 
 module.exports = {
     createUser,
     deleteUser,
     getUserID,
     authenticate,
-    getPool,
-    closePool,
     updateLastLogin,
     getUser,
     isUser,

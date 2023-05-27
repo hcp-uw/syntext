@@ -9,7 +9,6 @@ const {
 } = require('../db/game-db')
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db')
 
-const { pool } = require('../db/pool')
 
 const user = { username: 'test', password: 'password' }
 const snippet = {

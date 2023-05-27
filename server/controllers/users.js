@@ -99,7 +99,7 @@ userRouter.post('/refresh', jsonParser, async (req, res) => {
   const { userID } = req.query;
   const oldAccessToken = extractToken(req);
   const secret = await getSecret(userID);
-  console.log("secret: ", secret)
+  console.log("secret: ", secret, '\n')
   console.log("oldAccessToken: ", oldAccessToken)
   if (oldAccessToken !== "Bearer " + secret) 
     return res.status(401).send({success: false, error: "invalid access token"})
@@ -126,9 +126,10 @@ userRouter.get('/account', handleAuth, async (req, res) => {
   const { userID } = req.query
   try {
     const result = await getUser(userID)
-    result.userID === req.decodedUserID
+    console.log("getCurrentUser result: ", result)
+    Number(result.userID) === Number(req.decodedUserID)
       ? res.status(200).send({ ...result, success: true })
-      : res.status(401).send({ success: false })
+      : res.status(401).send({ success: false, error: `userID ${result.userID} !== ${req.decodedUserID}` })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })

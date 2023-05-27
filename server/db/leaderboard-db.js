@@ -1,4 +1,4 @@
-const { pool, closePool, getPool } = require('./pool.js')
+const { pool } = require('./pool.js')
 
 const getLeaderboardData = async sortParam => {
   let s;
@@ -37,10 +37,11 @@ const getLeaderboardData = async sortParam => {
             ORDER BY ? DESC;
         `
     const res = await connection.query(query, [s]);
-    await connection.release();
     return res[0];
   } catch (error) {
     console.error(error)
+  } finally {
+    await connection.release();
   }
 }
 

@@ -23,7 +23,6 @@ const generateRefreshToken = async () => {
 }
 
 const verifyRefreshToken = async (userSecret, token) => {
-  console.log("input: ", userSecret, token)
   try {
     const res = await jwt.verify(token.split(' ')[1], JWT_SECRET);
     return {...res, success: true}  
@@ -87,14 +86,14 @@ const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req);
   const token = extractToken(req);
   //============================================================================================================================================================
-  // console.log('in handleAuth', req)
+  console.log('in handleAuth', userID, token)
   //============================================================================================================================================================
   if (userID === undefined) return res.status(401).send({ success: false, error: 'missing userID'});
   try {
     if (!token) {
       return res.status(401).send({ success: false, error: 'missing token' });
     }
-    //console.log("hi from auth", token)
+    // console.log("hi from auth", token)
     const decoded = await verifyAccessToken(token, userID);
 
     if (!decoded || Number(decoded.userID) !== Number(userID)) {
@@ -102,6 +101,7 @@ const handleAuth = async (req, res, next) => {
     }
 
     req.decodedUserID = decoded.userID; // store  decoded userID in req 
+    console.log("auth passed")
     next(); 
   } catch (error) {
     console.error(error);
