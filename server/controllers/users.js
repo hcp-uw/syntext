@@ -45,9 +45,9 @@ userRouter.post('/create', jsonParser, async (req, res) => {
     const userID = await getUserID(username)
     if (!result.success) return res.status(409).send({ ...result })
     const accessToken = await generateAccessToken(userID)
-    const refreshToken = await generateRefreshToken();
-    await updateUser(userID, "secret", accessToken);
-    await updateUser(userID, "refresh_token", refreshToken);
+    const refreshToken = await generateRefreshToken()
+    await updateUser(userID, 'secret', accessToken)
+    await updateUser(userID, 'refresh_token', refreshToken)
     return res
       .set('Authorization', `Bearer ${accessToken}`)
       .status(201)
@@ -74,7 +74,6 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
   try {
     const authorized = await authenticate(username, password)
-    console.log(authorized)
     if (!authorized.success) {
       res
         .status(401)
@@ -82,7 +81,7 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     } else {
       const userID = await getUserID(username)
       const token = await generateAccessToken(userID)
-      await updateUser(userID, "secret", token);
+      await updateUser(userID, 'secret', token)
       await updateLastLogin(userID)
       return res
         .set('Authorization', `Bearer ${token}`)
@@ -96,24 +95,32 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 })
 
 userRouter.post('/refresh', jsonParser, async (req, res) => {
-  const { userID } = req.query;
-  const oldAccessToken = extractToken(req);
-  const secret = await getSecret(userID);
-  console.log("secret: ", secret, '\n')
-  console.log("oldAccessToken: ", oldAccessToken)
-  if (oldAccessToken !== "Bearer " + secret) 
-    return res.status(401).send({success: false, error: "invalid access token"})
-  
-  const refreshToken = await getRefreshToken(userID);
-  const refreshValidity = await verifyRefreshToken(userID, "Bearer " + refreshToken);
-  console.log(refreshValidity)
-  if (!refreshValidity) return {success: false}
-  if (!refreshValidity.success && refreshValidity.error.name === 'TokenExpiredError') 
-    return res.status(401).send({success: false, error: "session expired"})
-  
-  const newAccessToken = await generateAccessToken(userID);
-  await updateUser(userID, "secret", newAccessToken);
-  return res.status(200).set('Authorization', `Bearer ${newAccessToken}`).send({success: true})
+  const { userID } = req.query
+  const oldAccessToken = extractToken(req)
+  const secret = await getSecret(userID)
+  if (oldAccessToken !== 'Bearer ' + secret)
+    return res
+      .status(401)
+      .send({ success: false, error: 'invalid access token' })
+
+  const refreshToken = await getRefreshToken(userID)
+  const refreshValidity = await verifyRefreshToken(
+    userID,
+    'Bearer ' + refreshToken
+  )
+  if (!refreshValidity) return { success: false }
+  if (
+    !refreshValidity.success &&
+    refreshValidity.error.name === 'TokenExpiredError'
+  )
+    return res.status(401).send({ success: false, error: 'session expired' })
+
+  const newAccessToken = await generateAccessToken(userID)
+  await updateUser(userID, 'secret', newAccessToken)
+  return res
+    .status(200)
+    .set('Authorization', `Bearer ${newAccessToken}`)
+    .send({ success: true })
 })
 
 /*
@@ -126,10 +133,14 @@ userRouter.get('/account', handleAuth, async (req, res) => {
   const { userID } = req.query
   try {
     const result = await getUser(userID)
-    console.log("getCurrentUser result: ", result)
     Number(result.userID) === Number(req.decodedUserID)
       ? res.status(200).send({ ...result, success: true })
-      : res.status(401).send({ success: false, error: `userID ${result.userID} !== ${req.decodedUserID}` })
+      : res
+          .status(401)
+          .send({
+            success: false,
+            error: `userID ${result.userID} !== ${req.decodedUserID}`
+          })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
@@ -186,10 +197,8 @@ userRouter.delete('/account', [jsonParser, handleAuth], async (req, res) => {
 
 userRouter.get('/id', jsonParser, async (req, res) => {
   const { username } = req.query
-  console.log('username: ', username)
   try {
     const id = await getUserID(username)
-    console.log('id: ', id);
     if (id.error) return res.status(400).send({ success: false })
     else return res.status(200).send({ success: true, userID: id })
   } catch (error) {

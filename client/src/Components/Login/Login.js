@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -21,13 +21,12 @@ const Login = () => {
     event.preventDefault()
     const loginResult = await authenticate(username, password)
     if (loginResult.success) {
-      console.log('result: ', loginResult)
       setErrorMessage(null)
-      window.localStorage.setItem('authToken', loginResult.token);
-      window.localStorage.setItem('userID', loginResult.userID);
+      window.localStorage.setItem('authToken', loginResult.token)
+      window.localStorage.setItem('userID', loginResult.userID)
       dispatch(setUserID(loginResult.userID))
-      dispatch(setLoggedIn(true));
-      navigate('/');
+      dispatch(setLoggedIn(true))
+      navigate('/')
     } else {
       setErrorMessage('invalid username or password')
     }
@@ -66,12 +65,12 @@ const Login = () => {
           </button>
         </div>
         <div>
-        <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'center' }}>
-              - OR -
+          <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'center' }}>
+            - OR -
           </p>
         </div>
-        <div style={{width: "100%", textAlign: 'center'}}>
-          <Link className='create-account-button' type='submit' to={"/join"}>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <Link className='create-account-button' type='submit' to={'/join'}>
             don't have an account? sign up!
           </Link>
         </div>

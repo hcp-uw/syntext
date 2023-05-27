@@ -23,15 +23,15 @@ describe('POST /create', () => {
     expect(response.data.success).toBe(true)
     expect(response.headers['authorization']).toBeDefined()
     const token = response.headers['authorization']
-    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
-    const resTokenVerify = await verifyAccessToken(token, idRes.data.userID);
-    
-    expect(resTokenVerify.userID).toBe(idRes.data.userID);
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+    const resTokenVerify = await verifyAccessToken(token, idRes.data.userID)
 
-    expect(typeof resTokenVerify.userID).toBe("number")
+    expect(resTokenVerify.userID).toBe(idRes.data.userID)
+
+    expect(typeof resTokenVerify.userID).toBe('number')
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
-        Authorization: token 
+        Authorization: token
       },
       data: {
         username: testUser.username,
@@ -46,14 +46,16 @@ describe('POST /create', () => {
 describe('POST /login', () => {
   const validUser = { username: 'testuser', password: 'password123' }
   const invalidUser = { username: 'testuser', password: 'wrongpassword' }
-  let authToken;
-  let userID;
+  let authToken
+  let userID
 
   beforeAll(async () => {
     // Create a test user
     const response = await axios.post(`${baseURL}/create`, validUser)
 
-    const idRes = await axios.get(`${baseURL}/id?username=${validUser.username}`);
+    const idRes = await axios.get(
+      `${baseURL}/id?username=${validUser.username}`
+    )
     userID = idRes.data.userID
     // Get the auth token for the test user
     authToken = response.headers['authorization']
@@ -106,17 +108,15 @@ describe('POST /login', () => {
 
   it('updates the last login time for the user', async () => {
     // Get the current last login time for the user
-    const user = await getUser(validUser.username);
-    const previousLastLogin = user.last_login;
+    const user = await getUser(validUser.username)
+    const previousLastLogin = user.last_login
 
     // Login as the user
-    const response = await axios.post(`${baseURL}/login`, validUser);
+    const response = await axios.post(`${baseURL}/login`, validUser)
 
     // Check that the response includes the user's data
-
-  });
+  })
 })
-
 
 describe('GET /account', () => {
   it('gets the token from the req and verifies it, returning account data', async () => {
@@ -124,9 +124,8 @@ describe('GET /account', () => {
     const response = await axios.post(`${baseURL}/create`, testUser)
     expect(response.status).toBe(201)
 
-   
     const token = response.headers['authorization']
-    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
 
     userID = idRes.data.userID
     const resGet = await axios.get(`${baseURL}/account?userID=${userID}`, {
@@ -135,28 +134,26 @@ describe('GET /account', () => {
       }
     })
 
-    expect(resGet.status).toBe(200);
-    expect(resGet.data.username).toBe('getme');
-    expect(resGet.data.success).toBe(true);
+    expect(resGet.status).toBe(200)
+    expect(resGet.data.username).toBe('getme')
+    expect(resGet.data.success).toBe(true)
   })
 })
 
-
 describe('DELETE /account', () => {
   it('gets the token from the req and verifies it, deleting account', async () => {
-    console.log("point 2")
-    expect(2).toBe(2);
-    
+    console.log('point 2')
+    expect(2).toBe(2)
+
     const testUser = { username: 'rip', password: 'password123' }
     const response = await axios.post(`${baseURL}/create`, testUser)
     expect(response.status).toBe(201)
-   
+
     const token = response.headers['authorization']
-    console.log(`${baseURL}/id?username=${testUser.username}`)
-    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`);
-    
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+
     userID = idRes.data.userID
-    
+
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
         Authorization: token
@@ -168,10 +165,9 @@ describe('DELETE /account', () => {
       }
     })
 
-    
-    expect(resDelete.status).toBe(200);
+    expect(resDelete.status).toBe(200)
 
-    const nonexistantUserID = await getUserID(testUser.username);
-    expect(nonexistantUserID.success).toBe(false);
+    const nonexistantUserID = await getUserID(testUser.username)
+    expect(nonexistantUserID.success).toBe(false)
   })
 })

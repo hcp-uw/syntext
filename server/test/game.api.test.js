@@ -43,12 +43,12 @@ beforeAll(async () => {
     const response = await axios.post(`${baseURL}/user/create`, user)
     expect(response.status).toBe(201)
     token = response.headers['authorization']
-  
+
     userID = await getUserID(user.username)
-  
+
     game1.userID = userID
     game2.userID = userID
-  
+
     const createSnippetRes = await createSnippet(snippet)
     expect(createSnippetRes.success).toBe(true)
   } catch (error) {
@@ -62,14 +62,14 @@ afterAll(async () => {
       headers: {
         Authorization: token
       },
-      data: { ...user, userID } 
+      data: { ...user, userID }
     })
     expect(deleteUserRes.status).toBe(200)
-  
+
     const deleteSnippetRes = await deleteSnippetByID(snippet.id)
     expect(deleteSnippetRes.success).toBe(true)
   } catch (error) {
-    console.error('afterAll: ', error);
+    console.error('afterAll: ', error)
   }
   closePool()
 })
@@ -98,30 +98,31 @@ describe('POST /create', () => {
         },
         ...game1
       })
-  
+
       expect(res.data.success).toBe(true)
-  
+
       const res2 = await axios.post(`${baseURL}/game/create`, {
         headers: {
           Authorization: token
         },
         ...game2
       })
-  
+
       expect(res2.data.success).toBe(true)
-  
+
       const resDelete = await axios.delete(`${baseURL}/game/games`, {
         headers: {
           Authorization: token
         },
         data: {
-          ...user, userID 
+          ...user,
+          userID
         }
       })
-  
+
       expect(resDelete.status).toBe(200)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   })
 })
@@ -150,7 +151,7 @@ describe('GET, DELETE /games', () => {
         },
         ...game1
       })
-  
+
       expect(res.data.success).toBe(true)
     } catch (error) {
       console.error(error)
@@ -163,21 +164,21 @@ describe('GET, DELETE /games', () => {
         },
         ...game2
       })
-  
+
       expect(res2.data.success).toBe(true)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
 
-   try {
-     const resGet = await axios.get(`${baseURL}/game/games?userID=${userID}`)
- 
-     expect(resGet.data.length).toBe(2)
-     expect(resGet.data[0].snippet_id).toBe(snippet.id)
-     expect(resGet.data[1].userID).toBe(resGet.data[0].userID)
-   } catch (error) {
-    console.log(error);
-   }
+    try {
+      const resGet = await axios.get(`${baseURL}/game/games?userID=${userID}`)
+
+      expect(resGet.data.length).toBe(2)
+      expect(resGet.data[0].snippet_id).toBe(snippet.id)
+      expect(resGet.data[1].userID).toBe(resGet.data[0].userID)
+    } catch (error) {
+      console.error(error)
+    }
 
     try {
       const resDelete = await axios.delete(`${baseURL}/game/games`, {
@@ -188,10 +189,10 @@ describe('GET, DELETE /games', () => {
           userID: userID
         }
       })
-  
+
       expect(resDelete.status).toBe(200)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   })
 
@@ -203,26 +204,26 @@ describe('GET, DELETE /games', () => {
         },
         ...game1
       })
-  
+
       expect(res.data.success).toBe(true)
-  
+
       const res2 = await axios.post(`${baseURL}/game/create`, {
         headers: {
           Authorization: token
         },
         ...game2
       })
-  
+
       expect(res2.data.success).toBe(true)
-  
+
       const resGet = await axios.get(
         `${baseURL}/game/games?username=${user.username}`
       )
-  
+
       expect(resGet.data.length).toBe(2)
       expect(resGet.data[0].snippet_id).toBe(snippet.id)
       expect(resGet.data[1].userID).toBe(resGet.data[0].userID)
-  
+
       const resDelete = await axios.delete(`${baseURL}/game/games`, {
         headers: {
           Authorization: token
@@ -231,10 +232,10 @@ describe('GET, DELETE /games', () => {
           userID: userID
         }
       })
-  
+
       expect(resDelete.status).toBe(200)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   })
 
@@ -248,21 +249,20 @@ describe('GET, DELETE /games', () => {
       const resGet = await axios.get(
         `${baseURL}/game/games?username=${emptyUser.username}`
       )
-  
+
       expect(resGet.status).toBe(200)
       expect(resGet.data.length).toBe(0)
-  
+
       const deleteUser = await axios.delete(`${baseURL}/user/account`, {
         headers: {
           Authorization: emptyToken
         },
-        data: { ...emptyUser, userID: emptyUserID } 
+        data: { ...emptyUser, userID: emptyUserID }
       })
-  
+
       expect(deleteUser.status).toBe(200)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   })
 })
-

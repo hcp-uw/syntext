@@ -1,4 +1,4 @@
-const { verifyAccessToken, extractToken, handleAuth } = require('../utils/auth');
+const { verifyAccessToken, extractToken, handleAuth } = require('../utils/auth')
 const { getUserID } = require('../db/user-db')
 const {
   getGameEntries,
@@ -12,11 +12,9 @@ const jsonParser = bodyParser.json()
 const jwt = require('jsonwebtoken')
 const gameRouter = require('express').Router()
 
-
 // need to make sure userID is sent in req.body or req.query for handleAuth
 gameRouter.post('/create', [jsonParser, handleAuth], async (req, res) => {
   const gameObject = extractGame(req)
-  console.log(gameObject)
   if (gameObject.error) return res.status(400).send({ success: false })
 
   try {
@@ -54,7 +52,8 @@ gameRouter.get('/games', jsonParser, async (req, res) => {
 gameRouter.delete('/games', [jsonParser, handleAuth], async (req, res) => {
   let { userID, username } = req.body
 
-  if (!userID && !username) // only need ONE of them
+  if (!userID && !username)
+    // only need ONE of them
     return res
       .status(400)
       .send({ error: 'Bad Request: Missing data in request body' })
@@ -71,9 +70,8 @@ gameRouter.delete('/games', [jsonParser, handleAuth], async (req, res) => {
 })
 
 const extractGame = req => {
-  console.log(req)
   if (!req.body) return { error: true }
-  
+
   const {
     userID,
     snippet_id,
@@ -110,8 +108,6 @@ const extractGame = req => {
     num_mistakes: num_mistakes
   }
 }
-
-
 
 //Add in more about what frontend needs
 
