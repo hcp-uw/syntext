@@ -30,8 +30,10 @@ const CreateAccount = () => {
 
     if (createResult.success) {
       alert('Created user ' + username)
+      console.log(createResult)
       setErrorMessage(null)
-      window.localStorage.setItem('authToken', createResult.token)
+      window.localStorage.setItem('authToken', createResult.token);
+      window.localStorage.setItem('userID', createResult.userID);
       dispatch(setLoggedIn(true))
       navigate('/')
     } else {
