@@ -24,18 +24,31 @@ const snippet = {
 
 
 beforeAll(async () => {
- for (let user of users) {
-    const response = await axios.post(`${baseURL}/user/create`, user)
-    expect(response.status).toBe(201)
-    token = response.headers['authorization']
-  
-    user.userID = await getUserID(user.username)
-  
- }
+  try {
+    for (let user of users) {
+      const response = await axios.post(`${baseURL}/user/create`, user)
+      expect(response.status).toBe(201)
+      token = response.headers['authorization']
+    
+      user.userID = await getUserID(user.username)
+    
+    }
+    
+    let i = 0;
+    for (let game of games) {
+        game.userID = users[i++%3].userID;
+        let res = await axios.post(`${baseURL}/game/create`, {
+          headers: {
+            Authorization: token
+          },
+          data: game1
+        })
+    }
 
- game1.userID = user.userID
- game2.userID = user.userID
-
+  } catch (error) {
+    console.error(error.response);    
+  }
+  
   const createSnippetRes = await createSnippet(snippet)
   expect(createSnippetRes.success).toBe(true)
 })
@@ -55,7 +68,9 @@ for (let user of users) {
   closePool()
 })
 
-describe ('GET, /topPlayers', () => {
-
+describe ('GET, /topPlayers', async () => {
+    const res = await axios.get (`${baseURL}/leaderboard/topplayers`);
+    
+    
 
 })
