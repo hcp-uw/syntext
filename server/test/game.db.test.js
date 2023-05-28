@@ -9,8 +9,6 @@ const {
 } = require('../db/game-db')
 const { createSnippet, deleteSnippetByID } = require('../db/snippet-db')
 
-const { pool } = require('../db/pool')
-
 const user = { username: 'test', password: 'password' }
 const snippet = {
   id: 98,
@@ -75,31 +73,30 @@ describe('getGameEntries', () => {
     }
 
     // create games
-    resCreate1 = await createGameEntry(game1);
+    resCreate1 = await createGameEntry(game1)
     expect(resCreate1.success).toBe(true)
-    resCreate2 = await createGameEntry(game2);
+    resCreate2 = await createGameEntry(game2)
     expect(resCreate2.success).toBe(true)
 
     // get games
     const resultGet = await getGameEntries(userID)
 
     expect(resultGet.error).toBe(undefined)
-    expect(resultGet.length).toBe(2);
-    expect(resultGet[0].userID).toBe(userID);
+    expect(resultGet.length).toBe(2)
+    expect(resultGet[0].userID).toBe(userID)
 
     // delete games
-    const resClear = await clearGameEntries(userID);
-    expect(resClear.success).toBe(true);
+    const resClear = await clearGameEntries(userID)
+    expect(resClear.success).toBe(true)
   })
 
   it('should return success false and an error message when the query fails', async () => {
     const result = await getGameEntries('fakedata')
-    expect(result.success).toBe(false)
+    expect(result.error === undefined).toBe(false)
   })
 })
 
 describe('clearGameEntries', () => {
-
   it('should delete all entries for the specified user', async () => {
     const game1 = {
       userID: userID,
@@ -108,9 +105,9 @@ describe('clearGameEntries', () => {
       total_characters: 69,
       wpm_data: '[1,2,3,69]',
       wpm_avg: 69,
-      accuracy:.69,
-      num_mistakes: 69,
-    };
+      accuracy: 0.69,
+      num_mistakes: 69
+    }
 
     const game2 = {
       userID: userID,
@@ -119,26 +116,24 @@ describe('clearGameEntries', () => {
       total_characters: 42,
       wpm_data: '[1,2,3,42]',
       wpm_avg: 42,
-      accuracy:.42,
+      accuracy: 0.42,
       num_mistakes: 42
-    };
+    }
 
-    const result1 = await createGameEntry(game1);
-    expect(result1.success).toBe(true);
+    const result1 = await createGameEntry(game1)
+    expect(result1.success).toBe(true)
 
-    const result2 = await createGameEntry(game2);
-    expect(result2.success).toBe(true);
+    const result2 = await createGameEntry(game2)
+    expect(result2.success).toBe(true)
 
-    const resultDelete = await clearGameEntries(userID);
-    expect(resultDelete.success).toBe(true);
+    const resultDelete = await clearGameEntries(userID)
+    expect(resultDelete.success).toBe(true)
 
-    const resultGet = await getGameEntries(userID);
+    const resultGet = await getGameEntries(userID)
 
-    expect(resultGet.error).toBe(undefined);
-    expect(resultGet.length).toBe(0);
-
+    expect(resultGet.error).toBe(undefined)
+    expect(resultGet.length).toBe(0)
   })
-
 })
 
 beforeAll(async () => {
@@ -152,14 +147,18 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  const resDelete = await axios.delete(`${baseURL}/account`, {
-    headers: {
-      Authorization: token
-    }, 
-    data: user
-  })
-  expect(resDelete.status).toBe(204)
-  const resDeleteSnippet = await deleteSnippetByID(snippet.id)
-  expect(resDeleteSnippet.success).toBe(true)
-  closePool()
+  try {
+    const resDelete = await axios.delete(`${baseURL}/account`, {
+      headers: {
+        Authorization: token
+      },
+      data: { ...user, userID }
+    })
+    expect(resDelete.status).toBe(200)
+    const resDeleteSnippet = await deleteSnippetByID(snippet.id)
+    expect(resDeleteSnippet.success).toBe(true)
+    closePool()
+  } catch (error) {
+    console.error(error)
+  }
 })

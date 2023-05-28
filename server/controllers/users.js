@@ -1,6 +1,14 @@
 const userRouter = require('express').Router()
 const bodyParser = require('body-parser')
-const { verifyToken, generateToken, extractToken, generateHash, saltRounds } = require('../utils/auth');
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+  extractToken,
+  generateHash,
+  handleAuth,
+  saltRounds
+} = require('../utils/auth')
 
 const {
   createUser,
@@ -10,11 +18,11 @@ const {
   updateLastLogin,
   getUser,
   getUserID,
-  updateUser
+  updateUser,
+  getRefreshToken,
+  getSecret
 } = require('../db/user-db')
 const jsonParser = bodyParser.json()
-
-
 
 /*
   retrieve username and password from request body.
@@ -32,15 +40,18 @@ userRouter.post('/create', jsonParser, async (req, res) => {
   }
 
   try {
-    const hash = await generateHash(password);
+    const hash = await generateHash(password)
     const result = await createUser(username, hash)
-    const userID = await getUserID(username);
-    if (!result.success) return res.status(409).send({...result}) 
-    const token = await generateToken(userID, username, password)
+    const userID = await getUserID(username)
+    if (!result.success) return res.status(409).send({ success: false, error: result.error })
+    const accessToken = await generateAccessToken(userID)
+    const refreshToken = await generateRefreshToken()
+    await updateUser(userID, 'secret', accessToken)
+    await updateUser(userID, 'refresh_token', refreshToken)
     return res
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .status(201)
-      .send({ success: true })
+      .send({ success: true, userID: userID })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ success: false, ...error })
@@ -63,23 +74,53 @@ userRouter.post('/login', jsonParser, async (req, res) => {
 
   try {
     const authorized = await authenticate(username, password)
-    if (!authorized.success){
+    if (!authorized.success) {
       res
         .status(401)
         .send({ success: false, error: 'Invalid username or password' })
-    }else {
-      const userID = await getUserID(username);
-      const token = await generateToken(userID, username, password)
-      res
+    } else {
+      const userID = await getUserID(username)
+      const token = await generateAccessToken(userID)
+      await updateUser(userID, 'secret', token)
+      await updateLastLogin(userID)
+      return res
         .set('Authorization', `Bearer ${token}`)
         .status(200)
-        .json({ success: true })
-      await updateLastLogin(username)
+        .json({ success: true, userID: userID })
     }
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
   }
+})
+
+userRouter.post('/refresh', jsonParser, async (req, res) => {
+  const { userID } = req.query
+  const oldAccessToken = extractToken(req)
+  const secret = await getSecret(userID)
+  if (oldAccessToken !== 'Bearer ' + secret)
+    return res
+      .status(401)
+      .send({ success: false, error: 'invalid access token' })
+
+  const refreshToken = await getRefreshToken(userID)
+  const refreshValidity = await verifyRefreshToken(
+    userID,
+    'Bearer ' + refreshToken
+  )
+  if (!refreshValidity) return { success: false }
+  if (
+    !refreshValidity.success &&
+    refreshValidity.error.name === 'TokenExpiredError'
+  )
+    return res.status(401).send({ success: false, error: 'session expired' })
+
+  const newAccessToken = await generateAccessToken(userID)
+  await updateUser(userID, 'secret', newAccessToken)
+  return res
+    .status(200)
+    .set('Authorization', `Bearer ${newAccessToken}`)
+    .send({ success: true })
 })
 
 /*
@@ -88,19 +129,18 @@ userRouter.post('/login', jsonParser, async (req, res) => {
     send user data in response if successful,
     or send error message if request fails or token is invalid.
   */
-userRouter.get('/account', async (req, res) => {
-  const token = extractToken(req)
-  
+userRouter.get('/account', handleAuth, async (req, res) => {
+  const { userID } = req.query
   try {
-    if (!token) res.status(500).send({ success: false })
-    else {
-      const decoded = await verifyToken(token);
-      const result = await getUser(decoded.username)
-      if (result.username && decoded.username)
-        res.status(200).send({ ...result, success: true })
-      else res.status(401).send({ success: false })
-      return
-    }
+    const result = await getUser(userID)
+    return Number(result.user.userID) === Number(req.decodedUserID)
+      ? res.status(200).send({ ...result.user, success: true })
+      : res
+          .status(401)
+          .send({
+            success: false,
+            error: 'invalid userID or token'
+          })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
@@ -113,31 +153,23 @@ userRouter.get('/account', async (req, res) => {
     update user data and save to database. send 
     error message if request fails or token is invalid.
   */
-userRouter.put('/account', async (req, res) => {
+userRouter.put('/account', handleAuth, async (req, res) => {
   const { userID, key, value } = req.body
-  const token = extractToken(req)
-  if (!token) return res.status(500).send({ success: false })
   try {
-    const decoded = verifyToken(token)
-    if (!decoded.success) return res.status(401).send({success: false, error: 'unauthorized'})
-    
     switch (key) {
-      case "password":
+      case 'password':
         await handlePasswordChange(userID, value)
-        break;
-      case "username":
+        break
+      case 'username':
         await handleUsernameChange(userID, value)
-        break;
-      case "private":
+        break
+      case 'private':
         await handleAccountPrivateChange(userID, value)
-        break;
-      default: 
-        await handleUnknownUpdate(userID, key, value);
-        break;
+        break
+      default:
+        await handleUnknownUpdate(userID, key, value)
+        break
     }
-    
-
-
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
@@ -151,19 +183,12 @@ userRouter.put('/account', async (req, res) => {
   send success message in response if successful,
   or send error message if request fails or token is invalid.
 */
-userRouter.delete('/account', jsonParser, async (req, res) => {
-  const { username, password } = req.body;
-  const token = extractToken(req)
+userRouter.delete('/account', [jsonParser, handleAuth], async (req, res) => {
+  const { username, password, userID } = req.body // takes userID for handleAuth
   try {
-    if (!token) res.status(401).send({ success: false })
-    else {
-      const decoded = await verifyToken(token)
-      const result = await deleteUser(username, password)
-      if (result.success) 
-        res.status(200).send({ success: true })
-      else 
-        res.status(401).send({ success: false })
-    }
+    const result = await deleteUser(username, password)
+    if (result.success) return res.status(200).send({ success: true })
+    else return res.status(401).send({ success: false })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, error: 'Server error' })
@@ -171,44 +196,55 @@ userRouter.delete('/account', jsonParser, async (req, res) => {
 })
 
 userRouter.get('/id', jsonParser, async (req, res) => {
-  const { username } = req.body;
+  const { username } = req.query
   try {
-    const id = await getUserID(username);
-    if (id.error) return res.status(400).send({success: false})
-    else res.status(200).send({userID: id})
+    const id = await getUserID(username)
+    if (id.error) return res.status(400).send({ success: false })
+    else return res.status(200).send({ success: true, userID: id })
   } catch (error) {
-    console.error(error);
-    res.status(500).send({success: false, error: 'internal server error'})
+    console.error(error)
+    res.status(500).send({ success: false, error: 'internal server error' })
   }
 })
 
-
 const handlePasswordChange = async (userID, newPassword) => {
-  const newHash = await generateHash(value);
-  const result = await updateUser(userID, "hash_password", newHash);
-  if (!result.success) return res.status(400).send({success: false, error: "error while changing password"});
-  if (result.success) return res.status(201).send({success: true});
+  const newHash = await generateHash(value)
+  const result = await updateUser(userID, 'hash_password', newHash)
+  if (!result.success)
+    return res
+      .status(400)
+      .send({ success: false, error: 'error while changing password' })
+  if (result.success) return res.status(201).send({ success: true })
 }
 
 const handleUsernameChange = async (userID, newUsername) => {
-  const existingID = await getUserID(newUsername);
-  if (typeof Number(existingID) === 'number') return res.status(409).send({success: false, error: "username already taken"});
-  const result = await updateUser(userID, "username", newUsername);
-  if (!result.success) return res.status(400).send({success: false, error: "error while changing username"});
-  if (result.success) return res.status(201).send({success: true});
+  const existingID = await getUserID(newUsername)
+  if (typeof Number(existingID) === 'number')
+    return res
+      .status(409)
+      .send({ success: false, error: 'username already taken' })
+  const result = await updateUser(userID, 'username', newUsername)
+  if (!result.success)
+    return res
+      .status(400)
+      .send({ success: false, error: 'error while changing username' })
+  if (result.success) return res.status(201).send({ success: true })
 }
 
 const handleAccountPrivateChange = async (userID, isPrivate) => {
-  const result = await updateUser(userID, "private", isPrivate);
-  if (!result.success) return res.status(400).send({success: false, error: "error while changing username"});
-  if (result.success) return res.status(201).send({success: true});
+  const result = await updateUser(userID, 'private', isPrivate)
+  if (!result.success)
+    return res
+      .status(400)
+      .send({ success: false, error: 'error while changing username' })
+  if (result.success) return res.status(201).send({ success: true })
 }
 
 const handleUnknownUpdate = async (userID, key, value) => {
-  res.status(400).send({success: false, error: `unknown update ${key} ${value}`});
+  res
+    .status(400)
+    .send({ success: false, error: `unknown update ${key} ${value}` })
 }
-
-
 
 module.exports = {
   userRouter
