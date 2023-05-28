@@ -1,10 +1,12 @@
 const { getUserID } = require('../db/user-db')
 const {getLeaderBoardData} = require ('../db/leaderboard-db')
 
+const leaderboardRouter = require('express').Router()
+
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
-gameRouter.get('/topPlayers', jsonParser, async (req, res) => {
+leaderboardRouter.get('/topplayers', jsonParser, async (req, res) => {
     if (req !== 'wpm_avg' && req !== 'accuracy' && req !== 'total_time' && req !== 'total_characters') {
       return res
       .status(400)
@@ -29,3 +31,6 @@ gameRouter.get('/topPlayers', jsonParser, async (req, res) => {
     res.status(500).send({ error: 'Internal Server Error' });
   }
 });
+
+
+module.exports = leaderboardRouter;
