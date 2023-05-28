@@ -2,12 +2,13 @@ const express = require('express');
 const snippetRouter = require('./controllers/snippets');
 const { userRouter } = require('./controllers/users');
 const gameRouter  = require('./controllers/games');
-
+const leaderboardRouter = require('./controllers/leaderboard');
 const cors = require('cors');
 const path = require("path");
 const { unknownEndpoint, errorHandler } = require('./utils/middleware');
 
 const app = express();
+
 const corsOptions = {
     exposedHeaders: 'Authorization',
 };
@@ -22,7 +23,7 @@ app.use(express.static(path.join(__dirname, "..", "client", "build")));
 app.use('/api/snippet', snippetRouter);
 app.use('/api/user', userRouter);
 app.use('/api/game', gameRouter);
-
+app.use('/api/leaderboard', leaderboardRouter);
 
 // test endpoint
 app.get('/test', (req, res) => {res.send('hello')})
@@ -30,7 +31,6 @@ app.get('/test', (req, res) => {res.send('hello')})
 // error handling
 app.use(unknownEndpoint)
 app.use(errorHandler)
-
 
 module.exports = app;
 

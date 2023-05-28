@@ -7,13 +7,15 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
 leaderboardRouter.get('/topplayers', jsonParser, async (req, res) => {
-    if (req !== 'wpm_avg' && req !== 'accuracy' && req !== 'total_time' && req !== 'total_characters') {
+  const sort = req.query.sort
+  if (sort !== 'wpm_avg' && sort!== 'accuracy' && sort !== 'total_time' && sort !== 'total_characters') {
       return res
       .status(400)
       .send({ error: 'Bad Request: Incorrect data in request body' })
     }
+
   try {
-    const users = await getLeaderboardData(sortParam);
+    const users = await getLeaderboardData(sort);
     const userScores = [];
 
     for (const user of users) {
