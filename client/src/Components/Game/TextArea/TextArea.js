@@ -118,11 +118,15 @@ export default function TextArea (props) {
   } = props
   
   const { lineIndex, wordIndex, letterIndex } = cursor 
+  
   const { currWord, userInput } = typingState
-  const { time,
+  
+  const { 
+    time,
     numDel,
     typingProgress,
-    typingTarget } = gameRecorder
+    typingTarget 
+  } = gameRecorder
 
   const setTypingStatus = value => {
     setTypingState({
@@ -200,7 +204,6 @@ export default function TextArea (props) {
         break;
     }
   };
-  
 
   // handles all characters that are displayed
   function handleChange (event) {
@@ -221,9 +224,6 @@ export default function TextArea (props) {
       }))
     }
   }
-
-  // DEBUG(currWordHasMistake(currWord, userInput), allowedToOverflow(currWord, userInput));
-  // DEBUG(false, false);
 
   const renderedLines = lines.map((line, index) => {
     return (
