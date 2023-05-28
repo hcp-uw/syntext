@@ -18,7 +18,7 @@
     "game-api-test-runner": "npm run jest ./test/game.api.test.js",
     "leaderboard-db-test-runner": "npm run jest ./test/leaderboard.db.test.js",
     "leaderboard-api-test-runner": "npm run jest ./test/leaderboard.api.test.js",
-    "jest": "npm run localDBinit && NODE_ENV=test jest --verbose --runInBand --detectOpenHandles",
+    "jest": "npm run localDBinit && NODE_ENV=test jest --verbose --runInBand --detectOpenHandles --maxConcurrency 1",
     "create-tables": "node ./db-admin-scripts/create-snippet-tables && node ./db-admin-scripts/create-user-tables && node ./db-admin-scripts/create-settings-tables && node ./db-admin-scripts/create-games-tables",
     "localDBinit": " npm run create-tables && node ./db-admin-scripts/clear-tables",
     "localDBfill": "npm run localDBinit && node ./db-admin-scripts/fill-tables",

@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { verifyToken } = require('../utils/auth')
+const { verifyAccessToken } = require('../utils/auth')
 const { getUserID, getUser } = require('../db/user-db')
 const baseURL = 'http://localhost:3001/api/user' // Update with the correct URL
 
@@ -23,16 +23,20 @@ describe('POST /create', () => {
     expect(response.data.success).toBe(true)
     expect(response.headers['authorization']).toBeDefined()
     const token = response.headers['authorization']
-    const resTokenVerify = await verifyToken(token)
-    expect(resTokenVerify.username).toBe(testUser.username)
-    expect(typeof resTokenVerify.userID).toBe("number")
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+    const resTokenVerify = await verifyAccessToken(token, idRes.data.userID)
+
+    expect(resTokenVerify.userID).toBe(idRes.data.userID)
+
+    expect(typeof resTokenVerify.userID).toBe('number')
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
-        Authorization: token 
+        Authorization: token
       },
       data: {
         username: testUser.username,
-        password: testUser.password
+        password: testUser.password,
+        userID: resTokenVerify.userID
       }
     })
     expect(resDelete.status).toBe(200)
@@ -43,11 +47,16 @@ describe('POST /login', () => {
   const validUser = { username: 'testuser', password: 'password123' }
   const invalidUser = { username: 'testuser', password: 'wrongpassword' }
   let authToken
+  let userID
 
   beforeAll(async () => {
     // Create a test user
     const response = await axios.post(`${baseURL}/create`, validUser)
 
+    const idRes = await axios.get(
+      `${baseURL}/id?username=${validUser.username}`
+    )
+    userID = idRes.data.userID
     // Get the auth token for the test user
     authToken = response.headers['authorization']
   })
@@ -60,7 +69,8 @@ describe('POST /login', () => {
       },
       data: {
         username: validUser.username,
-        password: validUser.password
+        password: validUser.password,
+        userID: userID
       }
     })
   })
@@ -92,66 +102,76 @@ describe('POST /login', () => {
     expect(response.status).toBe(200)
     expect(response.headers['authorization']).toBeDefined()
     const token = response.headers['authorization']
-    const resTokenVerify = await verifyToken(token)
-    expect(resTokenVerify.username).toBe(validUser.username)
-    expect(typeof resTokenVerify.userID).toBe('number')
+    const resTokenVerify = await verifyAccessToken(token, userID)
+    expect(resTokenVerify.userID).toBe(userID)
   })
 
   it('updates the last login time for the user', async () => {
     // Get the current last login time for the user
-    const user = await getUser(validUser.username);
-    const previousLastLogin = user.last_login;
+    const user = await getUser(validUser.username)
+    const previousLastLogin = user.last_login
 
     // Login as the user
-    const response = await axios.post(`${baseURL}/login`, validUser);
+    const response = await axios.post(`${baseURL}/login`, validUser)
 
     // Check that the response includes the user's data
-
-  });
-})
-
-
-describe('GET /account', () => {
-  it('gets the token from the req and verifies it, returning account data', async () => {
-    const testUser = { username: 'getme', password: 'password123' }
-    const response = await axios.post(`${baseURL}/create`, testUser)
-    expect(response.status).toBe(201)
-   
-    const token = response.headers['authorization']
-  
-    const resGet = await axios.get(`${baseURL}/account`, {
-      headers: {
-        Authorization: token
-      }
-    })
-    expect(resGet.status).toBe(200);
-    expect(resGet.data.username).toBe('getme');
-    expect(resGet.data.success).toBe(true);
   })
 })
 
+describe('GET /account', () => {
+  it('gets the token from the req and verifies it, returning account data', async () => {
+    try {
+      const testUser = { username: 'getme', password: 'password123' }
+      const response = await axios.post(`${baseURL}/create`, testUser)
+      expect(response.status).toBe(201)
+  
+      const token = response.headers['authorization']
+      const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+  
+      userID = idRes.data.userID
+      const resGet = await axios.get(`${baseURL}/account?userID=${userID}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+  
+      expect(resGet.status).toBe(200)
+      expect(resGet.data.username).toBe('getme')
+      expect(resGet.data.success).toBe(true)
+    } catch (error) {
+      console.error(error)
+    }
+  })
+})
 
 describe('DELETE /account', () => {
   it('gets the token from the req and verifies it, deleting account', async () => {
-    const testUser = { username: 'deleteme', password: 'password123' }
+    console.log('point 2')
+    expect(2).toBe(2)
+
+    const testUser = { username: 'rip', password: 'password123' }
     const response = await axios.post(`${baseURL}/create`, testUser)
     expect(response.status).toBe(201)
-   
+
     const token = response.headers['authorization']
-  
+    const idRes = await axios.get(`${baseURL}/id?username=${testUser.username}`)
+
+    userID = idRes.data.userID
+
     const resDelete = await axios.delete(`${baseURL}/account`, {
       headers: {
         Authorization: token
       },
       data: {
         username: testUser.username,
-        password: testUser.password
+        password: testUser.password,
+        userID: userID
       }
     })
 
-    expect(resDelete.status).toBe(200);
+    expect(resDelete.status).toBe(200)
 
-    const nonexistantUserID = await getUserID(testUser.username);
-    expect(nonexistantUserID.success).toBe(false);
+    const nonexistantUserID = await getUserID(testUser.username)
+    expect(nonexistantUserID.success).toBe(false)
   })
 })

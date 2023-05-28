@@ -19,6 +19,8 @@ const createUserTable = async () => {
             date_created date, 
             last_login date, 
             private BOOL DEFAULT 0,
+            refresh_token varchar(256),
+            secret varchar(256),
             primary key (userID)
         );`;
         const result = await connection.query(query);
