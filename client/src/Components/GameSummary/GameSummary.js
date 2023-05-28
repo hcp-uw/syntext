@@ -6,14 +6,13 @@ import Chart from 'chart.js/auto'
 import LineChart from './LineChart'
 const smoothen = require('./smoothen')
 
-export default function GameSummary ({
-  dataTyped,
-  numDel,
-  time,
-  typingTarget,
-  snapshot
-}) {
-  
+export default function GameSummary ({ gameRecorder }) {
+  const { time, typingTarget, snapshot } = gameRecorder
+
+  const dataTyped = gameRecorder.dataTyped.current
+  const numDel = gameRecorder.numDel.current
+
+
   dataTyped[time.current] =
     typingTarget.split('').length - snapshot.current[time.current].length
   

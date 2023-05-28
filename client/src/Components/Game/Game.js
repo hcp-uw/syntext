@@ -7,7 +7,7 @@ import GameSummary from '../GameSummary/GameSummary'
 import Timer from '../Timer/Timer'
 import { useSelector } from 'react-redux'
 import { createGame } from '../../services/gameService'
-import './Game.css';
+import './Game.css'
 
 const Game = ({ defaultSnippet }) => {
   const userID = useSelector(s => s.userState.userID)
@@ -17,54 +17,42 @@ const Game = ({ defaultSnippet }) => {
   const [selectedLength, setSelectedLength] = useState()
 
   const [selectedType, setSelectedType] = useState()
-  
+
   const [recording, setRecording] = useState(false)
 
   const [gameFinished, setGameFinished] = useState(false)
 
-  
   const [typingState, setTypingState] = useState({
     userInput: '',
     currWord: currSnippet.data[0].split(' ')[0],
     typingStatus: false
   })
 
+  const cursor = {
+    lineIndex: useRef(0),
+    wordIndex: useRef(0),
+    letterIndex: useRef(-1)
+  }
 
+  const gameRecorder = {
+    time: useRef(0),
+    numDel: useRef(0),
+    dataTyped: useRef([]),
+    typingTarget: currSnippet.data.join('\n'),
+    typingProgress: useRef(''),
+    snapshot: useRef([''])
+  }
 
-  // the array of tokens corresponding to the current line
-  // updated with lineIndex changes
-  const currLine = useRef(currSnippet.data[0].split(' '))
+  const { time, dataTyped, typingProgress, snapshot } = gameRecorder
 
-  
-  const cursor = useRef({
-    lineIndex: 0,
-    wordIndex: 0,
-    letterIndex: -1
-  })
-
-
-  const time = useRef(0)
-
-  const numDel = useRef(0)
-
-  const dataTyped = useRef([])
-
-  const typingTarget = currSnippet.data.join('\n')
-
-  const typingProgress = useRef('')
-
-  const snapshot = useRef([''])
-
-
-
-  useEffect(() => {
-    currLine.current = currSnippet.data[0].split(' ')
-    
-    setTypingState(oldState => ({
-      ...oldState, currWord: currSnippet.data[0].split(' ')[0]
-    }))
-    
-  }, [currSnippet.data])
+  useEffect(
+    () =>
+      setTypingState(oldState => ({
+        ...oldState,
+        currWord: currSnippet.data[0].split(' ')[0]
+    })),
+    [currSnippet.data]
+  )
 
   // use to integrate gameService
   useEffect(() => {
@@ -75,7 +63,8 @@ const Game = ({ defaultSnippet }) => {
   }, [gameFinished])
 
   const tickTime = () => {
-    snapshot.current[time.current + 1] = typingProgress.current
+    snapshot.current[time.current + 1] =
+      typingProgress.current
     dataTyped.current[time.current] =
       snapshot.current[time.current + 1].length -
       snapshot.current[time.current].length
@@ -88,27 +77,21 @@ const Game = ({ defaultSnippet }) => {
   }
 
   const restartGame = () => {
-    setTypingState(oldState => ({ 
-      userInput: '', 
+    setTypingState(oldState => ({
+      userInput: '',
       currWord: currSnippet.data[0].split(' ')[0],
       typingStatus: false
     }))
-
-    currLine.current = currSnippet.data[0].split(' ')
-    cursor.current = {
-      lineIndex: 0,
-      wordIndex: 0,
-      letterIndex: -1
-    }
-    
-    setGameFinished(false)
-
-    numDel.current = 0
     setRecording(false)
-    time.current = 0
-    dataTyped.current = [[]]
-    typingProgress.current = ''
-    snapshot.current = ['']
+    setGameFinished(false)
+    cursor.lineIndex.current = 0
+    cursor.wordIndex.current = 0
+    cursor.letterIndex.current = -1
+    gameRecorder.numDel.current = 0
+    gameRecorder.time.current = 0
+    gameRecorder.dataTyped.current = [[]]
+    gameRecorder.typingProgress.current = ''
+    gameRecorder.snapshot.current = ['']
   }
 
   return !gameFinished ? (
@@ -117,23 +100,12 @@ const Game = ({ defaultSnippet }) => {
       <TextArea
         typingState={typingState}
         setTypingState={setTypingState}
-        userInput={typingState.userInput}
-        currWord={typingState.currWord}
-        typingStatus={typingState.typingStatus}
-        time={time}
-        
-        numDel={numDel}
+        cursor={cursor}
+        gameRecorder={gameRecorder}
+        lines={currSnippet.data}
+        setGameFinished={setGameFinished}
         recording={recording}
         startGame={startGame}
-        lines={currSnippet.data}
-        
-
-        currLine={currLine}
-
-        setGameFinished={setGameFinished}
-        
-        typingProgress={typingProgress}
-        typingTarget={typingTarget}
       />
       <RestartButton restartGame={restartGame} />
       <RestartShortcut restartGame={restartGame} />
@@ -149,14 +121,7 @@ const Game = ({ defaultSnippet }) => {
     </div>
   ) : (
     <div className='game-container'>
-      <GameSummary
-        gameFinished={gameFinished}
-        dataTyped={dataTyped.current}
-        numDel={numDel.current}
-        time={time}
-        typingTarget={typingTarget}
-        snapshot={snapshot}
-      />
+      <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
       <RestartButton restartGame={restartGame} />
       <GameOptions
         restartGame={() => restartGame()}
@@ -170,7 +135,6 @@ const Game = ({ defaultSnippet }) => {
     </div>
   )
 }
-
 
 const RestartShortcut = ({ restartGame }) => {
   useEffect(() => {
