@@ -19,7 +19,6 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css'
 const GameOptions = props => {
   const {
     restartGame,
-    setLines,
     selectedType,
     setSelectedType,
     selectedLength,
@@ -38,7 +37,6 @@ const GameOptions = props => {
     nextIndex = (nextIndex + 1) % currSnippets.length
 
     setCurrSnippet(currSnippets[nextIndex])
-    setLines(currSnippets[nextIndex].data)
     restartGame()
   }
 
