@@ -112,22 +112,20 @@ export default function TextArea (props) {
   const {
     typingState,
     setTypingState,
-    time,
-    numDel,
+    cursor,
+    gameRecorder,
     recording,
     startGame,
     lines,
-    currLine,
-    cursor,
-    setGameFinished,
-    typingProgress,
-    typingTarget
+    setGameFinished
   } = props
-  console.log('render', typingState)
   
-  const { lineIndex, wordIndex, letterIndex } = cursor.current 
+  const { lineIndex, wordIndex, letterIndex } = cursor 
   const { currWord, userInput } = typingState
-
+  const { time,
+    numDel,
+    typingProgress,
+    typingTarget } = gameRecorder
 
   const setTypingStatus = value => {
     setTypingState({
@@ -136,10 +134,12 @@ export default function TextArea (props) {
     })
   }
 
+
   const handleSpecialKey = (event) => {
     const isAtEndOfWord = atEndOfWord(currWord, userInput) 
-    const isAtEndOfLine = atEndOfLine(wordIndex, currLine)
+    const isAtEndOfLine = atEndOfLine(wordIndex, lines[cursor.lineIndex.current].split(' '))
     const madeMistake = currWordHasMistake(currWord, userInput)
+
     switch (event.key) {
       case ' ':
         if (isAtEndOfWord && !isAtEndOfLine && !madeMistake) {
@@ -149,7 +149,7 @@ export default function TextArea (props) {
           setTypingState((oldState) => ({
             ...oldState,
             userInput: '',
-            currWord: currLine.current[wordIndex.current],
+            currWord: lines[cursor.lineIndex.current].split(' ')[cursor.wordIndex.current],
           }));
         }
         event.preventDefault();
@@ -160,7 +160,6 @@ export default function TextArea (props) {
           if (lines.length === lineIndex.current + 1) {
             setGameFinished(true);
           } else {
-            currLine.current = lines[lineIndex.current + 1].split(' ');
             lineIndex.current++;
             wordIndex.current = 0;
             letterIndex.current = -1;
@@ -169,7 +168,7 @@ export default function TextArea (props) {
             setTypingState((oldState) => ({
               ...oldState,
               userInput: '',
-              currWord: lines[lineIndex.current].split(' ')[0],
+              currWord: lines[cursor.lineIndex.current].split(' ')[0],
             }));
           }
         }
