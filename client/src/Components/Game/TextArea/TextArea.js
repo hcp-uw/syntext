@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom/client'
 import {
   atEndOfLine,
   atEndOfWord,
   currWordHasMistake,
-  allowedToOverflow,
-  isMistake
+  allowedToOverflow
 } from './inputValidation'
 import Cursor from '../../Cursor/Cursor'
-import stylesheet from './TextArea.css'
+import './TextArea.css'
 
 const Letter = ({
   letterActual,

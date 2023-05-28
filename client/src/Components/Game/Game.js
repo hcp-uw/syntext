@@ -50,7 +50,7 @@ const Game = ({ defaultSnippet }) => {
       setTypingState(oldState => ({
         ...oldState,
         currWord: currSnippet.data[0].split(' ')[0]
-    })),
+      })),
     [currSnippet.data]
   )
 
@@ -63,8 +63,7 @@ const Game = ({ defaultSnippet }) => {
   }, [gameFinished])
 
   const tickTime = () => {
-    snapshot.current[time.current + 1] =
-      typingProgress.current
+    snapshot.current[time.current + 1] = typingProgress.current
     dataTyped.current[time.current] =
       snapshot.current[time.current + 1].length -
       snapshot.current[time.current].length
@@ -94,34 +93,25 @@ const Game = ({ defaultSnippet }) => {
     gameRecorder.snapshot.current = ['']
   }
 
-  return !gameFinished ? (
+  return (
     <div className='game-container'>
-      <Timer recording={recording} tickTime={tickTime} />
-      <TextArea
-        typingState={typingState}
-        setTypingState={setTypingState}
-        cursor={cursor}
-        gameRecorder={gameRecorder}
-        lines={currSnippet.data}
-        setGameFinished={setGameFinished}
-        recording={recording}
-        startGame={startGame}
-      />
-      <RestartButton restartGame={restartGame} />
+      {!gameFinished ? 
+        <>
+          <Timer recording={recording} tickTime={tickTime} />
+          <TextArea
+            typingState={typingState}
+            setTypingState={setTypingState}
+            cursor={cursor}
+            gameRecorder={gameRecorder}
+            lines={currSnippet.data}
+            setGameFinished={setGameFinished}
+            recording={recording}
+            startGame={startGame}
+          />
+        </>
+        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
+      }
       <RestartShortcut restartGame={restartGame} />
-      <GameOptions
-        restartGame={() => restartGame()}
-        selectedLength={selectedLength}
-        setSelectedLength={setSelectedLength}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        currSnippet={currSnippet}
-        setCurrSnippet={setCurrSnippet}
-      />
-    </div>
-  ) : (
-    <div className='game-container'>
-      <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
       <RestartButton restartGame={restartGame} />
       <GameOptions
         restartGame={() => restartGame()}
