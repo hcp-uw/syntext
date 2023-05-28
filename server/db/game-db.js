@@ -1,10 +1,10 @@
 const mysql = require('mysql2')
 const config = require('../utils/config.js')
 const bcrypt = require('bcrypt')
-const { pool, closePool, getPool } = require('./pool.js')
+const { pool } = require('./pool.js')
 
 const missingRequiredParams = (name, obj) => {
-  return {success: false, error: `missing required params in ${name}: ${obj}`};
+  return { success: false, error: `missing required params in ${name}: ${obj}` }
 }
 
 //id int primary key auto_increment,
@@ -18,7 +18,6 @@ const missingRequiredParams = (name, obj) => {
 //     num_mistakes int,
 //     time_stamp datetime,
 
-
 const createGameEntry = async game => {
   const {
     userID,
@@ -31,20 +30,23 @@ const createGameEntry = async game => {
     num_mistakes
   } = game
 
-  if (!(
-    typeof userID == "number" &&
-    typeof snippet_id == "number" &&
-    typeof total_time == "number" &&
-    typeof total_characters == "number" &&
-    wpm_data &&
-    typeof wpm_avg == "number" &&
-    typeof accuracy == "number" &&
-    typeof num_mistakes == "number"
-    )) return missingRequiredParams("game", game);
-
+  if (
+    !(
+      typeof userID == 'number' &&
+      typeof snippet_id == 'number' &&
+      typeof total_time == 'number' &&
+      typeof total_characters == 'number' &&
+      wpm_data &&
+      typeof wpm_avg == 'number' &&
+      typeof accuracy == 'number' &&
+      typeof num_mistakes == 'number'
+    )
+  )
+    return missingRequiredParams('game', game)
+  let connection
   try {
-    const connection = await pool.getConnection();
-    
+    connection = await pool.getConnection()
+
     const query = `
       INSERT INTO games ( 
         id, userID, snippet_id, 
@@ -64,46 +66,51 @@ const createGameEntry = async game => {
       accuracy,
       num_mistakes
     ])
-    
-    await connection.release();
-    return { success: true };
+
+    return { success: true }
   } catch (error) {
     console.error(error)
-    return { success: false, error: error };
+    return { success: false, error: error }
+  } finally {
+    await connection.release()
   }
 }
 
 const getGameEntries = async userID => {
-
+  let connection
   try {
-    if (!userID || isNaN(userID)) 
-      return {success: false, error: 'invalid userID'}
-    
-    const connection = await pool.getConnection()
+    if (!userID || isNaN(userID))
+      return { success: false, error: 'invalid userID' }
+
+    connection = await pool.getConnection()
     const query = `
       SELECT * FROM games WHERE userID=?;
     `
-    const result = await connection.query(query, [userID]);
-    await connection.release();
-    return result[0];
+    const result = await connection.query(query, [userID])
+    await connection.release()
+    return result[0]
   } catch (error) {
     console.error(error)
     return { error: error }
+  } finally {
+    await connection.release()
   }
 }
 
 const clearGameEntries = async userID => {
+  let connection
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection()
     const query = `
       DELETE FROM games as g WHERE g.userID=?;
     `
-    const result = await connection.query(query, [userID]);
-    await connection.release();
+    const result = await connection.query(query, [userID])
     return { success: true, result: result }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
+  } finally {
+    await connection.release()
   }
 }
 //Add in function that returns aggergate stats for leaderboard (JOINT for users.id & games.userID)\

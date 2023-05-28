@@ -1,5 +1,5 @@
 const atEndOfLine = (wIndex, cLine) => {
-  return wIndex.current === cLine.current.length - 1
+  return wIndex.current === cLine.length - 1
 }
 
 const atEndOfWord = (cWord, uInput) => cWord.length === uInput.length

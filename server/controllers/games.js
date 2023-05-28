@@ -1,4 +1,4 @@
-const { verifyAccessToken, extractToken } = require('../utils/auth');
+const { verifyAccessToken, extractToken, handleAuth } = require('../utils/auth')
 const { getUserID } = require('../db/user-db')
 const {
   getGameEntries,
@@ -12,19 +12,12 @@ const jsonParser = bodyParser.json()
 const jwt = require('jsonwebtoken')
 const gameRouter = require('express').Router()
 
-gameRouter.post('/create', jsonParser, async (req, res) => {
-  const gameObject = extractGame(req.body)
-
+// need to make sure userID is sent in req.body or req.query for handleAuth
+gameRouter.post('/create', [jsonParser, handleAuth], async (req, res) => {
+  const gameObject = extractGame(req)
   if (gameObject.error) return res.status(400).send({ success: false })
 
-  const token = extractToken(req)
-
   try {
-    const decodedToken = await verifyAccessToken(token, gameObject.userID);
-
-    if (!decodedToken.success || gameObject.userID != decodedToken.userID)
-      res.status(401).send({ success: false, error: 'Token unauthorized' })
-
     const result = await createGameEntry(gameObject)
 
     if (result.success) res.status(201).send({ success: true })
@@ -56,34 +49,28 @@ gameRouter.get('/games', jsonParser, async (req, res) => {
   }
 })
 
-gameRouter.delete('/games', jsonParser, async (req, res) => {
+gameRouter.delete('/games', [jsonParser, handleAuth], async (req, res) => {
   let { userID, username } = req.body
 
-  const token = extractToken(req)
-
   if (!userID && !username)
+    // only need ONE of them
     return res
       .status(400)
       .send({ error: 'Bad Request: Missing data in request body' })
 
   if (!userID) userID = await getUserID(username)
 
-  const decodedToken = await verifyAccessToken(token, userID)
-
-  if (!decodedToken.success || userID != decodedToken.userID)
-    res.status(401).send({ success: false, error: 'Token unauthorized' })
-
   try {
     const result = await clearGameEntries(userID)
     if (result.success) res.status(200).send(result)
-    else res.status(400).send({ error: 'could not get game entries' })
+    else res.status(400).send({ error: 'could not find game entries' })
   } catch (error) {
     res.status(500).send({ error: 'Internal Server Error' })
   }
 })
 
-const extractGame = body => {
-  if (!body.data) return { error: true }
+const extractGame = req => {
+  if (!req.body) return { error: true }
 
   const {
     userID,
@@ -94,7 +81,7 @@ const extractGame = body => {
     wpm_avg,
     accuracy,
     num_mistakes
-  } = body.data
+  } = req.body
 
   if (
     !(
@@ -121,8 +108,6 @@ const extractGame = body => {
     num_mistakes: num_mistakes
   }
 }
-
-
 
 //Add in more about what frontend needs
 

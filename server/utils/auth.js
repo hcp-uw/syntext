@@ -4,33 +4,40 @@ const { JWT_SECRET } = require('./config')
 
 const saltRounds = 3
 
-const generateHash = async (password) => {
-    const res = await bcrypt.hash(password, saltRounds)
-    return res;
+const generateHash = async password => {
+  const res = await bcrypt.hash(password, saltRounds)
+  return res
 }
 
 const verifyHash = async (password, hash) => {
-    const authResult = await bcrypt.compare(password, hash);
-    return authResult
+  const authResult = await bcrypt.compare(password, hash)
+  return authResult
 }
 
-const generateRefreshToken = async (userSecret) => {
+const generateRefreshToken = async () => {
   const date = Date.now()
-
-  const token = jwt.sign({ stamp: date }, userSecret, {
-    expiresIn: '1800000000000s'
+  const token = jwt.sign({ stamp: date }, JWT_SECRET, {
+    expiresIn: '864000s'
   })
-  return token;
+  return token
 }
 
 const verifyRefreshToken = async (userSecret, token) => {
-  const res = await jwt.verify(token.split(' '[1], userSecret));
-  return {...res, success: true}
+  try {
+    const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+    return { ...res, success: true }
+  } catch (error) {
+    if (error.name == 'TokenExpiredError') {
+      return { error: error, success: false }
+    } else {
+      return { error: error, success: false }
+    }
+  }
 }
 
-const generateAccessToken = async (userID) => {
+const generateAccessToken = async userID => {
   const token = jwt.sign({ userID: userID }, JWT_SECRET, {
-    expiresIn: '1800000s'
+    expiresIn: '7200s'
   })
   return token
 }
@@ -41,12 +48,14 @@ const verifyAccessToken = async (token, userID) => {
     return { ...res, success: true }
   } catch (error) {
     if (error.name == 'TokenExpiredError') {
-
+      return { error: error, success: false }
     }
   }
 }
 
 const extractToken = req => {
+  if (req.headers && req.headers.Authorization) return req.headers.Authorization
+  if (req.headers && req.headers.authorization) return req.headers.authorization
   if (
     req.method === 'POST' &&
     req.body !== undefined &&
@@ -62,13 +71,50 @@ const extractToken = req => {
   return req.rawHeaders[tokenIndex]
 }
 
-module.exports = { 
-    extractToken, 
-    verifyAccessToken, 
-    generateAccessToken, 
-    generateRefreshToken,
-    verifyRefreshToken,
-    generateHash, 
-    verifyHash,
-    saltRounds 
+const extractUserID = req => {
+  let userID
+  if (req.query && req.query.userID) userID = req.query.userID
+  if (userID === undefined && req.body && req.body.userID)
+    userID = req.body.userID
+  return userID
+}
+
+const handleAuth = async (req, res, next) => {
+  const userID = extractUserID(req)
+  const token = extractToken(req)
+  //=============================================
+  // console.log('in handleAuth', userID, token)
+  //=============================================
+  if (userID === undefined)
+    return res.status(401).send({ success: false, error: 'missing userID' })
+  try {
+    if (!token) {
+      return res.status(401).send({ success: false, error: 'missing token' })
+    }
+
+    const decoded = await verifyAccessToken(token, userID)
+
+    if (!decoded || Number(decoded.userID) !== Number(userID)) {
+      return res.status(401).send({ success: false, error: 'TokenExpired' })
+    }
+
+    req.decodedUserID = decoded.userID // store  decoded userID in req
+
+    next()
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, error: 'Server error' })
+  }
+}
+
+module.exports = {
+  extractToken,
+  verifyAccessToken,
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+  generateHash,
+  verifyHash,
+  handleAuth,
+  saltRounds
 }

@@ -1,30 +1,31 @@
-const { pool, closePool, getPool } = require('./pool.js')
+const { pool } = require('./pool.js')
 
 const getLeaderboardData = async sortParam => {
-  let s;
+  let s
   switch (sortParam) {
     case 'wpm':
-      s = 'avg_wpm';
-      break;
+      s = 'avg_wpm'
+      break
 
     case 'accuracy':
-      s = 'avg_accuracy';
-      break;
+      s = 'avg_accuracy'
+      break
 
     case 'time':
-      s = 'time_played';
-      break;
+      s = 'time_played'
+      break
 
     case 'characters':
-      s = characters_typed;
-      break;
+      s = characters_typed
+      break
 
     default:
-      return { error: 'invalid sort param: ' + sortParam };
-      break;
+      return { error: 'invalid sort param: ' + sortParam }
+      break
   }
+  let connection
   try {
-    const connection = await pool.getConnection();
+    connection = await pool.getConnection()
     const query = `
             SELECT u.username, 
                 AVG(g.wpm_avg) AS avg_wpm,
@@ -36,13 +37,13 @@ const getLeaderboardData = async sortParam => {
             GROUP BY username
             ORDER BY ? DESC;
         `
-    const res = await connection.query(query, [s]);
-    await connection.release();
-    return res[0];
+    const res = await connection.query(query, [s])
+    return res[0]
   } catch (error) {
     console.error(error)
+  } finally {
+    await connection.release()
   }
 }
 
-
-module.exports = { getLeaderboardData };
+module.exports = { getLeaderboardData }
