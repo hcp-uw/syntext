@@ -1,9 +1,13 @@
 import stylesheet from "./Cursor.css"
 import React, { useState, useEffect } from 'react';
 
-const Cursor = (props) => {
-  const { userInput, currWord, typingStatus, setTypingStatus} = props;
-
+const Cursor = ({ typingState, setTypingStatus}) => {
+  const {
+    userInput,
+    currWord,
+    typingStatus
+  } = typingState
+  
   // Gets when App loads for the first time
   window.addEventListener('load', () => moveCursor(document.querySelector('.active').querySelector('div').getBoundingClientRect(), true));
 
