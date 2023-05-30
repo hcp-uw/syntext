@@ -163,32 +163,27 @@ export default function TextArea (props) {
         if (isAtEndOfWord && isAtEndOfLine && !madeMistake) {
           if (linesDisplayed.length === lineIndex.current + 1) {
             setGameFinished(true);
-          } else if (lineIndex.current < 0){
-            lineIndex.current++;
-            wordIndex.current = 0;
-            letterIndex.current = -1;
-            typingProgress.current += '\n';
-  
-            setTypingState((oldState) => ({
-              ...oldState,
-              userInput: '',
-              currWord: linesDisplayed[cursor.lineIndex.current].split(' ')[0],
-            }));
           } else {
-            setLinesDisplayed([...linesDisplayed].splice(1));
+            let offset;
+            if (lineIndex.current < 4) {
+              offset = 0;
+              lineIndex.current++;
+            } else {
+              offset = 1
+              setLinesDisplayed(linesDisplayed.slice(1));
+            }
             wordIndex.current = 0;
             letterIndex.current = -1;
             typingProgress.current += '\n';
-            console.log(lineIndex.current)
-            console.log(linesDisplayed[lineIndex.current])
-            console.log(typingState)
+            const nextLine = linesDisplayed[cursor.lineIndex.current + offset].split(' ');
             setTypingState((oldState) => ({
               ...oldState,
               userInput: '',
-              currWord: linesDisplayed[cursor.lineIndex.current + 1].split(' ')[0],
+              currWord: nextLine[0],
             }));
           }
         }
+        
         event.preventDefault();
         break;
   
