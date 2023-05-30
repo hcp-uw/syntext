@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'https://syntext.herokuapp.com'
+const baseURL = 'https://syntext.herokuapp.com/api'
 
 const errSnippet = {
   id: -1,

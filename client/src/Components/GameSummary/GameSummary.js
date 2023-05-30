@@ -1,6 +1,5 @@
 import './GameSummary.css'
 import { useState, useEffect } from 'react'
-import { Data } from './Data'
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import LineChart from './LineChart'
