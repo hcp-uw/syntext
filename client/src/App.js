@@ -1,46 +1,66 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-
-import Game from './Components/Game/Game'
-import NewNavBar from './Components/NewNavBar/NewNavBar';
-
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Stack from "react-bootstrap/Stack";
-import Navbar from 'react-bootstrap/Navbar';
-import "bootstrap/dist/css/bootstrap-grid.min.css";
-import './index.css';
+import { Route, Routes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoggedIn, setUserID } from './redux/user/userStateActions'
+import NavBar from './Components/NavBar/NavBar'
+import Main from './Pages/Main'
+import AccountPage from './Pages/AccountPage'
+import LoginPage from './Pages/LoginPage'
+import SignUpPage from './Pages/SignUpPage'
+import LeaderboardPage from './Pages/LeaderboardPage'
+import PopUpController from './Components/PopupController/PopUpController'
+import { getCurrentUser, refreshCurrentSession } from './services/userService'
 
 const App = () => {
-	// const someData = ['int j = 20;',
-	// 					'for (int i = 0; i < 10; i++) {',
-	// 					'	System.out.print(j + " - " + i);',
-	// 					'	if (i > j)',
-	// 					'		System.out.println(" < 0");',
-	// 					'	else',
-	// 					'		System.out.println(" > 0");',
-	// 					'	j -= 1;',
-	// 					'}'
-	// 			]
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector(s => s.userState.isLoggedIn)
+  const [settingsFocus, setSettingsFocus] = useState(false)
+  const [refresh, setRefresh] = useState(false) //just a dummy variable...will fix later
 
-	const defaultSnippet =  {
-		id: 1,
-		SnippetType:'FOR_LOOP',
-		length: 'LONG',
-		data: ['meow',
-					'\ti like dogs']
-		//  data: someData
-	}
+  useEffect(() => {
+    const token = window.localStorage.getItem('authToken')
+    const userID = window.localStorage.getItem('userID')
+    if (!token || !userID) return
+    const fetchData = async () => {
+      const u = await getCurrentUser(userID)
+      if (u && u.success) {
+        dispatch(setUserID(u.userID))
+        dispatch(setLoggedIn(true))
+      } else if (u && u.error === 'TokenExpired') {
+        const refresh = await refreshCurrentSession(token, userID)
+        if (refresh.success) {
+          window.localStorage.setItem('authToken', refresh.token)
+          dispatch(setUserID(refresh.userID))
+          dispatch(setLoggedIn(true))
+          setRefresh(refresh => !refresh)
+        } else {
+          dispatch(setUserID(undefined))
+          dispatch(setLoggedIn(false))
+        }
+      }
+    }
+    fetchData()
+  }, [])
 
+  return (
+    <div className='app-container'>
+      <NavBar setSettingsFocus={setSettingsFocus} />
+      <Routes>
+        <Route path='/' element={<Main />} />
+        <Route
+          path='/account'
+          element={isLoggedIn ? <AccountPage /> : <LoginPage />}
+        />
+        <Route path='/join' element={<SignUpPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/leaderboard' element={<LeaderboardPage />} />
+      </Routes>
+      <PopUpController
+        settingsFocus={settingsFocus}
+        setSettingsFocus={setSettingsFocus}
+      />
+    </div>
+  )
+}
 
-
-	return(
-		<div className="app-container">
-			<NewNavBar/>
-			<Game defaultSnippet={defaultSnippet.data}/>
-		</div>
-	)
-  }
-
-export default App;
+export default App

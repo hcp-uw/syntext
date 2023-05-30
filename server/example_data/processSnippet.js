@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const directoryPath = './server/example_data/snippets'
+// const directoryPath = './server/example_data/snippets'
 
 const processSnippet = (dirPath) => {
     
@@ -44,8 +44,8 @@ const processSnippet = (dirPath) => {
 
     const fileNames = [];
 
-    fs.readdirSync(directoryPath).forEach(file => {
-        const path = `${directoryPath}/${file}`
+    fs.readdirSync(dirPath).forEach(file => {
+        const path = `${dirPath}/${file}`
         if (fs.statSync(path).isFile()) fileNames.push(path);
     })
 
@@ -72,7 +72,7 @@ const processSnippet = (dirPath) => {
     return pData
 }
 
-console.log(processSnippet('./snippets'))
+// console.log(processSnippet('./snippets'))
 ;
 
 //console.log(processSnippet(directoryPath))

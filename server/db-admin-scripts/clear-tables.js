@@ -24,7 +24,7 @@ const clearRecordTable = async () => {
         const connection = await pool.getConnection();
         const query = 'DELETE FROM snippet_records WHERE 1 = 1;'
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('cleared snippet_records')
         return result[0];
     } catch (error) {
@@ -38,7 +38,7 @@ const clearDataTable = async () => {
         const connection = await pool.getConnection();
         const query = 'DELETE FROM snippet_data WHERE 1 = 1;'
         const result = await connection.query(query);
-        connection.release();
+        await connection.release();
         console.log('cleared snippet_data')
         return result[0];
     } catch (error) {
@@ -46,5 +46,52 @@ const clearDataTable = async () => {
     }
 }
 
-Promise.all([clearDataTable(), clearRecordTable()]).then(() => pool.end())
+const clearUserTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM users WHERE 1 = 1;'
+        const result = await connection.query(query);
+        await connection.release();
+        console.log('cleared users')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const clearSettingsTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM settings WHERE 1 = 1;'
+        const result = await connection.query(query);
+        await connection.release();
+        console.log('cleared settings')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const clearGamesTable = async () => {
+    try {
+        const connection = await pool.getConnection();
+        const query = 'DELETE FROM games WHERE 1 = 1;'
+        const result = await connection.query(query);
+        await connection.release();
+        console.log('cleared snippet_data')
+        return result[0];
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const clearAll = async () => {
+    await clearGamesTable()
+    await clearSettingsTable()
+    await clearDataTable()
+    await clearRecordTable()
+    await clearUserTable()
+}
+
+clearAll().then(() => pool.end())
 

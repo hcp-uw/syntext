@@ -2,7 +2,7 @@ version: "4.17"
 services:
   database:
     container_name: db_container
-    env_file: ./.env
+    #env_file: ./.env
     environment:
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_USER=$MYSQL_USER
@@ -32,20 +32,20 @@ services:
       - '3001:3001'
     networks:
       - backend
-      - frontend
+      # - frontend
     
     
-  client:
-    container_name: client_container
-    depends_on:
-      - server
-    build: ./client
-    ports: 
-      - '3000:3000'
-    networks:
-      - frontend
-    stdin_open: true
-    tty: true
+  # client:
+  #   container_name: client_container
+  #   depends_on:
+  #     - server
+  #   build: ./client
+  #   ports: 
+  #     - '3000:3000'
+  #   networks:
+  #     - frontend
+  #   stdin_open: true
+  #   tty: true
 
 volumes: 
   database:
@@ -53,4 +53,4 @@ volumes:
 
 networks:
   backend:
-  frontend:
+  # frontend:

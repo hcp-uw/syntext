@@ -1,65 +1,95 @@
-import React, { useState } from 'react';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import style from "./SnippetOptions.css"
-import 'bootstrap/dist/css/bootstrap.css';
+import React, { useEffect } from 'react'
+import ToggleButton from 'react-bootstrap/ToggleButton'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import { getSnippet } from '../../services/snippetService'
+import style from './SnippetOptions.css'
+import 'bootstrap/dist/css/bootstrap.css'
 
-const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSelectedLength }) => {
-  
+const SnippetOptions = props => {
+  const {
+    selectedType,
+    setSelectedType,
+    selectedLength,
+    setSelectedLength,
+    setCurrSnippets
+  } = props
 
-  const handleLengthChange = (value) => {
-    setSelectedLength(value);
+  useEffect(() => {
+    if (selectedLength && selectedType) {
+      loadNewSnippets(selectedLength, selectedType)
+    }
+  }, [selectedLength, selectedType])
+
+  const loadNewSnippets = async (len, type) => {
+    const snippets = await getSnippet(len, type);
+    setCurrSnippets(snippets);
   }
 
-  const handleTypeChange = (value) => {
-    setSelectedType(value);
+
+
+  const handleLengthChange = value => {
+    if (value === selectedLength) return
+    setSelectedLength(value)
+    //loadNewSnippets(selectedLength, selectedType);
+  }
+
+  const handleTypeChange = value => {
+    if (value === selectedType) return
+    setSelectedType(value)
+    //loadNewSnippets(selectedLength, selectedType);
   }
 
   const displayedType = (() => {
     switch (selectedType) {
       case 'METHOD':
-        return 'methods';
+        return 'methods'
       case 'FOR':
-        return 'for loop';
+        return 'for loop'
       case 'WHILE':
-        return 'while loop';
-      case 'CONDITIONAL':
-        return 'conditional'
+        return 'while loop'
+      case 'COLLECTIONS':
+        return 'collections'
       default:
-        return 'snippet type';
+        return 'snippet type'
     }
-  })();
+  })()
 
-  return(
+  return (
     <>
-      <div className="snippet-options-container">
+      <div className='snippet-options-container'>
         <ButtonGroup>
           <Dropdown>
-            <DropdownButton 
-              title={displayedType} 
-              drop="up" 
-              variant="custom"
-              className="rounded-start"
+            <DropdownButton
+              title={displayedType}
+              drop='up'
+              variant='custom'
+              className='rounded-start'
               onSelect={handleTypeChange}
             >
-              <Dropdown.Item eventKey="METHOD">methods</Dropdown.Item>
-              <Dropdown.Item eventKey="FOR">for loop</Dropdown.Item>
-              <Dropdown.Item eventKey="WHILE">while loop</Dropdown.Item>
-              <Dropdown.Item eventKey="CONDITIONAL">conditional</Dropdown.Item>
+              <Dropdown.Item eventKey='METHOD'>methods</Dropdown.Item>
+              <Dropdown.Item eventKey='FOR'>for loop</Dropdown.Item>
+              <Dropdown.Item eventKey='WHILE'>while loop</Dropdown.Item>
+              <Dropdown.Item eventKey='COLLECTIONS'>collections</Dropdown.Item>
             </DropdownButton>
           </Dropdown>
-          <ToggleButtonGroup 
-            type="radio" 
-            name="options" 
-            value={selectedLength} 
+          <ToggleButtonGroup
+            type='radio'
+            name='options'
+            value={selectedLength}
             onChange={handleLengthChange}
           >
-            <ToggleButton variant="sides" id="tbg-radio-1" value="SHORT">short</ToggleButton>
-            <ToggleButton variant="sides" id="tbg-radio-2" value="MEDIUM">medium</ToggleButton>
-            <ToggleButton variant="sides" id="tbg-radio-3" value="LONG">long</ToggleButton>
+            <ToggleButton variant='sides' id='tbg-radio-1' value='SHORT'>
+              short
+            </ToggleButton>
+            <ToggleButton variant='sides' id='tbg-radio-2' value='MEDIUM'>
+              medium
+            </ToggleButton>
+            <ToggleButton variant='sides' id='tbg-radio-3' value='LONG'>
+              long
+            </ToggleButton>
           </ToggleButtonGroup>
         </ButtonGroup>
       </div>
@@ -67,4 +97,4 @@ const SnippetOptions = ({ selectedType, setSelectedType, selectedLength, setSele
   )
 }
 
-export default SnippetOptions;
+export default SnippetOptions

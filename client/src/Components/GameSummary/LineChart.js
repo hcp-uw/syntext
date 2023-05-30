@@ -1,9 +1,9 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
+import React from 'react'
+import { Line } from 'react-chartjs-2'
 
-function LineChart({ chartData }) {
+function LineChart ({ chartData }) {
   return (
-    <div className="chart-container">
+    <div className='chart-container'>
       <Line
         data={chartData}
         options={{
@@ -20,7 +20,8 @@ function LineChart({ chartData }) {
                 display: true,
                 text: 'words per minute',
                 font: { size: 18 }
-              }},
+              }
+            },
             x: { ticks: { color: 'black' } }
           },
           elements: {
@@ -33,6 +34,6 @@ function LineChart({ chartData }) {
         }}
       />
     </div>
-  );
+  )
 }
-export default LineChart;
+export default LineChart

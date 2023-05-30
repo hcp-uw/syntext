@@ -1,5 +1,5 @@
 const { getSnippetData } = require('../example_data/hardcodedsnippets')
-const { createSnippet, closePool } = require('../db/db')
+const { createSnippet, closePool } = require('../db/snippet-db')
 const { processSnippet } = require('../example_data/processSnippet')
 const mysql = require('mysql2');
 const config = require('../utils/config')
@@ -14,12 +14,12 @@ const pool = mysql.createPool({
 }).promise()
 
 // const exampleSnippets = getSnippetData();
-const exampleSnippets = processSnippet("./snippets")
+const exampleSnippets = processSnippet("./example_data/snippets")
 
-const fill = async (exampleData, connectionPool) => {
+const fill = async (exampleData) => {
     const promises = []
     await exampleData.forEach((snippet) => {
-        promises.push(createSnippet(snippet, connectionPool));
+        promises.push(createSnippet(snippet));
     });
     return Promise.all(promises);
     

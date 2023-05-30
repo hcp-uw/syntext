@@ -1,0 +1,35 @@
+version: "4.17"
+services:
+  database:
+    container_name: db_container
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_HOST=$MYSQL_HOST
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    networks:
+      - backend
+
+  server:
+    container_name: server_container
+    depends_on:
+      - database
+    build: ../../
+    restart: "no"
+    env_file: .env
+    ports: 
+      - '3001:3001'
+    networks:
+      - backend
+    command: npm run user-db-test-runner
+    tty: true
+
+networks:
+  backend:

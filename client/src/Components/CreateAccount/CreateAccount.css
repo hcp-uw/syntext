@@ -1,0 +1,51 @@
+.create-container {
+  background: #fcdfdf;
+  border-radius: 8px;
+  margin: 6% auto;
+  max-width: 400px;
+  /* padding: 40px; */
+  padding: 40px;
+    padding-bottom: 20px;
+}
+
+.create-title {
+  margin-bottom: 8%;
+}
+
+.create-container .input-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 3.5%;
+}
+
+.create-container .input-textbox {
+  border-radius: 8px;
+  border-color: transparent;
+  background-color: #bc8785;
+  padding-left: 10px;
+  color: #fff;
+  width: 100%;
+  height: 40px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: right;
+  padding-top: 5px;
+}
+
+.submit-button {
+  background: #ebc6c6;
+  border-color: transparent;
+  color: #7d615f;
+  justify-content: right;
+  border-radius: 5px;
+}
+
+.create-container .input-textbox::placeholder {
+  color: #fff9;
+}
+
+.create-container .input-textbox:focus {
+  outline: #fff 1px;
+}

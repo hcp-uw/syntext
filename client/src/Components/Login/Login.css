@@ -1,0 +1,52 @@
+.login-container {
+    background: #fcdfdf;
+    border-radius: 8px;
+    margin: 7% auto;
+    max-width: 400px;
+    padding: 20px;
+    padding-bottom: 10px;
+}
+
+.login-container .input-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 3.5%;
+}
+
+.login-container .input-textbox {
+    border-radius: 8px;
+    border-color: transparent;
+    background-color: #BC8785;
+    padding-left: 10px;
+    color: #fff;
+    width: 100%;
+    height: 40px;    
+}
+
+.button-container {
+  display: flex;
+  justify-content: right;
+  padding-top: 5px;
+}
+
+.submit-button {
+    background: #ebc6c6;
+    border-color: transparent;
+    color: #7D615F;
+    justify-content: right;
+    border-radius: 5px;
+}
+
+.login-container .input-textbox::placeholder {
+  color: #fff9;
+}
+
+.login-container .input-textbox:focus {
+  outline: #fff 1px;
+}
+
+.create-account-button {
+  margin: auto;
+  color: #7D615F;
+  font-size: 0.8em;
+}
