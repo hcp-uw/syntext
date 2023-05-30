@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'https://syntext.herokuapp.com/api'
+const baseURL = 'https://syntext.herokuapp.com/api/snippet'
 
 const errSnippet = {
   id: -1,
@@ -17,7 +17,7 @@ const errSnippet = {
 const createSnippet = async (snippet) => {
   try {
     const res = await axios.post(
-      'http://localhost:3001/api/snippet/create',
+      `${baseURL}/create`,
       snippet
     )
     
