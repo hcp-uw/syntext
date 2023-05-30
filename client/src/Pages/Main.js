@@ -25,8 +25,8 @@ const Main = () => {
     id: 1,
     SnippetType: "FOR_LOOP",
     length: "LONG",
-    data: ["meow", "\ti like dogs"],
-    //  data: someData
+    // data: ["meow", "\ti like dogs"],
+     data: someData
   };
 
   return (
