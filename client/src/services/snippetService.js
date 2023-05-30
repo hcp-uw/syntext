@@ -38,7 +38,7 @@ const getSnippet = async (len, type) => {
     return (res.status === 200 && res.data.length !== 0) ? res.data : [errSnippet];
   } catch (error) {
     console.error(error)
-    return {success: false}
+    return [errSnippet]
   }
 }
 
