@@ -55,7 +55,8 @@ const processSnippet = (dirPath) => {
         data.push({
             fileData: fs.readFileSync(filePath, {encoding:'utf8', flag:'r'})
             .replaceAll('\r', '')
-            .split('\n'),
+            .split('\n')
+            .map(line => line.trimEnd()),
             filePath: filePath
         })
     })
@@ -72,7 +73,7 @@ const processSnippet = (dirPath) => {
     return pData
 }
 
-// console.log(processSnippet('./snippets'))
+console.log(processSnippet('./snippets'))
 ;
 
 //console.log(processSnippet(directoryPath))
