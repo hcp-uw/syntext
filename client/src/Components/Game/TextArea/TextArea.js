@@ -106,7 +106,8 @@ const Line = (props) => {
 
 
 export default function TextArea (props) {
-  
+  const LINES_DISPLAYED = 5;
+
   const {
     typingState,
     setTypingState,
@@ -165,7 +166,7 @@ export default function TextArea (props) {
             setGameFinished(true);
           } else {
             let offset;
-            if (lineIndex.current < 4) {
+            if (lineIndex.current < LINES_DISPLAYED/2) {
               offset = 0;
               lineIndex.current++;
             } else {
@@ -237,7 +238,7 @@ export default function TextArea (props) {
   }
 
   const renderedlinesDisplayed = linesDisplayed.map((line, index) => {
-    return (
+    return  index < LINES_DISPLAYED ? (
       <Line
         typingState={typingState}
         key={index}
@@ -246,7 +247,7 @@ export default function TextArea (props) {
         cursor={cursor}
         lineIsActive={cursor.lineIndex.current === index}
       />
-    )
+    ) : <></>
   })
 
   return (
