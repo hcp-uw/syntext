@@ -18,7 +18,7 @@ const createGame = async game => {
       headers: {
         Authorization: authToken
       },
-      data: game
+      ...game
     });
     return {
       success: true
@@ -27,6 +27,7 @@ const createGame = async game => {
     console.error(error);
   }
 };
+
 const getAllGames = async userID => {
   if (!userID) return {
     success: false,
@@ -78,6 +79,7 @@ const deleteAllGames = async userID => {
     };
   }
 };
+
 const verifyGameData = game => {
   const {
     userID,
