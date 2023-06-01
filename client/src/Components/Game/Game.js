@@ -109,7 +109,7 @@ const Game = ({ defaultSnippet }) => {
             startGame={startGame}
           />
         </>
-        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
+        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} currSnippet={currSnippet}/>
       }
       <RestartShortcut restartGame={restartGame} />
       <RestartButton restartGame={restartGame} />
