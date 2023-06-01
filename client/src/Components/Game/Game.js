@@ -54,14 +54,6 @@ const Game = ({ defaultSnippet }) => {
     [currSnippet.data]
   )
 
-  // use to integrate gameService
-  useEffect(() => {
-    if (gameFinished) {
-      // calculate game object
-      // createGame(game).then(res => console.log(res));
-    }
-  }, [gameFinished])
-
   const tickTime = () => {
     snapshot.current[time.current + 1] = typingProgress.current
     dataTyped.current[time.current] =
