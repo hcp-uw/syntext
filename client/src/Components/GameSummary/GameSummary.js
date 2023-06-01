@@ -16,8 +16,6 @@ export default function GameSummary ({ gameRecorder, currSnippet }) {
   const dataTyped = gameRecorder.dataTyped.current
   const numDel = gameRecorder.numDel.current
 
-  console.log(userID)
-
   dataTyped[time.current] =
     typingTarget.split('').length - snapshot.current[time.current].length
   
@@ -32,7 +30,6 @@ export default function GameSummary ({ gameRecorder, currSnippet }) {
 
   useEffect(() => {
     if (isLoggedIn && userID && currSnippet.id !== -1) {
-      console.log('before')
       const gameObject = {
         userID: userID,
         snippet_id: currSnippet.id,
@@ -43,10 +40,7 @@ export default function GameSummary ({ gameRecorder, currSnippet }) {
         accuracy: accuracy,
         num_mistakes: gameRecorder.numDel.current
       }
-      console.log('after')
-      createGame(gameObject).then(res => console.log(res));
-
-      console.log('gameObject: ', gameObject)
+      createGame(gameObject); // async
     }
   }, [])
 
