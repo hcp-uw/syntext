@@ -73,7 +73,7 @@ const processSnippet = (dirPath) => {
     return pData
 }
 
-console.log(processSnippet('./snippets'))
+console.log(processSnippet('./example_data/snippets'))
 ;
 
 //console.log(processSnippet(directoryPath))

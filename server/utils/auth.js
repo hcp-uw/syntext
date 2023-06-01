@@ -44,12 +44,11 @@ const generateAccessToken = async userID => {
 
 const verifyAccessToken = async (token, userID) => {
   try {
+    console.log(JWT_SECRET)
     const res = await jwt.verify(token.split(' ')[1], JWT_SECRET)
     return { ...res, success: true }
   } catch (error) {
-    if (error.name == 'TokenExpiredError') {
-      return { error: error, success: false }
-    }
+    return { error: error, success: false }
   }
 }
 
@@ -83,7 +82,7 @@ const handleAuth = async (req, res, next) => {
   const userID = extractUserID(req)
   const token = extractToken(req)
   //=============================================
-  // console.log('in handleAuth', userID, token)
+  console.log('in handleAuth', userID, token)
   //=============================================
   if (userID === undefined)
     return res.status(401).send({ success: false, error: 'missing userID' })
@@ -93,6 +92,8 @@ const handleAuth = async (req, res, next) => {
     }
 
     const decoded = await verifyAccessToken(token, userID)
+
+    console.log(decoded)
 
     if (!decoded || Number(decoded.userID) !== Number(userID)) {
       return res.status(401).send({ success: false, error: 'TokenExpired' })

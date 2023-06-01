@@ -22,7 +22,7 @@ const Main = () => {
   ]
 
   const defaultSnippet = {
-    id: 1,
+    id: -1,
     SnippetType: "FOR_LOOP",
     length: "LONG",
     data: ["meow", "\ti like dogs"],
