@@ -5,6 +5,7 @@
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "strict": true,
     "lib": ["es2018"],
     "module": "commonjs",
     "target": "es2018",
