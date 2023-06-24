@@ -1,5 +1,5 @@
-const app = require('./app');
-const config = require('./utils/config');
+import app from './app';
+import * as config from './utils/config';
 
 console.table(config)
 
