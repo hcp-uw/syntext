@@ -1,0 +1,3 @@
+public String getParamValue(String paramName) {
+	return request.getParameter(paramName);
+}

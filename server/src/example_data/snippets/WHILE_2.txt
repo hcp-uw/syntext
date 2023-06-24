@@ -1,0 +1,6 @@
+int number = 2, count = 0;
+while (count < 10) {
+	System.out.print(number + " ");
+	number += 2;
+	count++;
+}
