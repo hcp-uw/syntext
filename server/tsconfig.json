@@ -6,7 +6,7 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "strict": true,
-    "lib": ["es2018"],
+    "lib": ["es2021"],
     "module": "commonjs",
     "target": "es2018",
     "baseUrl": ".",

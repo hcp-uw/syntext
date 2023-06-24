@@ -2,14 +2,14 @@ const fs = require('fs');
 
 // const directoryPath = './server/example_data/snippets'
 
-const processSnippet = (dirPath) => {
+const processSnippet = (dirPath: string) => {
     
-    const getType = (filePath) => {
-        const temp = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
+    const getType = (filePath: string): string => {
+        const temp: Array<string> = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
         return temp[temp.length - 1].split('_')[0]; //['FOR', '6.txt']
     }
 
-    const getID = (filePath) => {
+    const getID = (filePath: string): number => {
         const type = getType(filePath).toUpperCase();
         const temp = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
         const num = temp[temp.length - 1].split('_')[1];
@@ -29,6 +29,8 @@ const processSnippet = (dirPath) => {
             case "WHILE":
                 id = `4${num}` 
                 break;
+            default:
+                id = `0${num}`
         }
         
         return Number(id.replace('.txt', ''));
