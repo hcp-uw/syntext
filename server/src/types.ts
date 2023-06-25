@@ -9,5 +9,15 @@ export interface Snippet {
     data: Array<string>
 }
 
+export interface GameSummary {
+    userID: number,
+    snippet_id: number,
+    total_time: number,
+    total_characters: number,
+    wpm_data: Array<number>,
+    wpm_avg: number,
+    accuracy: number,
+    num_mistakes: number
+}
 
 

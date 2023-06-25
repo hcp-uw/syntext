@@ -1,8 +1,8 @@
-const mysql = require('mysql2');
-const config = require('../utils/config')
+import mysql, { Pool } from 'mysql2';
+import * as config from '../utils/config';
 
 
-const pool = mysql.createPool({
+const pool: Pool = mysql.createPool({
     host: config.MYSQL_HOST, 
     user: config.MYSQL_USER,
     password: config.MYSQL_ROOT_PASSWORD,
@@ -10,14 +10,12 @@ const pool = mysql.createPool({
 }).promise()
 
 
-console.table(
-    {
-        host: config.MYSQL_HOST, 
-        user: config.MYSQL_USER,
-        password: config.MYSQL_ROOT_PASSWORD,
-        database: config.MYSQL_DATABASE
-    }
-)
+console.table({
+    host: config.MYSQL_HOST, 
+    user: config.MYSQL_USER,
+    password: config.MYSQL_ROOT_PASSWORD,
+    database: config.MYSQL_DATABASE
+})
 
 const clearRecordTable = async () => {
     try {
