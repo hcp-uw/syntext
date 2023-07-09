@@ -1,8 +1,11 @@
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+import { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from "express"
+
+export const unknownEndpoint = (request: Request, response: Response) => {
+    return response.status(404).send({ error: 'unknown endpoint' })
 }
   
-const errorHandler = (error, request, response, next) => {
+// FIX ME
+export const errorHandler = (error: any, request: Request, response: Response, next: NextFunction) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
@@ -14,7 +17,3 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-module.exports = {
-  unknownEndpoint,
-  errorHandler
-}
