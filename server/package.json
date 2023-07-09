@@ -23,7 +23,11 @@
     "localDBinit": " npm run create-tables && node ./db-admin-scripts/clear-tables",
     "localDBfill": "npm run localDBinit && node ./db-admin-scripts/fill-tables",
     "grant-privs": "node ./db-admin-scripts/create-user && node ./db-admin-scripts/grant-privs",
-    "start": "nodemon server"
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/app.ts",
+    "start": "npm run dev",
+    "build": "tsc",
+    "debug": "tsc && node --inspect ./build/src/app.js",
+    "prod": "tsc && node ./build/src/app.js"
   },
   "keywords": [],
   "author": "",
