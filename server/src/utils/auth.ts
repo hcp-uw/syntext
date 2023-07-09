@@ -168,16 +168,3 @@ export const handleAuth = async (req: Request, res: Response, next: NextFunction
     res.status(500).json({ success: false, error: 'Server error' })
   }
 }
-
-
-module.exports = {
-  extractToken,
-  verifyAccessToken,
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-  generateHash,
-  verifyHash,
-  handleAuth,
-  saltRounds
-}
