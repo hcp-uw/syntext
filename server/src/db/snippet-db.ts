@@ -10,12 +10,19 @@ const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
 }
 
-export const getSnippetByLengthAndType = async (length: SnippetLength, type: SnippetType): Promise<Array<Snippet> | unknown> => {
-  const result = await getSnippetByType(type)
-  return result instanceof Array 
-    ? result.filter(snippet => snippet.length === length)
-    : result
+interface SnippetDBResultLine<T> extends Snippet {
+  line_text: T
 }
+
+export const getSnippetByLengthAndType = async (
+  length: SnippetLength,
+  type: SnippetType
+): Promise<Array<Snippet> | unknown> => {
+  const result = await getSnippetByType(type);
+  return Array.isArray(result)
+    ? result.filter(snippet => snippet.length === length)
+    : result;
+};
 
 export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet> | unknown> => {
   try {
@@ -26,53 +33,41 @@ export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet
       rec.snippet_type = ? 
       ORDER BY rec.id, data.line_index ASC;
     `
-    // FIXME
-    const result: any = await pool.query(query, [type])
 
-    if (result[0].length === 0) return []
     // FIXME
-    const charData: Array<{
-      id: number, 
-      snippet_type: SnippetType, 
-      snippet_length: SnippetLength, 
-      line_text: string
-    }> = result[0].map((line_data: any ) => { //FIXME
-      return {
+    const rawResult: any = await pool.query(query, [type])
+
+    if (rawResult[0].length === 0) return []
+    
+    const result = rawResult.map((line: any) => 
+      ({ ...line, line_text: JSON.parse(line.line_text)}))
+
+    const charData: SnippetDBResultLine<string>[] = result.map(
+      (line_data: SnippetDBResultLine<number[]>) => ({
         ...line_data,
-        line_text: toChar(JSON.parse(line_data.line_text)).join('')
-      }
-    })
+        line_text: toChar(line_data.line_text).join('')
+    }));
 
-    // might actually need to use any for this one, or use a HashMap 
-    // instead of a js object
-    let intermediateResult: any = {}
+    let intermediateResult: Record<number, Snippet> = {}
 
-    charData.forEach((line: {
-      id: number, 
-      snippet_type: SnippetType, 
-      snippet_length: SnippetLength, 
-      line_text: string
-    }) => {
+    charData.forEach((line: SnippetDBResultLine<string>) => {
       if (!intermediateResult[line.id]) {
         intermediateResult[line.id] = {
           id: line.id,
-          length: line.snippet_length,
-          type: line.snippet_type,
-          data: line.line_text
+          length: line.length,
+          type: line.type,
+          data: [line.line_text]
         }
       } else {
-        intermediateResult[line.id] = {
-          ...intermediateResult[line.id],
-          data: (intermediateResult[line.id].data += '\n' + line.line_text)
-        }
+        intermediateResult[line.id].data.push(line.line_text)  
       }
     })
 
     let processedResult: Array<Snippet> = []
-    Object.keys(intermediateResult).forEach(id => {
-      const d = intermediateResult[id].data
-      processedResult.push({ ...intermediateResult[id], data: d.split('\n') })
-    })
+    
+    for (const id in intermediateResult) {
+      processedResult.push(intermediateResult[id])
+    }
 
     return processedResult
   } catch (error) {
