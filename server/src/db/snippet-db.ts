@@ -10,9 +10,13 @@ const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
 }
 
-interface SnippetDBResultLine<T> extends Snippet {
+interface SnippetDBResultLine<T> {
+  id: number
+  snippet_length: SnippetLength
+  snippet_type: SnippetType
   line_text: T
 }
+
 
 export const getSnippetByLengthAndType = async (
   length: SnippetLength,
@@ -42,32 +46,7 @@ export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet
     const result = rawResult.map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
-    const charData: SnippetDBResultLine<string>[] = result.map(
-      (line_data: SnippetDBResultLine<number[]>) => ({
-        ...line_data,
-        line_text: toChar(line_data.line_text).join('')
-    }));
-
-    let intermediateResult: Record<number, Snippet> = {}
-
-    charData.forEach((line: SnippetDBResultLine<string>) => {
-      if (!intermediateResult[line.id]) {
-        intermediateResult[line.id] = {
-          id: line.id,
-          length: line.length,
-          type: line.type,
-          data: [line.line_text]
-        }
-      } else {
-        intermediateResult[line.id].data.push(line.line_text)  
-      }
-    })
-
-    let processedResult: Array<Snippet> = []
-    
-    for (const id in intermediateResult) {
-      processedResult.push(intermediateResult[id])
-    }
+    const processedResult: Array<Snippet> = convertDBResultToSnippet(result)
 
     return processedResult
   } catch (error) {
@@ -86,42 +65,15 @@ export const getSnippetByLength = async (length: SnippetLength): Promise<Array<S
       ORDER BY data.line_index ASC;
     `
     // FIXME    
-    const result: any = await pool.query(query, [length])
-    const characterConvertedData: Array<{
-      id: number, 
-      snippet_type: SnippetType, 
-      snippet_length: SnippetLength, 
-      line_text: string
-    }> = result[0].map((line_data: any) => { //FIXME
-      return {
-        ...line_data,
-        line_text: toChar(JSON.parse(line_data.line_text)).join('')
-      }
-    })
+    const rawResult: any = await pool.query(query, [length])
 
-    // same here as above, might need to change to HashMap
-    let intermediateResult: any = {}
-    characterConvertedData.forEach(line => {
-      if (!intermediateResult[line.id]) {
-        intermediateResult[line.id] = {
-          id: line.id,
-          length: line.snippet_length,
-          type: line.snippet_type,
-          data: line.line_text
-        }
-      } else {
-        intermediateResult[line.id] = {
-          ...intermediateResult[line.id],
-          data: (intermediateResult[line.id].data += '\n' + line.line_text)
-        }
-      }
-    })
+    if (rawResult[0].length === 0) return []
 
-    let processedResult: Array<Snippet> = []
-    Object.keys(intermediateResult).forEach(id => {
-      const d = intermediateResult[id].data
-      processedResult.push({ ...intermediateResult[id], data: d.split('\n') })
-    })
+    const result = rawResult.map((line: any) => 
+      ({ ...line, line_text: JSON.parse(line.line_text)}))
+
+    let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
+
     return processedResult
   } catch (error) {
     console.error(error)
@@ -139,12 +91,22 @@ export const createSnippet = async (snippet: Snippet): Promise<{
   let connection
   try {
     connection = await pool.getConnection()
+    
+    if (connection !instanceof Connection)
+      return { success: false, error: 'connection failed' }
+
     const recordQuery =
       'INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);'
+    
+    connection.beginTransaction()
+
     await connection.query(recordQuery, [id, type, length])
-    const preparedValues = []
+    
+    const preparedValues: Array<{id: number, i: number, d: number[]}> = []
+    
     const insertQuery =
       "INSERT INTO snippet_data (id, line_index, line_text) VALUES (?, ?, '[?]');"
+    
     let index = 0
     for (const line of data) {
       preparedValues[index] = { id: id, i: index, d: toAscii(line) }
@@ -158,12 +120,15 @@ export const createSnippet = async (snippet: Snippet): Promise<{
       index++
     }
 
+    connection.commit();
+
     return {
       success: true,
       created: { id, type, length }
     }
   } catch (error) {
     console.error(error)
+    connection?.rollback()
     return { error: error, success: false }
   } 
 }
@@ -208,36 +173,50 @@ export const getSnippetByID = async (id: number): Promise<Snippet | unknown> => 
             ORDER BY data.line_index ASC;
     `
   try {
-    const data: any = await pool.query(query, [id])
+    const rawResult: any = await pool.query(query, [id])
 
-    const result: Array<{
-      id: number, 
-      snippet_type: SnippetType, 
-      snippet_length: SnippetLength, 
-      line_text: string
-    }> = data[0].map((line_data: any) => {
-      return {
-        ...line_data,
-        line_text: toChar(JSON.parse(line_data.line_text)).join('')
-      }
-    })
 
-    let type: SnippetType = result[0].snippet_type
-    let length: SnippetLength = result[0].snippet_length
-    const processedSnippetText: Array<string> = result.map(line => line.line_text)
+    if (rawResult[0].length === 0) return {}
 
-    const processedResult: Snippet = {
-      id: id,
-      type: type,
-      length: length,
-      data: processedSnippetText
-    }
+    const result = rawResult.map((line: any) => 
+      ({ ...line, line_text: JSON.parse(line.line_text)}))
 
-    return processedResult
+    let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
+
+    
+    return processedResult[0]
   } catch (error) {
-    return {}
     console.error(error)
-    return error
+    return {}
   } 
 }
 
+const convertDBResultToSnippet = (result: any): Snippet[] => {
+  const charData: SnippetDBResultLine<string>[] = result.map((line_data: SnippetDBResultLine<number[]>) => ({
+    ...line_data,
+    line_text: toChar(line_data.line_text).join('')
+  }));
+
+  let intermediateResult: Record<number, Snippet> = {};
+
+  charData.forEach((line: SnippetDBResultLine<string>) => {
+    if (!intermediateResult[line.id]) {
+      intermediateResult[line.id] = {
+        id: line.id,
+        length: line.snippet_length,
+        type: line.snippet_type,
+        data: [line.line_text]
+      };
+    } else {
+      intermediateResult[line.id].data.push(line.line_text);
+    }
+  });
+
+  let processedResult: Snippet[] = [];
+
+  for (const id in intermediateResult) {
+    processedResult.push(intermediateResult[id]);
+  }
+
+  return processedResult;
+};
