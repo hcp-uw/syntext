@@ -1,15 +1,17 @@
+import { Snippet } from "../types"
 
-const getSnippetData = () => {
+// 'MISC' deprecated
+const getSnippetData = (): Array<Snippet> => {
     return [
         {
             id: 1, 
-            type:'PRINT',
+            type:'MISC',
             length: 'SHORT',
             data: ['System.out.println("goodbye world");']
         },
         {
             id: 2,
-            type: 'PRINT',
+            type: 'MISC',
             length: 'SHORT',
             data: ['String myCat = "Matilda";',
                     'System.out.println(myCat.charAt(3));'
@@ -17,7 +19,7 @@ const getSnippetData = () => {
         },
         {
             id: 3,
-            type: 'PRINT',
+            type: 'MISC',
             length: 'SHORT',
             data: ['int sum = myCat.length() - myGod.length();',
                     'System.out.println(sum);'
@@ -25,7 +27,7 @@ const getSnippetData = () => {
         },
         {
             id: 4, 
-            type:'FOR_LOOP',
+            type:'FOR',
             length: 'MEDIUM',
             data: ['for (int i = 0; i < 10; i++) {',
                     '\tSystem.out.println(i);',
@@ -34,7 +36,7 @@ const getSnippetData = () => {
         },
         {
             id: 5, 
-            type:'FOR_LOOP',
+            type:'FOR',
             length: 'MEDIUM',  
             data: ['for (int i = 0; i < rows; i++) {',
                     '\tfor (int j = 0; j < columns; j++) {',
@@ -45,7 +47,7 @@ const getSnippetData = () => {
         },
         {
             id: 6, 
-            type:'CONDITIONAL',
+            type:'MISC',
             length: 'MEDIUM',
             data: ['if (hours > 8) {',
                     '\treturn (rate * 8) + ((hours - 8) * (rate * 1.5));',
@@ -57,7 +59,7 @@ const getSnippetData = () => {
         },
         {
             id: 7, 
-            type:'FOR_LOOP',
+            type:'FOR',
             length: 'LONG',
             data: ['int j = 20;',  
                     'for (int i = 0; i < 10; i++) {',  
@@ -72,7 +74,7 @@ const getSnippetData = () => {
         },
         {
             id: 8, 
-            type:'WHILE_LOOP',
+            type:'WHILE',
             length: 'LONG',
             data: ['int total = 0;',
                     'int turns = 0;',
@@ -87,7 +89,7 @@ const getSnippetData = () => {
         },
         {
             id: 9, 
-            type:'WHILE_LOOP',
+            type:'WHILE',
             length: 'LONG',
             data: [
                 'while (input.hasNextLine()) {',

@@ -1,12 +1,13 @@
-const fs = require('fs');
+import { Snippet, SnippetLength, SnippetType } from '../types'
+import fs from 'fs';
 
 // const directoryPath = './server/example_data/snippets'
 
 const processSnippet = (dirPath: string) => {
     
-    const getType = (filePath: string): string => {
+    const getType = (filePath: string): SnippetType => {
         const temp: Array<string> = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
-        return temp[temp.length - 1].split('_')[0]; //['FOR', '6.txt']
+        return temp[temp.length - 1].split('_')[0] as SnippetType; //['FOR', '6.txt']
     }
 
     const getID = (filePath: string): number => {
@@ -37,47 +38,44 @@ const processSnippet = (dirPath: string) => {
     }
 
 
-    const getLength = (fileData) => {
-    const len = fileData.length
-    if (len <= 6) return "SHORT";
-    if (len <= 10) return "MEDIUM";
-    else return "LONG";
+    const getLength = (fileData: Array<string>): SnippetLength => {
+        const len = fileData.length
+        if (len <= 6) return "SHORT";
+        if (len <= 10) return "MEDIUM";
+        else return "LONG";
     }
 
-    const fileNames = [];
+    const fileNames: Array<string> = [];
 
-    fs.readdirSync(dirPath).forEach(file => {
+    fs.readdirSync(dirPath).forEach( (file: string): void => {
         const path = `${dirPath}/${file}`
         if (fs.statSync(path).isFile()) fileNames.push(path);
     })
+    type FileObject = {fileData: Array<string>, filePath: string}
+    const data: Array<FileObject> = []
 
-    const data = []
-
-    fileNames.forEach((filePath) => {
+    fileNames.forEach((filePath: string) => {
         data.push({
+            filePath: filePath,
             fileData: fs.readFileSync(filePath, {encoding:'utf8', flag:'r'})
-            .replaceAll('\r', '')
-            .split('\n')
-            .map(line => line.trimEnd()),
-            filePath: filePath
+                .replaceAll('\r', '')
+                .split('\n')
+                .map((line: string): string => line.trimEnd())
         })
     })
 
-    const pData = data.map(({ fileData, filePath }) => {
+    const pData = data.map(({ fileData, filePath }: FileObject): Snippet => {
         return {
             id: getID(filePath),
             type: getType(filePath),
             length: getLength(fileData),
             data: fileData
-        }
+        } as Snippet
     });
 
     return pData
 }
 
-console.log(processSnippet('./example_data/snippets'))
-;
+// console.log(processSnippet('./example_data/snippets'))
 
-//console.log(processSnippet(directoryPath))
 
-module.exports = { processSnippet }

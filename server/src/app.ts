@@ -1,13 +1,12 @@
-const express = require('express');
-const snippetRouter = require('./controllers/snippets');
-const { userRouter } = require('./controllers/users');
-const gameRouter  = require('./controllers/games');
+import express, { Application } from 'express';
+import snippetRouter from './controllers/snippets';
+import { userRouter } from './controllers/users';
+import gameRouter from './controllers/games';
+import cors from 'cors';
+import path from "path";
+import { unknownEndpoint, errorHandler } from './utils/middleware';
 
-const cors = require('cors');
-const path = require("path");
-const { unknownEndpoint, errorHandler } = require('./utils/middleware');
-
-const app = express();
+const app: Application = express();
 const corsOptions = {
     exposedHeaders: 'Authorization',
 };
@@ -31,6 +30,5 @@ app.get('/test', (req, res) => {res.send('hello')})
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
-
-module.exports = app;
+export default app;
 
