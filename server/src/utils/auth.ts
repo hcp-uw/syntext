@@ -6,6 +6,25 @@ import { Response } from 'express-serve-static-core'
 
 const saltRounds = 3
 
+interface AccessTokenPayload extends JwtPayload {
+  userID: number
+}
+
+interface RefreshTokenPayload extends JwtPayload {
+  stamp: number
+}
+
+interface SuccesfullyDecodedToken<T> { 
+  result: T,
+  success: boolean 
+} 
+
+interface FailedDecodedToken { 
+  error: unknown,
+  success: boolean,
+  message?: string 
+}
+
 export const generateHash = async (password: string): Promise<string> => {
   const res: string = await bcrypt.hash(password, saltRounds)
   return res
@@ -43,12 +62,16 @@ export const generateAccessToken = async (userID: number | string): Promise<stri
 
 export const verifyAccessToken = async (token: string, userID: string | number):
   Promise<
-    {result: string | JwtPayload, success: boolean} | 
+    {result: AccessTokenPayload, success: boolean} | 
     {error: unknown, success: false, message?: string}
   > => {
   try {
     const res: string | JwtPayload = await jwt.verify(token.split(' ')[1], JWT_SECRET)
-    return { result: res, success: true }
+
+    if (typeof res === "string")
+      return { error: undefined, success: false, message: "decoded token is a string instead of a JwtPayload" }
+
+    return { result: res as AccessTokenPayload, success: true }
   } catch (error) {
     if (error instanceof JsonWebTokenError && error.name == 'TokenExpiredError') {
       return { error: error, success: false, message: "expired" }
@@ -136,10 +159,11 @@ const extractUserID = (req: Request): number => {
 }
 
 interface IdentifiedRequest extends Request {
-  userID: number;
+  userID: number
+  decodedUserID: number
 }
 
-export const handleAuth = async (req: Request, res: Response, next: NextFunction) => {
+export const handleAuth = async (req: IdentifiedRequest, res: Response, next: NextFunction) => {
   const userID = extractUserID(req)
   const token = extractToken(req)
   //=============================================
@@ -152,15 +176,17 @@ export const handleAuth = async (req: Request, res: Response, next: NextFunction
       return res.status(401).send({ success: false, error: 'missing token' })
     }
 
-    const decoded = await verifyAccessToken(token, userID)
+    let decoded: SuccesfullyDecodedToken<AccessTokenPayload> | FailedDecodedToken = await verifyAccessToken(token, userID)
 
     console.log(decoded)
 
-    if (!decoded || Number(decoded.userID) !== Number(userID)) {
-      return res.status(401).send({ success: false, error: 'TokenExpired' })
+    if (decoded && (!decoded.success)) {
+      decoded = decoded as FailedDecodedToken
+      return res.status(401).send({ success: false, error: decoded.message })
     }
 
-    req.decodedUserID = decoded.userID // store  decoded userID in req
+    decoded = decoded as SuccesfullyDecodedToken<AccessTokenPayload>
+    req.decodedUserID = decoded.result.userID // store  decoded userID in req
 
     next()
   } catch (error) {
