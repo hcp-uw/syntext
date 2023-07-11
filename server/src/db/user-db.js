@@ -1,7 +1,7 @@
 const mysql = require('mysql2')
-const config = require('../utils/config.js')
-const { pool } = require('./pool.js')
-const { verifyHash, generateRefreshToken } = require('../utils/auth.js')
+const config = require('../utils/config')
+const { pool } = require('./pool')
+const { verifyHash, generateRefreshToken } = require('../utils/auth')
 
 const getRefreshToken = async userID => {
   if (!userID) return { success: false, error: 'missing required field' }

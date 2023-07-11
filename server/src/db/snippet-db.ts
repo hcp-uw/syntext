@@ -1,10 +1,10 @@
 // get the client
 import mysql from 'mysql2'
-import * as config from '../utils/config.js'
+import * as config from '../utils/config'
 import { toAscii, toChar } from './betweenASCIIValues'
-import { pool } from './pool.js'
-import { SnippetLength, SnippetType, Snippet } from '../types.js'
-import { Connection } from 'mysql2/typings/mysql/lib/Connection.js'
+import { pool } from './pool'
+import { SnippetLength, SnippetType, Snippet } from '../types'
+// import { Connection } from 'mysql2/typings/mysql/lib/Connection'
 
 const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
@@ -92,8 +92,8 @@ export const createSnippet = async (snippet: Snippet): Promise<{
   try {
     connection = await pool.getConnection()
     
-    if (connection !instanceof Connection)
-      return { success: false, error: 'connection failed' }
+    // if (connection !instanceof Connection)
+    //   return { success: false, error: 'connection failed' }
 
     const recordQuery =
       'INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);'
@@ -138,11 +138,13 @@ export const deleteSnippetByID = async (id: number): Promise<{
   error?: unknown 
 }> => {
   if (!id) return missingRequiredParams('id', id)
-  let connection
+  let connection: any
   try {
     connection = await pool.getConnection()
-    if (connection !instanceof Connection)
-      return { success: false }
+    
+    // if (connection !instanceof Connection)
+    //   return { success: false }
+    
     const query1 = 'DELETE FROM snippet_records WHERE id = ?'
     const query2 = 'DELETE FROM snippet_data WHERE id = ?'
     await connection.beginTransaction()
@@ -152,12 +154,12 @@ export const deleteSnippetByID = async (id: number): Promise<{
     return { success: true }
   } catch (error) {
     console.error(error)
-    if (connection instanceof Connection) 
-      await connection.rollback()
+    // if (connection instanceof Connection) 
+    await connection.rollback()
     return { error: error, success: false }
   } finally {
-    if (connection instanceof Connection)
-      await connection.release()
+    // if (connection instanceof Connection)
+    await connection.release()
   }
 }
 

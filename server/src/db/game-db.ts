@@ -1,8 +1,8 @@
 import mysql, { QueryError } from 'mysql2'
-import * as config from '../utils/config.js'
+import * as config from '../utils/config'
 import bcrypt from 'bcrypt'
-import { pool } from './pool.js'
-import { GameSummary } from '../types.js'
+import { pool } from './pool'
+import { GameSummary } from '../types'
 
 const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
