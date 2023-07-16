@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { JWT_SECRET }  from './config'
 import { NextFunction, Request } from 'express'
 import { Response } from 'express-serve-static-core'
+import { SuccesfullyDecodedToken, FailedDecodedToken } from '../types'
 
 const saltRounds = 3
 
@@ -14,16 +15,7 @@ interface RefreshTokenPayload extends JwtPayload {
   stamp: number
 }
 
-interface SuccesfullyDecodedToken<T> { 
-  result: T,
-  success: boolean 
-} 
 
-interface FailedDecodedToken { 
-  error: unknown,
-  success: boolean,
-  message?: string 
-}
 
 export const generateHash = async (password: string): Promise<string> => {
   const res: string = await bcrypt.hash(password, saltRounds)

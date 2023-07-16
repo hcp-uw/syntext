@@ -1,3 +1,5 @@
+import { Request } from "express"
+
 export type SnippetLength =  'SHORT' | 'MEDIUM' | 'LONG'
 
 export type SnippetType = 'FOR' | 'METHOD' | 'COLLECTIONS' | 'WHILE' | 'MISC'
@@ -23,7 +25,24 @@ export interface GameSummary {
 export interface User {
     userID: number,
     username: string,
-    last_login: Date
+    last_login: Date,
+    secret: string,
+    refresh_token: string,
+    hash_password: string
 }
 
+export interface SuccesfullyDecodedToken<T> { 
+    result: T,
+    success: boolean 
+} 
+  
+export interface FailedDecodedToken { 
+    error: unknown,
+    success: boolean,
+    message?: string 
+}
 
+export interface IdentifiedRequest extends Request {
+    userID: number
+    decodedUserID: number
+  }

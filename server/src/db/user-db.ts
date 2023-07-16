@@ -12,7 +12,7 @@ type Result<T> = Promise<{
 }>
 
 
-const getRefreshToken = async (userID: number): Result<number> => {
+export const getRefreshToken = async (userID: number): Result<number> => {
 
   try {
     const query = 'SELECT refresh_token FROM users WHERE userID = ?'
@@ -30,12 +30,12 @@ const getRefreshToken = async (userID: number): Result<number> => {
   }
 }
 
-const getSecret = async (userID: number): Result<number> => {
+export const getSecret = async (userID: number): Result<string> => {
 
   try {
     const query = 'SELECT secret FROM users WHERE userID = ?'
     const result = await pool.query(query, [userID])
-    const rows: any =result[0]
+    const rows: any = result[0]
 
     if (rows.length > 0) 
       return { success: true, result: rows[0].secret }
@@ -48,12 +48,12 @@ const getSecret = async (userID: number): Result<number> => {
   }
 }
 
-const isUser = async (userID: number): Result<boolean> => {
+export const isUser = async (userID: number): Result<boolean> => {
   
   try {
     const query = 'SELECT username FROM users WHERE userID = ?'
     const result = await pool.query(query, [userID])
-    const rows: any =result[0]
+    const rows: any = result[0]
 
     return { success: true, result: rows.length > 0 }
   } catch (error) {
@@ -62,13 +62,13 @@ const isUser = async (userID: number): Result<boolean> => {
   }
 }
 
-const getUser = async (userID: number): Result<User> => {
+export const getUser = async (userID: number): Result<User> => {
 
   try {
     const query =
       'SELECT username, userID, last_login FROM users WHERE userID = ?'
     const result = await pool.query(query, [userID])
-    const rows: any =result[0]
+    const rows: any = result[0]
 
     if (rows.length > 0) 
       return { success: true, result: rows[0] }
@@ -83,7 +83,7 @@ const getUser = async (userID: number): Result<User> => {
 }
 
 // The key must be sanitized!!! only ever hard code string values (never use client input)
-const updateUser = async (userID: number, key: keyof User, value: string): Result<undefined> => {
+export const updateUser = async (userID: number, key: keyof User, value: string): Result<undefined> => {
 
   // if (value is not a proper value) 
   //   return { 
@@ -108,12 +108,12 @@ const updateUser = async (userID: number, key: keyof User, value: string): Resul
   }
 }
 
-const getUserID = async (username: string): Result<number> => {
+export const getUserID = async (username: string): Result<number> => {
   
   try {
     const query = 'SELECT userID FROM users WHERE username = ?'
     const result = await pool.query(query, [username])
-    const rows: any =result[0]
+    const rows: any = result[0]
 
     if (rows.length > 0) 
       return { result: rows[0].userID, success: true }
@@ -126,7 +126,7 @@ const getUserID = async (username: string): Result<number> => {
   }
 }
 
-const createUser = async (username: string, hash: string): Result<number> => {
+export const createUser = async (username: string, hash: string): Result<number> => {
 
   try {
     let res = await getUserID(username)
@@ -167,12 +167,12 @@ const createUser = async (username: string, hash: string): Result<number> => {
   }
 }
 
-const authenticate = async (username: string, password: string): Result<boolean> => {
+export const authenticate = async (username: string, password: string): Result<boolean> => {
   
   try {
     const query = 'SELECT username, hash_password FROM users WHERE username = ?'
     const result = await pool.query(query, [username])
-    const rows: any =result[0]
+    const rows: any = result[0]
 
     if (rows.length > 0) {
       const authResult = await verifyHash(password, rows[0].hash_password)
@@ -189,7 +189,7 @@ const authenticate = async (username: string, password: string): Result<boolean>
   }
 }
 
-const updateLastLogin = async (userID: number): Result<undefined> => {
+export const updateLastLogin = async (userID: number): Result<undefined> => {
   
   try {
     const date = Date.now()
@@ -201,7 +201,7 @@ const updateLastLogin = async (userID: number): Result<undefined> => {
   }
 }
 
-const deleteUser = async (username: string, password: string): Result<undefined> => {
+export const deleteUser = async (username: string, password: string): Result<undefined> => {
   
   try {
 
@@ -235,17 +235,4 @@ const deleteUser = async (username: string, password: string): Result<undefined>
     console.error(error)
     return { success: false, error: error }
   }
-}
-
-module.exports = {
-  createUser,
-  deleteUser,
-  getUserID,
-  authenticate,
-  updateLastLogin,
-  getUser,
-  isUser,
-  updateUser,
-  getRefreshToken,
-  getSecret
 }
