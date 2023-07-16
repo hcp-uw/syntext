@@ -103,16 +103,7 @@ const extractGame = async (req: Request): Result<GameSummary> => {
     success: true, 
     result: { ...req.body }
   }
-  // return {
-  //   userID: userID,
-  //   snippet_id: snippet_id,
-  //   total_time: total_time,
-  //   total_characters: total_characters,
-  //   wpm_data: wpm_data.toString(),
-  //   wpm_avg: wpm_avg,
-  //   accuracy: accuracy,
-  //   num_mistakes: num_mistakes
-  // }
+
 }
 
 function isGameSummary(obj: any): obj is GameSummary {
