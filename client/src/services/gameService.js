@@ -14,15 +14,16 @@ const createGame = async game => {
     error: "invalid game data"
   };
   try {
+    
     const res = await axios.post(`${baseURL}/create`, {
       headers: {
         Authorization: authToken
       },
       ...game
-    });
-    return {
-      success: true
-    };
+    })
+
+    return res 
+  
   } catch (error) {
     console.error(error);
   }
@@ -34,15 +35,8 @@ const getAllGames = async userID => {
     error: "invalid userID"
   };
   try {
-    const res = await axios.get(`${baseURL}/games`, {
-      data: {
-        userID: userID
-      }
-    });
-    if (res.status === 200) return res.data;else return {
-      success: false,
-      error: res.status
-    };
+    const res = await axios.get(`${baseURL}/games?userID=${userID}`);
+    return res 
   } catch (error) {
     console.error(error);
     return {
@@ -51,26 +45,22 @@ const getAllGames = async userID => {
     };
   }
 };
+
 const deleteAllGames = async userID => {
+  
   if (!userID) return {
     success: false,
     error: "invalid userID"
-  };
+  }
+
   try {
-    const res = await axios.delete(`${baseURL}/games`, {
+    const res = await axios.delete(`${baseURL}/games?userID=${userID}`, {
       headers: {
         Authorization: authToken
-      },
-      data: {
-        userID: userID
       }
     });
-    if (res.status === 200) return {
-      success: true
-    };else return {
-      success: false,
-      error: res.status
-    };
+
+    return res
   } catch (error) {
     console.error(error);
     return {
