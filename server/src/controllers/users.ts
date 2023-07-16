@@ -125,8 +125,6 @@ userRouter.post('/refresh', jsonParser, async (req: Request, res: Response) => {
     'Bearer ' + refreshToken.result
   )
 
-  console.log(refreshValidity)
-
   if (!refreshToken.success || !refreshToken.result)
     return res
       .status(401)
