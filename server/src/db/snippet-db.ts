@@ -4,7 +4,7 @@ import * as config from '../utils/config'
 import { toAscii, toChar } from './betweenASCIIValues'
 import { pool } from './pool'
 import { SnippetLength, SnippetType, Snippet } from '../types'
-// import { Connection } from 'mysql2/typings/mysql/lib/Connection'
+
 
 const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
@@ -43,7 +43,7 @@ export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet
 
     if (rawResult[0].length === 0) return []
     
-    const result = rawResult.map((line: any) => 
+    const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
     const processedResult: Array<Snippet> = convertDBResultToSnippet(result)
@@ -69,7 +69,7 @@ export const getSnippetByLength = async (length: SnippetLength): Promise<Array<S
 
     if (rawResult[0].length === 0) return []
 
-    const result = rawResult.map((line: any) => 
+    const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
     let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
@@ -88,19 +88,11 @@ export const createSnippet = async (snippet: Snippet): Promise<{
 }> => {
   const { id, type, length, data } = snippet
 
-  let connection
   try {
-    connection = await pool.getConnection()
-    
-    // if (connection !instanceof Connection)
-    //   return { success: false, error: 'connection failed' }
-
     const recordQuery =
       'INSERT INTO snippet_records (id, snippet_type, snippet_length) VALUES (?, ?, ?);'
-    
-    connection.beginTransaction()
 
-    await connection.query(recordQuery, [id, type, length])
+    await pool.query(recordQuery, [id, type, length])
     
     const preparedValues: Array<{id: number, i: number, d: number[]}> = []
     
@@ -116,11 +108,9 @@ export const createSnippet = async (snippet: Snippet): Promise<{
     index = 0
     let values
     for (const values of preparedValues) {
-      await connection.query(insertQuery, [values.id, values.i, values.d])
+      await pool.query(insertQuery, [values.id, values.i, values.d])
       index++
     }
-
-    connection.commit();
 
     return {
       success: true,
@@ -128,7 +118,6 @@ export const createSnippet = async (snippet: Snippet): Promise<{
     }
   } catch (error) {
     console.error(error)
-    connection?.rollback()
     return { error: error, success: false }
   } 
 }
@@ -138,28 +127,17 @@ export const deleteSnippetByID = async (id: number): Promise<{
   error?: unknown 
 }> => {
   if (!id) return missingRequiredParams('id', id)
-  let connection: any
+
   try {
-    connection = await pool.getConnection()
-    
-    // if (connection !instanceof Connection)
-    //   return { success: false }
-    
     const query1 = 'DELETE FROM snippet_records WHERE id = ?'
     const query2 = 'DELETE FROM snippet_data WHERE id = ?'
-    await connection.beginTransaction()
-    await connection.query(query1, [id])
-    await connection.query(query2, [id])
-    await connection.commit()
+    await pool.query(query1, [id])
+    await pool.query(query2, [id])
+    await pool.commit()
     return { success: true }
   } catch (error) {
     console.error(error)
-    // if (connection instanceof Connection) 
-    await connection.rollback()
     return { error: error, success: false }
-  } finally {
-    // if (connection instanceof Connection)
-    await connection.release()
   }
 }
 
@@ -180,7 +158,7 @@ export const getSnippetByID = async (id: number): Promise<Snippet | unknown> => 
 
     if (rawResult[0].length === 0) return {}
 
-    const result = rawResult.map((line: any) => 
+    const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
     let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
