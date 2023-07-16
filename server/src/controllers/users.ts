@@ -78,8 +78,18 @@ userRouter.post('/login', jsonParser, async (req: Request, res: Response) => {
 
     const token = await Auth.generateAccessToken(userID.result)
 
-    await Users.updateUser(userID.result, 'secret', token)  // might want to verify 
-    await Users.updateLastLogin(userID.result)              // this is successful
+    const secretRes = await Users.updateUser(userID.result, 'secret', token)  // might want to verify 
+    const updateLoginRes = await Users.updateLastLogin(userID.result)              // this is successful
+
+    if (!secretRes.success)
+      return res
+        .status(401)
+        .json({ success: false, error: 'unable to update secret ' + secretRes.error })
+
+    if (!updateLoginRes.success)
+      return res
+        .status(401)
+        .json({ success: false, error: 'unable to update last login ' + updateLoginRes.error })  
 
     return res
       .set('Authorization', `Bearer ${token}`)
@@ -224,16 +234,18 @@ userRouter.get('/id', jsonParser, async (req: Request, res: Response) => {
 
   try {
     const id = await Users.getUserID(username)
-    if (id.error) return res.status(400).send({ success: false })
-    else return res.status(200).send({ success: true, userID: id })
+    if (!id.success || !id.result) 
+      return res.status(400).send({ success: false })
+    else 
+      return res.status(200).send({ success: true, userID: id })
   } catch (error) {
     console.error(error)
     res.status(500).send({ success: false, error: 'internal server error' })
   }
 })
 
-const handlePasswordChange = async (res: Response, userID, newPassword) => {
-  const newHash = await Auth.generateHash(value)
+const handlePasswordChange = async (res: Response, userID: number, newPassword: string) => {
+  const newHash = await Auth.generateHash(newPassword)
   const result = await Users.updateUser(userID, 'hash_password', newHash)
   if (!result.success)
     return res
@@ -242,13 +254,13 @@ const handlePasswordChange = async (res: Response, userID, newPassword) => {
   if (result.success) return res.status(201).send({ success: true })
 }
 
-const handleUsernameChange = async (res: Response, userID, newUsername) => {
-  const existingID = await getUserID(newUsername)
+const handleUsernameChange = async (res: Response, userID: number, newUsername: string) => {
+  const existingID = await Users.getUserID(newUsername)
   if (typeof Number(existingID) === 'number')
     return res
       .status(409)
       .send({ success: false, error: 'username already taken' })
-  const result = await updateUser(userID, 'username', newUsername)
+  const result = await Users.updateUser(userID, 'username', newUsername)
   if (!result.success)
     return res
       .status(400)
@@ -256,8 +268,8 @@ const handleUsernameChange = async (res: Response, userID, newUsername) => {
   if (result.success) return res.status(201).send({ success: true })
 }
 
-const handleAccountPrivateChange = async (res: Response, userID, isPrivate) => {
-  const result = await updateUser(userID, 'private', isPrivate)
+const handleAccountPrivateChange = async (res: Response, userID: number, isPrivate: boolean) => {
+  const result = await Users.updateUser(userID, 'private', isPrivate)
   if (!result.success)
     return res
       .status(400)
@@ -265,12 +277,10 @@ const handleAccountPrivateChange = async (res: Response, userID, isPrivate) => {
   if (result.success) return res.status(201).send({ success: true })
 }
 
-const handleUnknownUpdate = async (res: Response, userID, key, value) => {
+const handleUnknownUpdate = async (res: Response, userID: number, key: any, value: any) => {
   res
     .status(400)
     .send({ success: false, error: `unknown update ${key} ${value}` })
 }
 
-module.exports = {
-  userRouter
-}
+export default userRouter

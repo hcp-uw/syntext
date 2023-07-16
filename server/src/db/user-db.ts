@@ -83,7 +83,7 @@ export const getUser = async (userID: number): Result<User> => {
 }
 
 // The key must be sanitized!!! only ever hard code string values (never use client input)
-export const updateUser = async (userID: number, key: keyof User, value: string): Result<undefined> => {
+export const updateUser = async (userID: number, key: keyof User, value: any): Result<undefined> => {
 
   // if (value is not a proper value) 
   //   return { 
@@ -192,9 +192,17 @@ export const authenticate = async (username: string, password: string): Result<b
 export const updateLastLogin = async (userID: number): Result<undefined> => {
   
   try {
-    const date = Date.now()
-    const res = await updateUser(userID, 'last_login', String(date))
-    return res
+    const exists = await isUser(userID)
+    if (!exists.success || !exists.result) 
+      return { success: false, error: `User not found` }
+
+    const query = `
+        UPDATE users
+        SET last_login = NOW()    
+        WHERE userID = ?;`
+
+    await pool.query(query, [userID])
+    return { success: true }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
