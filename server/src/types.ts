@@ -20,4 +20,10 @@ export interface GameSummary {
     num_mistakes: number
 }
 
+export interface User {
+    userID: number,
+    username: string,
+    last_login: Date
+}
+
 
