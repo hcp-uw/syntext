@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { JWT_SECRET }  from './config'
 import { NextFunction, Request } from 'express'
 import { Response } from 'express-serve-static-core'
-import { SuccesfullyDecodedToken, FailedDecodedToken, IdentifiedRequest } from '../types'
+import { SuccesfullyDecodedToken, FailedDecodedToken, IdentifiedRequest, Result } from '../types'
 
 const saltRounds = 3
 
@@ -14,8 +14,6 @@ interface AccessTokenPayload extends JwtPayload {
 interface RefreshTokenPayload extends JwtPayload {
   stamp: number
 }
-
-
 
 export const generateHash = async (password: string): Promise<string> => {
   const res: string = await bcrypt.hash(password, saltRounds)
@@ -53,42 +51,30 @@ export const generateAccessToken = async (userID: number | string): Promise<stri
  */
 
 export const verifyAccessToken = async (token: string, userID: string | number):
-  Promise<
-    {result: AccessTokenPayload, success: boolean} | 
-    {error: unknown, success: false, message?: string}
-  > => {
+  Result<boolean> => {
   try {
-    console.log('in verifyAccessToken token: ', token)
-    const res: string | JwtPayload = await jwt.verify(token.split(' ')[1], JWT_SECRET)
+    const res: any = jwt.verify(token.split(' ')[1], JWT_SECRET)
 
     if (typeof res === "string")
-      return { error: undefined, success: false, message: "decoded token is a string instead of a JwtPayload" }
+      return { success: false, error: "decoded token is a string instead of a JwtPayload" }
 
-    return { result: res as AccessTokenPayload, success: true }
+    return { result: Number(res.userID) === Number(userID), success: true }
   } catch (error) {
-    if (error instanceof JsonWebTokenError && error.name == 'TokenExpiredError') {
-      return { error: error, success: false, message: "expired" }
-    } else {
-      return { error: error, success: false }
-    }
+    return { error: error, success: false }
   }
 }
 
 export const verifyRefreshToken = async (userSecret: string, token: string): 
-  Promise<
-    {result: string | JwtPayload, success: boolean} | 
-    {error: unknown, success: false, message?: string}
-  > => {
+  Result<boolean> => {
   try {
-    const res: string | JwtPayload = jwt.verify(token.split(' ')[1], JWT_SECRET)
+    const res: any = jwt.verify(token.split(' ')[1], JWT_SECRET)
 
-    return { result: res, success: true }
+    if (!res)
+      return { success: false, error: 'jwt payload undefined' }
+
+    return { result: true, success: true }
   } catch (error: unknown) {
-    if (error instanceof JsonWebTokenError && error.name == 'TokenExpiredError') {
-      return { error: error, success: false, message: "expired" }
-    } else {
-      return { error: error, success: false }
-    }
+    return { error: error, success: false }
   }
 }
 
@@ -145,27 +131,31 @@ const extractUserID = (req: Request): number => {
 export const handleAuth = async (req: IdentifiedRequest, res: Response, next: NextFunction) => {
   const userID = extractUserID(req)
   const token = extractToken(req)
+  
   //=============================================
-  console.log('in handleAuth', userID, token)
+  // console.log('in handleAuth', userID, token)
   //=============================================
   if (userID === undefined)
-    return res.status(401).send({ success: false, error: 'missing userID' })
+    return res
+      .status(401)
+      .send({ success: false, error: 'missing userID' })
+  
+  if (!token) 
+    return res
+      .status(401)
+      .send({ success: false, error: 'missing token' })
+  
   try {
-    if (!token) {
-      return res.status(401).send({ success: false, error: 'missing token' })
-    }
 
-    let decoded: SuccesfullyDecodedToken<AccessTokenPayload> | FailedDecodedToken = await verifyAccessToken(token, userID)
+    let { success, result, error } = await verifyAccessToken(token, userID)
+    
+    if (!success || !result)
+      return res
+        .status(401)
+        .send({ success: false, error: error })
 
-    console.log(decoded)
-
-    if (decoded && (!decoded.success)) {
-      decoded = decoded as FailedDecodedToken
-      return res.status(401).send({ success: false, error: decoded.message })
-    }
-
-    decoded = decoded as SuccesfullyDecodedToken<AccessTokenPayload>
-    req.decodedUserID = decoded.result.userID // store  decoded userID in req
+    
+    req.decodedUserID = userID // store  decoded userID in req
 
     next()
   } catch (error) {

@@ -122,8 +122,10 @@ userRouter.post('/refresh', jsonParser, async (req: Request, res: Response) => {
   const refreshToken = await Users.getRefreshToken(userIDv)
   const refreshValidity = await Auth.verifyRefreshToken(
     secret.result,
-    'Bearer ' + refreshToken
+    'Bearer ' + refreshToken.result
   )
+
+  console.log(refreshValidity)
 
   if (!refreshToken.success || !refreshToken.result)
     return res
@@ -152,6 +154,7 @@ userRouter.post('/refresh', jsonParser, async (req: Request, res: Response) => {
   */
 userRouter.get('/account', Auth.handleAuth, async (req: IdentifiedRequest, res: Response) => {
   const { userID } = req.query
+  
   if (typeof Number(userID) != 'number')
     return res
       .status(400)
@@ -162,11 +165,12 @@ userRouter.get('/account', Auth.handleAuth, async (req: IdentifiedRequest, res: 
   
   try {
     const result = await Users.getUser(userIDv)
-    if (!result.success || !result.result || result.result.userID !== req.decodedUserID)
+    if (!result.success || !result.result || Number(result.result.userID) !== Number(req.decodedUserID))
       return res
         .status(401)
         .send({ success: false, error: 'invalid userID or token' })
 
+        
     return res.status(200).send({ result: result.result, success: true })
       
   } catch (error) {
