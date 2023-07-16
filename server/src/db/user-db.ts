@@ -170,12 +170,10 @@ const createUser = async (username: string, hash: string): Result<number> => {
 const authenticate = async (username: string, password: string): Result<boolean> => {
   
   try {
-    // Check if username exists in table
     const query = 'SELECT username, hash_password FROM users WHERE username = ?'
     const result = await pool.query(query, [username])
     const rows: any =result[0]
 
-    //checks if any rows were returned
     if (rows.length > 0) {
       const authResult = await verifyHash(password, rows[0].hash_password)
       return { success: true, result: rows[0].hash_password }
