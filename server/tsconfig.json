@@ -9,7 +9,7 @@
     "lib": ["es2021"],
     "module": "commonjs",
     "target": "es2018",
-    "baseUrl": ".",
+    "baseUrl": "./server",
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
@@ -17,5 +17,5 @@
     "outDir": "./build"
   },
   "include": ["./src/**/*", "jest.config.js"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "../client/*"]
 }

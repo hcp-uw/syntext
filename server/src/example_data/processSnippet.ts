@@ -3,8 +3,18 @@ import fs from 'fs';
 
 // const directoryPath = './server/example_data/snippets'
 
-const processSnippet = (dirPath: string) => {
+
+
+export const processSnippet = (dirPath: string) => {
     
+    try {
+        const filesInDirectory = fs.readdirSync('.');
+        console.log('Files in the current directory:');
+        console.log(filesInDirectory);
+    } catch (err) {
+        console.error('Error reading directory:', err);
+    }
+
     const getType = (filePath: string): SnippetType => {
         const temp: Array<string> = filePath.split('/') // ['server', 'example_data', 'snippets', 'FOR_6.txt']
         return temp[temp.length - 1].split('_')[0] as SnippetType; //['FOR', '6.txt']
