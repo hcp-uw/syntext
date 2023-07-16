@@ -2,7 +2,7 @@ import mysql, { QueryError } from 'mysql2'
 import * as config from '../utils/config'
 import bcrypt from 'bcrypt'
 import { pool } from './pool'
-import { GameSummary } from '../types'
+import { GameSummary, Result } from '../types'
 
 const missingRequiredParams = (name: string, obj: any) => {
   return { success: false, error: `missing required params in ${name}: ${obj}` }
@@ -19,8 +19,8 @@ const missingRequiredParams = (name: string, obj: any) => {
 //     num_mistakes int,
 //     time_stamp datetime,
 
-export const createGameEntry = async (game: GameSummary): 
-  Promise<{ success: boolean, error?: Error | unknown }> => {
+
+export const createGameEntry = async (game: GameSummary): Result<undefined> => {
   
   const {
     userID,
@@ -30,7 +30,7 @@ export const createGameEntry = async (game: GameSummary):
     wpm_data,
     wpm_avg,
     accuracy,
-    num_mistakes
+    num_mistakes,
   } = game
 
   try {
@@ -49,7 +49,7 @@ export const createGameEntry = async (game: GameSummary):
       snippet_id,
       total_time,
       total_characters,
-      wpm_data,
+      wpm_data.toString(),
       wpm_avg,
       accuracy,
       num_mistakes
@@ -57,35 +57,35 @@ export const createGameEntry = async (game: GameSummary):
 
     return { success: true }
 
-  } catch (error: QueryError | Error | unknown) {
+  } catch (error: unknown) {
     console.error(error)
     return { success: false, error: error }
   }
 }
 
 // FIXME
-export const getGameEntries = async (userID: number) => {
+export const getGameEntries = async (userID: number): Result<Array<GameSummary>> => {
   try {
     const query = `
       SELECT * FROM games WHERE userID=?;
     `
-    const result = await pool.query(query, [userID])
-    return result[0];
+    const result: any = await pool.query(query, [userID])
+
+    return { success: true, result: result[0] }
   } catch (error) {
     console.error(error)
-    return { error: error }
+    return { success: false, error: error }
   } 
 }
 
 // FIXME
-export const clearGameEntries = async (userID: number): 
-  Promise<{success: boolean, result?: any, error?: any}> => {
+export const clearGameEntries = async (userID: number): Result<undefined> => {
   try {
     const query = `
       DELETE FROM games as g WHERE g.userID=?;
     `
-    const result = await pool.query(query, [userID])
-    return { success: true, result: result }
+    await pool.query(query, [userID])
+    return { success: true }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }

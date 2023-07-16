@@ -58,6 +58,7 @@ export const verifyAccessToken = async (token: string, userID: string | number):
     {error: unknown, success: false, message?: string}
   > => {
   try {
+    console.log('in verifyAccessToken token: ', token)
     const res: string | JwtPayload = await jwt.verify(token.split(' ')[1], JWT_SECRET)
 
     if (typeof res === "string")
@@ -112,22 +113,11 @@ export const verifyRefreshToken = async (userSecret: string, token: string):
  */
 
 
-export const extractToken = (req: Request): string => {
-  // if (req.headers && req.headers.Authorization) return req.headers.Authorization
-  if (req.headers && req.headers.authorization) return req.headers.authorization
-  if (
-    req.method === 'POST' &&
-    req.body !== undefined &&
-    req.body.headers !== undefined &&
-    req.body.headers.Authorization !== undefined
-  ) {
-    return req.body.headers.Authorization
-  }
-
-  const tokenIndex =
-    req.rawHeaders.findIndex(header => header === 'Authorization') + 1
-
-  return req.rawHeaders[tokenIndex]
+export const extractToken = (req: Request): string | undefined => {
+  if (req.headers && req.headers.authorization) 
+    return req.headers.authorization
+  else 
+    return undefined
 }
 
 

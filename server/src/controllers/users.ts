@@ -94,7 +94,7 @@ userRouter.post('/login', jsonParser, async (req: Request, res: Response) => {
     return res
       .set('Authorization', `Bearer ${token}`)
       .status(200)
-      .json({ success: true, result: userID })
+      .json({ success: true, result: userID.result })
   
   } catch (error) {
     console.error(error)
@@ -237,7 +237,7 @@ userRouter.get('/id', jsonParser, async (req: Request, res: Response) => {
     if (!id.success || !id.result) 
       return res.status(400).send({ success: false })
     else 
-      return res.status(200).send({ success: true, userID: id })
+      return res.status(200).send({ success: true, userID: id.result })
   } catch (error) {
     console.error(error)
     res.status(500).send({ success: false, error: 'internal server error' })

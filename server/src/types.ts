@@ -19,7 +19,8 @@ export interface GameSummary {
     wpm_data: Array<number>,
     wpm_avg: number,
     accuracy: number,
-    num_mistakes: number
+    num_mistakes: number,
+    time_stamp?: string
 }
 
 export interface User {
