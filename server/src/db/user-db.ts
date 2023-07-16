@@ -13,13 +13,11 @@ type Result<T> = Promise<{
 
 
 const getRefreshToken = async (userID: number): Result<number> => {
-  
-  let connection: any
+
   try {
-    connection = await pool.getConnection()
     const query = 'SELECT refresh_token FROM users WHERE userID = ?'
-    const result = await connection.query(query, [userID])
-    const rows = result[0]
+    const result = await pool.query(query, [userID])
+    const rows: any = result[0]
 
     if (rows.length > 0) {
       return { success: true, result: rows[0].refresh_token }
@@ -29,20 +27,15 @@ const getRefreshToken = async (userID: number): Result<number> => {
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const getSecret = async (userID: number): Result<number> => {
-  
-  let connection: any
-  try {
-    connection = await pool.getConnection()
 
+  try {
     const query = 'SELECT secret FROM users WHERE userID = ?'
-    const result = await connection.query(query, [userID])
-    const rows = result[0]
+    const result = await pool.query(query, [userID])
+    const rows: any =result[0]
 
     if (rows.length > 0) 
       return { success: true, result: rows[0].secret }
@@ -52,38 +45,30 @@ const getSecret = async (userID: number): Result<number> => {
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const isUser = async (userID: number): Result<boolean> => {
   
-  let connection: any
   try {
-    connection = await pool.getConnection()
     const query = 'SELECT username FROM users WHERE userID = ?'
-    const result = await connection.query(query, [userID])
-    const rows = result[0]
+    const result = await pool.query(query, [userID])
+    const rows: any =result[0]
 
     return { success: true, result: rows.length > 0 }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const getUser = async (userID: number): Result<User> => {
 
-  let connection: any
   try {
-    connection = await pool.getConnection()
     const query =
       'SELECT username, userID, last_login FROM users WHERE userID = ?'
-    const result = await connection.query(query, [userID])
-    const rows = result[0]
+    const result = await pool.query(query, [userID])
+    const rows: any =result[0]
 
     if (rows.length > 0) 
       return { success: true, result: rows[0] }
@@ -94,8 +79,6 @@ const getUser = async (userID: number): Result<User> => {
     console.error(error)
 
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
@@ -107,37 +90,30 @@ const updateUser = async (userID: number, key: keyof User, value: string): Resul
   //     success: false, 
   //     error: `invalid value ${String(value)} for key ${String(key)}`
   //   }
-  
 
-  let connection: any
   try {
     const exists = await isUser(userID)
     if (!exists.success || !exists.result) 
       return { success: false, error: `User not found` }
 
-    connection = await pool.getConnection()
     const query = `
         UPDATE users
         SET ${String(key)} = ?    
         WHERE userID = ?;`
-    const result = await connection.query(query, [value, userID])
+    const result = await pool.query(query, [value, userID])
     return { success: true }
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const getUserID = async (username: string): Result<number> => {
   
-  let connection: any
   try {
-    connection = await pool.getConnection()
     const query = 'SELECT userID FROM users WHERE username = ?'
-    const result = await connection.query(query, [username])
-    const rows = result[0]
+    const result = await pool.query(query, [username])
+    const rows: any =result[0]
 
     if (rows.length > 0) 
       return { result: rows[0].userID, success: true }
@@ -147,16 +123,12 @@ const getUserID = async (username: string): Result<number> => {
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const createUser = async (username: string, hash: string): Result<number> => {
 
-  let connection: any
   try {
-    connection = pool.getConnection()
     let res = await getUserID(username)
 
     if (res.success) 
@@ -176,7 +148,7 @@ const createUser = async (username: string, hash: string): Result<number> => {
           last_login
       ) VALUES (NULL, ?, ?, CURRENT_DATE, NULL, NULL, NULL);
     `
-    await connection.query(insert, [username, hash])
+    await pool.query(insert, [username, hash])
     res = await getUserID(username)
     if (res.success)
       return {
@@ -192,20 +164,16 @@ const createUser = async (username: string, hash: string): Result<number> => {
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const authenticate = async (username: string, password: string): Result<boolean> => {
   
-  let connection: any
   try {
-    connection = await pool.getConnection()
     // Check if username exists in table
     const query = 'SELECT username, hash_password FROM users WHERE username = ?'
-    const result = await connection.query(query, [username])
-    const rows = result[0]
+    const result = await pool.query(query, [username])
+    const rows: any =result[0]
 
     //checks if any rows were returned
     if (rows.length > 0) {
@@ -220,14 +188,11 @@ const authenticate = async (username: string, password: string): Result<boolean>
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const updateLastLogin = async (userID: number): Result<undefined> => {
   
-  let connection: any
   try {
     const date = Date.now()
     const res = await updateUser(userID, 'last_login', String(date))
@@ -235,16 +200,12 @@ const updateLastLogin = async (userID: number): Result<undefined> => {
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
 const deleteUser = async (username: string, password: string): Result<undefined> => {
   
-  let connection: any
   try {
-    connection = await pool.getConnection()
 
     const authResult = await authenticate(username, password)
     
@@ -262,10 +223,10 @@ const deleteUser = async (username: string, password: string): Result<undefined>
     const deleteUser = 'DELETE FROM users AS u WHERE u.userID=?;'
 
     const q = [deleteSettings, deleteGames, deleteUser]
-    await connection.beginTransaction()
-    await connection.query(q[0], id)
-    await connection.query(q[1], id)
-    await connection.query(q[2], id)
+
+    await pool.query(q[0], id)
+    await pool.query(q[1], id)
+    await pool.query(q[2], id)
 
     const isStillUser = await isUser(id)
     if (!isStillUser.success || isStillUser.result)
@@ -275,8 +236,6 @@ const deleteUser = async (username: string, password: string): Result<undefined>
   } catch (error) {
     console.error(error)
     return { success: false, error: error }
-  } finally {
-    await connection.release()
   }
 }
 
