@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import snippetRouter from './controllers/snippets';
-import { userRouter } from './controllers/users';
+import userRouter from './controllers/users';
 import gameRouter from './controllers/games';
 import cors from 'cors';
 import path from "path";
