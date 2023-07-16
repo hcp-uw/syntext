@@ -3,7 +3,7 @@ import mysql from 'mysql2'
 import * as config from '../utils/config'
 import { toAscii, toChar } from './betweenASCIIValues'
 import { pool } from './pool'
-import { SnippetLength, SnippetType, Snippet } from '../types'
+import { SnippetLength, SnippetType, Snippet, Result } from '../types'
 
 
 const missingRequiredParams = (name: string, obj: any) => {
@@ -21,14 +21,20 @@ interface SnippetDBResultLine<T> {
 export const getSnippetByLengthAndType = async (
   length: SnippetLength,
   type: SnippetType
-): Promise<Array<Snippet> | unknown> => {
-  const result = await getSnippetByType(type);
-  return Array.isArray(result)
-    ? result.filter(snippet => snippet.length === length)
-    : result;
+): Result<Array<Snippet>> => {
+  const snipetsOfType = await getSnippetByType(type);
+
+  if (!snipetsOfType.success || !snipetsOfType.result)
+    return { success: false, error: snipetsOfType.error }
+
+  const snippets: Array<Snippet> = snipetsOfType
+    .result
+    .filter(snippet => snippet.length === length)
+  
+  return { result: snippets, success: true }
 };
 
-export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet> | unknown> => {
+export const getSnippetByType = async (type: SnippetType): Result<Array<Snippet>> => {
   try {
     const query = `
       SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text
@@ -41,21 +47,26 @@ export const getSnippetByType = async (type: SnippetType): Promise<Array<Snippet
     // FIXME
     const rawResult: any = await pool.query(query, [type])
 
-    if (rawResult[0].length === 0) return []
+    if (rawResult[0].length === 0)
+      return {
+        success: true,
+        result: []
+      }
     
     const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
-    const processedResult: Array<Snippet> = convertDBResultToSnippet(result)
+    const snippets: Array<Snippet> = convertDBResultToSnippet(result)
 
-    return processedResult
+    return { result: snippets, success: true }
+    
   } catch (error) {
     console.error(error)
-    return error
+    return { success: false, error: error }
   }
 }
 
-export const getSnippetByLength = async (length: SnippetLength): Promise<Array<Snippet> | unknown> => {
+export const getSnippetByLength = async (length: SnippetLength): Result<Array<Snippet>> => {
   try {
     const query = `
       SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text 
@@ -67,25 +78,26 @@ export const getSnippetByLength = async (length: SnippetLength): Promise<Array<S
     // FIXME    
     const rawResult: any = await pool.query(query, [length])
 
-    if (rawResult[0].length === 0) return []
-
+    if (rawResult[0].length === 0)
+      return {
+        success: true,
+        result: []
+      }
+    
     const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
 
-    let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
+    const snippets: Array<Snippet> = convertDBResultToSnippet(result)
 
-    return processedResult
+    return { result: snippets, success: true }
+
   } catch (error) {
     console.error(error)
-    return error
+    return { success: false, error: error }
   } 
 }
 
-export const createSnippet = async (snippet: Snippet): Promise<{ 
-  success: boolean,
-  created?: { id: number, length: SnippetLength, type: SnippetType },
-  error?: any
-}> => {
+export const createSnippet = async (snippet: Snippet): Result<Snippet> => {
   const { id, type, length, data } = snippet
 
   try {
@@ -114,26 +126,22 @@ export const createSnippet = async (snippet: Snippet): Promise<{
 
     return {
       success: true,
-      created: { id, type, length }
+      result: snippet
     }
+
   } catch (error) {
     console.error(error)
     return { error: error, success: false }
   } 
 }
 
-export const deleteSnippetByID = async (id: number): Promise<{
-  success: boolean,
-  error?: unknown 
-}> => {
-  if (!id) return missingRequiredParams('id', id)
-
+export const deleteSnippetByID = async (id: number): Result<undefined> => {
   try {
     const query1 = 'DELETE FROM snippet_records WHERE id = ?'
     const query2 = 'DELETE FROM snippet_data WHERE id = ?'
     await pool.query(query1, [id])
     await pool.query(query2, [id])
-    await pool.commit()
+
     return { success: true }
   } catch (error) {
     console.error(error)
@@ -143,7 +151,7 @@ export const deleteSnippetByID = async (id: number): Promise<{
 
 
 
-export const getSnippetByID = async (id: number): Promise<Snippet | unknown> => {
+export const getSnippetByID = async (id: number): Result<Snippet> => {
 
   const query = `
             SELECT rec.id, rec.snippet_type, rec.snippet_length, data.line_index, data.line_text 
@@ -156,7 +164,11 @@ export const getSnippetByID = async (id: number): Promise<Snippet | unknown> => 
     const rawResult: any = await pool.query(query, [id])
 
 
-    if (rawResult[0].length === 0) return {}
+    if (rawResult[0].length === 0) 
+      return {
+        success: false,
+        error: `snippet with id ${id} not found`
+      }
 
     const result = rawResult[0].map((line: any) => 
       ({ ...line, line_text: JSON.parse(line.line_text)}))
@@ -164,10 +176,14 @@ export const getSnippetByID = async (id: number): Promise<Snippet | unknown> => 
     let processedResult: Array<Snippet> = convertDBResultToSnippet(result)
 
     
-    return processedResult[0]
+    return {
+      success: true,
+      result: processedResult[0]
+    }
+
   } catch (error) {
     console.error(error)
-    return {}
+    return { error: error, success: false }
   } 
 }
 

@@ -2,14 +2,8 @@ import mysql from 'mysql2'
 import * as config  from '../utils/config'
 import { pool } from './pool'
 import { verifyHash, generateRefreshToken } from '../utils/auth'
-import { User } from '../types'
+import { User, Result } from '../types'
 
-
-type Result<T> = Promise<{
-    success: boolean,
-    result?: T,
-    error?: unknown
-}>
 
 
 export const getRefreshToken = async (userID: number): Result<number> => {

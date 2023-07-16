@@ -46,4 +46,10 @@ export interface FailedDecodedToken {
 export interface IdentifiedRequest extends Request {
     userID: number
     decodedUserID: number
-  }
+}
+
+export type Result<T> = Promise<{
+    success: boolean,
+    result?: T,
+    error?: unknown
+}>

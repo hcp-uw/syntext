@@ -1,24 +1,18 @@
 const snippetRouter = require('express').Router()
+import { Request, Response } from 'express'
 import * as Snippets from '../db/snippet-db'
-
 import bodyParser from 'body-parser'
+import { Snippet, SnippetLength, SnippetType } from '../types'
 
 const jsonParser = bodyParser.json()
 
-const missingParamsError = {
-  success: false,
-  message: 'Bad Request: Missing data in request body'
-}
-const internalServerError = { success: false, message: 'Internal Server Error' }
+const internalServerError = { success: false, error: 'Internal Server Error' }
+const missingParamsError = (param: string) => ({ success: false, error: `missing param ${param}` })
 
-snippetRouter.post('/create', jsonParser, async (req, res) => {
+snippetRouter.post('/create', jsonParser, async (req: Request, res: Response) => {
   const { id, type, length, data } = req.body
 
-  if (!id || !type || !length || !data || typeof data != typeof [] ) {
-    return res.status(400).send(missingParamsError)
-  }
-
-  const snippetObject = {
+  const snippet: Snippet = {
     id: Number(id),
     type: type,
     length: length,
@@ -26,128 +20,150 @@ snippetRouter.post('/create', jsonParser, async (req, res) => {
   }
 
   try {
-    await createSnippet(snippetObject)
+    const createResult = await Snippets.createSnippet(snippet)
+
+    if (!createResult.success)
+      return res
+        .status(400)
+        .json({ success: false, error: createResult.error })
+
     res.status(201).send({ success: true })
   } catch (error) {
-    console.error('Error creating snippet:', error)
+    console.error('Error creating snippet: ', error)
     res.status(500).send(internalServerError)
   }
 })
 
-snippetRouter.delete('/remove', async (req, res) => {
+snippetRouter.delete('/remove', async (req: Request, res: Response) => {
   const id = Number(req.query.id)
 
-  if (!id) {
-    return res.status(400).send(missingParamsError)
-  }
-
+  if (!id) 
+    return res
+      .status(400)
+      .send(missingParamsError('id'))
+  
   try {
-    const result = await deleteSnippetByID(id)
+    const result = await Snippets.deleteSnippetByID(id)
 
-    if (result && result.success) {
-      return res.status(202).send({ success: true })
-    } else {
+    if (!result.success)
       return res
         .status(404)
-        .send({ success: false, message: 'Not Found: Snippet not found' })
-    }
+        .send({ success: false, error: result.error })
+
+    return res
+      .status(202)
+      .send({ success: true })
+
   } catch (error) {
     console.error('Error deleting snippet:', error)
     res.status(500).send(internalServerError)
   }
 })
 
-snippetRouter.get('/get/length', async (req, res) => {
-  const length = req.query.length
+snippetRouter.get('/get/length', async (req: Request, res: Response) => {
+  const length: SnippetLength = req.query.length as SnippetLength
 
-  if (!length) {
-    return res.status(400).send(missingParamsError)
-  }
+  if (!length) 
+    return res
+      .status(400)
+      .send(missingParamsError('length'))
 
   try {
-    const result = await getSnippetByLength(length)
+    const snippetQueryResult = await Snippets.getSnippetByLength(length)
 
-    if (result.length === 0) {
+    if (!snippetQueryResult.success || !snippetQueryResult.result)
       return res
         .status(404)
-        .send('Not Found: No snippets found with given length')
-    }
+        .json({ success: false, error: snippetQueryResult.error })
 
-    return res.send(result)
+    return res
+      .status(200)
+      .send({ success: true, result: snippetQueryResult.result })
+
   } catch (error) {
     console.error('Error retrieving snippets by length:', error)
     res.status(500).send(internalServerError)
   }
 })
 
-snippetRouter.get('/get/lengthandtype', async (req, res) => {
-  const length = req.query.length
-  const type = req.query.type
+snippetRouter.get('/get/lengthandtype', async (req: Request, res: Response) => {
+  const length = req.query.length as SnippetLength;
+  const type = req.query.type as SnippetType;
 
-  if (!length || !type) {
-    return res.status(400).send(missingParamsError)
-  }
-
+  if (!length || !type)
+    return res
+      .status(400)
+      .send({ success: false, error: missingParamsError('length, type') });
+  
   try {
-    const result = await getSnippetByLengthAndType(length, type)
+    const snippetQueryResult = await Snippets.getSnippetByLengthAndType(length, type);
 
-    if (result.length === 0) {
+    if (!snippetQueryResult.success || !snippetQueryResult.result) 
       return res
         .status(404)
-        .send('Not Found: No snippets found with given length and type')
-    }
+        .send({ success: false, error: snippetQueryResult.error });
+    
 
-    return res.send(result)
+    return res
+      .status(200)
+      .send({ success: true, result: snippetQueryResult.result });
   } catch (error) {
-    console.error('Error retrieving snippets by length and type:', error)
-    res.status(500).send(internalServerError)
+    console.error('Error retrieving snippets by length and type:', error);
+    res.status(500).send({ success: false, error: internalServerError });
   }
-})
+});
 
-snippetRouter.get('/get/type', async (req, res) => {
-  const type = req.query.type
 
-  if (!type) {
-    return res.status(400).send(missingParamsError)
-  }
+snippetRouter.get('/get/type', async (req: Request, res: Response) => {
+  const type = req.query.type as SnippetType;
+
+  if (!type)
+    return res
+      .status(400)
+      .send({ success: false, error: missingParamsError('type') });
 
   try {
-    const result = await getSnippetByType(type)
+    const snippetQueryResult = await Snippets.getSnippetByType(type);
 
-    if (result.length === 0) {
+    if (!snippetQueryResult.success || !snippetQueryResult.result) 
       return res
         .status(404)
-        .send('Not Found: No snippets found with given type')
-    }
+        .send({ success: false, error: snippetQueryResult.error });
 
-    return res.json(result)
+    return res
+      .status(200)
+      .send({ success: true, result: snippetQueryResult.result });
   } catch (error) {
-    console.error('Error retrieving snippets by type:', error)
-    res.status(500).send(internalServerError)
+    console.error('Error retrieving snippets by type:', error);
+    res.status(500).send({ success: false, error: internalServerError });
   }
-})
+});
 
-snippetRouter.get('/get/id', async (req, res) => {
-  const id = Number(req.query.id)
+
+snippetRouter.get('/get/id', async (req: Request, res: Response) => {
+  const id = Number(req.query.id);
 
   if (!id) {
-    return res.status(400).send(missingParamsError)
+    return res.status(400).send({ success: false, error: missingParamsError });
   }
 
   try {
-    const result = await getSnippetByID(id)
+    const snippetQueryResult = await Snippets.getSnippetByID(id);
 
-    if (Object.keys(result).length !== 0) {
-      return res.status(200).json(result)
-    } else {
+    if (!snippetQueryResult.success || !snippetQueryResult.result) {
       return res
         .status(404)
-        .json({ Message: `No snippet with id ${id} found.` })
+        .send({ success: false, error: `No snippet with id ${id} found.` });
     }
-  } catch (error) {
-    console.error(`Error retrieving snippet with id ${id}:`, error)
-    return res.status(500).json(internalServerError)
-  }
-})
 
-module.exports = snippetRouter
+    return res
+      .status(200)
+      .json({ success: true, result: snippetQueryResult.result });
+  } catch (error) {
+    console.error(`Error retrieving snippet with id ${id}:`, error);
+    res.status(500).json({ success: false, error: internalServerError });
+  }
+});
+
+
+export default snippetRouter
