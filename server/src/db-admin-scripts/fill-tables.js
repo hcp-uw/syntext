@@ -4,6 +4,7 @@ const { processSnippet } = require('../example_data/processSnippet')
 const mysql = require('mysql2');
 const config = require('../utils/config')
 
+
 console.table(config)
 
 const pool = mysql.createPool({
@@ -14,14 +15,21 @@ const pool = mysql.createPool({
 }).promise()
 
 // const exampleSnippets = getSnippetData();
-const exampleSnippets = processSnippet("./example_data/snippets")
+const exampleSnippets = processSnippet("./src/example_data/snippets")
 
 const fill = async (exampleData) => {
-    const promises = []
-    await exampleData.forEach((snippet) => {
-        promises.push(createSnippet(snippet));
-    });
-    return Promise.all(promises);
+    // console.log(exampleData)
+    // await exampleData.forEach( async (snippet) => {
+    //     const res = await createSnippet(snippet)
+    //     console.log(res)
+    //     console.log("added snippet " + snippet.type)
+    // });
+
+    for (let snippet of exampleData) {
+        const res = await createSnippet(snippet)
+        console.log(res)
+        // console.log("added snippet " + snippet.type)
+    }
     
 }
 
