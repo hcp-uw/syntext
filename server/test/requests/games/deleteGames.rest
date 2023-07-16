@@ -1,0 +1,2 @@
+DELETE http://localhost:3001/api/game/games?userID=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjYsImlhdCI6MTY4OTUwMjg0OCwiZXhwIjoxNjg5NTEwMDQ4fQ.6f3d8nK540iwnusVgiQ-aR9VjdWB7l0lwnaV7gI8Ytg
