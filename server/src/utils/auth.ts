@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { JWT_SECRET }  from './config'
 import { NextFunction, Request } from 'express'
 import { Response } from 'express-serve-static-core'
-import { SuccesfullyDecodedToken, FailedDecodedToken } from '../types'
+import { SuccesfullyDecodedToken, FailedDecodedToken, IdentifiedRequest } from '../types'
 
 const saltRounds = 3
 
@@ -150,10 +150,7 @@ const extractUserID = (req: Request): number => {
   return userID
 }
 
-interface IdentifiedRequest extends Request {
-  userID: number
-  decodedUserID: number
-}
+
 
 export const handleAuth = async (req: IdentifiedRequest, res: Response, next: NextFunction) => {
   const userID = extractUserID(req)

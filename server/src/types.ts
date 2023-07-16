@@ -28,7 +28,8 @@ export interface User {
     last_login: Date,
     secret: string,
     refresh_token: string,
-    hash_password: string
+    hash_password: string,
+    private: boolean
 }
 
 export interface SuccesfullyDecodedToken<T> { 
