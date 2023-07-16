@@ -1,14 +1,7 @@
 const snippetRouter = require('express').Router()
-const {
-  getSnippetByType,
-  getSnippetByLength,
-  getSnippetByID,
-  createSnippet,
-  deleteSnippetByID,
-  getSnippetByLengthAndType
-} = require('../db/snippet-db')
+import * as Snippets from '../db/snippet-db'
 
-const bodyParser = require('body-parser')
+import bodyParser from 'body-parser'
 
 const jsonParser = bodyParser.json()
 
