@@ -1,0 +1,8 @@
+int a = 0, b = 1, sum, count = 0;
+while (count < 10) {
+	System.out.print(a + " ");
+	sum = a + b;
+	a = b;
+	b = sum;
+	count++;
+}

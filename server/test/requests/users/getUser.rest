@@ -1,3 +1,2 @@
 GET http://localhost:3001/api/user/account?userID=6
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjYsImlhdCI6MTY4NDkwMTM1OCwiZXhwIjoxNjg0OTAxMzY4fQ.YfLL_yQNKHvAqExM8yWXWIXLA0OMxvhn6nax3avVkPo
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjYsImlhdCI6MTY4OTQ5Nzc4OSwiZXhwIjoxNjg5NTA0OTg5fQ.4gTpM5TRuevf7anlFhwB39EwJdjo6NyTHLWPGh3bZxY

@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/user/id?username=fuckyo
+GET http://localhost:3001/api/user/id?username=fuckyou

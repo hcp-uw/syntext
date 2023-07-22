@@ -1,9 +1,0 @@
-public static String generateRandomPassword(int length, String charset) {
-	StringBuilder password = new StringBuilder();
-	Random random = new Random();
-	for (int i = 0; i < length; i++) {
-		int index = random.nextInt(charset.length());
-		password.append(charset.charAt(index));
-	}
-	return password.toString();
-}
