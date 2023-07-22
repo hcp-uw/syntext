@@ -1,3 +1,0 @@
-public void redirectTo(String url) throws IOException {
-	response.sendRedirect(url);
-}
