@@ -111,17 +111,19 @@ const Game = ({ defaultSnippet }) => {
         </>
         : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
       }
-      <RestartShortcut restartGame={restartGame} />
-      <RestartButton restartGame={restartGame} />
-      <GameOptions
-        restartGame={() => restartGame()}
-        selectedLength={selectedLength}
-        setSelectedLength={setSelectedLength}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        currSnippet={currSnippet}
-        setCurrSnippet={setCurrSnippet}
-      />
+      <div className="control-center">
+        <RestartShortcut restartGame={restartGame} />
+        <RestartButton restartGame={restartGame} />
+        <GameOptions
+          restartGame={() => restartGame()}
+          selectedLength={selectedLength}
+          setSelectedLength={setSelectedLength}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          currSnippet={currSnippet}
+          setCurrSnippet={setCurrSnippet}
+        />
+      </div>
     </div>
   )
 }
