@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseURL = 'http://localhost:3001/api/user'
 
-let authToken = window.localStorage.getItem('authToken')
+
 
 /*
     send POST request to server with provided username and password.
@@ -16,9 +16,8 @@ const createUser = async (username, password) => {
     })
 
     return {
-      ...res.data,
-      success: true,
-      userID: res.data.userID,
+      success: res.data.success,
+      userID: res.data.result,
       token: res.headers['authorization']
     }
   } catch (error) {
@@ -42,8 +41,8 @@ const authenticate = async (username, password) => {
     })
 
     return {
-      ...res.data,
-      userID: res.data.userID,
+      success: res.data.success,
+      userID: res.data.result,
       token: res.headers['authorization']
     }
   } catch (error) {
@@ -58,7 +57,11 @@ const refreshCurrentSession = async (token, userID) => {
       headers: { Authorization: token }
     })
 
-    return { ...res.data, success: true, token: res.headers['authorization'] }
+    return { 
+      success: res.data.success, 
+      token: res.headers['authorization'] 
+    }
+
   } catch (error) {
     return { success: false }
   }
@@ -66,13 +69,18 @@ const refreshCurrentSession = async (token, userID) => {
 
 const getUserID = async username => {
   try {
-    const res = await axios.get(`${baseURL}/id`, {
-      data: { username: username }
-    })
-    if (res.status === 200) return res.data.userID
+    const res = await axios.get(`${baseURL}/id?username=${username}`)
+    if (res.data.success) 
+      return {
+        success: res.data.success,
+        userID: res.data.result
+      }
   } catch (error) {
     console.error(error)
-    return false
+    return {
+      success: false,
+      error: error
+    }    
   }
 }
 
@@ -83,15 +91,26 @@ const getUserID = async username => {
 */
 const getCurrentUser = async userID => {
   try {
+    let authToken = window.localStorage.getItem('authToken')
     const res = await axios.get(`${baseURL}/account?userID=${userID}`, {
       headers: { Authorization: authToken }
     })
-    return res.data
+    
+    if (res.data.success)
+      return {
+        success: true,
+        user: res.data.result 
+      }
   } catch (error) {
     console.error(error)
+    
     if (error.response && error.response.data.error === 'TokenExpired')
       return { success: false, error: 'TokenExpired' }
-    else return { success: false }
+    
+    return { 
+      success: false, 
+      error: error 
+    }
   }
 }
 

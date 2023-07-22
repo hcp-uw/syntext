@@ -1,0 +1,13 @@
+public static String getPageContent(String url) throws IOException {
+	URL pageUrl = new URL(url);
+	HttpURLConnection connection = (HttpURLConnection) pageUrl.openConnection();
+	connection.setRequestMethod("GET");
+	BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	StringBuilder content = new StringBuilder();
+	String line;
+	while ((line = reader.readLine()) != null) {
+		content.append(line);
+	}
+	reader.close();
+	return content.toString();
+}

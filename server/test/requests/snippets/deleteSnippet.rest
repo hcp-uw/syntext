@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/edit/delsnippet?id=1123
+DELETE http://localhost:3001/api/snippet/remove?id=6969

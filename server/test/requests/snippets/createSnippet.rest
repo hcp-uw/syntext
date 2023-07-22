@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/edit/mksnippet HTTP/1.1
+POST http://localhost:3001/api/snippet/create HTTP/1.1
 Content-Type: application/json
 
 {

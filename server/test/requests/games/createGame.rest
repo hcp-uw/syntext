@@ -1,0 +1,14 @@
+POST http://localhost:3001/api/game/create HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjYsImlhdCI6MTY4OTUwMjg0OCwiZXhwIjoxNjg5NTEwMDQ4fQ.6f3d8nK540iwnusVgiQ-aR9VjdWB7l0lwnaV7gI8Ytg
+
+{
+  "userID": 6,
+  "snippet_id": 6969,
+  "total_time": 30,
+  "total_characters": 45,
+  "wpm_data": [99, 100, 101],
+  "wpm_avg": 100,
+  "accuracy": 88,
+  "num_mistakes": 5
+}

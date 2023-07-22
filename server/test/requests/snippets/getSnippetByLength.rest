@@ -1,2 +1,2 @@
 
-GET http://localhost:3001/api/snippet/get/length?length=LONG
+GET http://localhost:3001/api/snippet/get/length?length=SHORT
