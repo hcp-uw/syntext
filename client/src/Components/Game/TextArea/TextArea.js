@@ -140,14 +140,12 @@ export default function TextArea (props) {
     })
   }
 
-  // console.log(typingState)
 
   const handleSpecialKey = (event) => {
     const isAtEndOfWord = atEndOfWord(currWord, userInput) 
     const isAtEndOfLine = atEndOfLine(wordIndex, linesDisplayed[cursor.lineIndex.current].text.split(' '))
     const madeMistake = currWordHasMistake(currWord, userInput)
-    // console.log(isAtEndOfWord, isAtEndOfLine, madeMistake)
-    // console.log(currWord, userInput)
+
     switch (event.key) {
       case ' ':
         if (isAtEndOfWord && !isAtEndOfLine && !madeMistake) {
@@ -160,32 +158,26 @@ export default function TextArea (props) {
             currWord: linesDisplayed[cursor.lineIndex.current].text.split(' ')[cursor.wordIndex.current],
           }));
         }
-        event.preventDefault();
         break;
   
       case 'Enter':
         if (isAtEndOfWord && isAtEndOfLine && !madeMistake) {
           if (linesDisplayed.length === lineIndex.current + 1) {
             setGameFinished(true);
-          } else {
-            let offset;
-            // console.log(lineIndex.current + " < " + LINES_DISPLAYED/2 + " or " +  lineIndex.current + " > " +  lines.length + " - " + LINES_DISPLAYED + " - 1")
-            // console.log(lineIndex.current < LINES_DISPLAYED/2, " or ", lineIndex.current > lines.length - LINES_DISPLAYED - 1)
-            
-            lineIndex.current++;
-            wordIndex.current = 0;
-            letterIndex.current = -1;
-            typingProgress.current += '\n';
-            const nextLine = linesDisplayed[cursor.lineIndex.current].text.split(' ');
-            setTypingState((oldState) => ({
-              ...oldState,
-              userInput: '',
-              currWord: nextLine[0],
-            }));
+            break;
           }
+          lineIndex.current++;
+          wordIndex.current = 0;
+          letterIndex.current = -1;
+          typingProgress.current += '\n';
+          const nextLine = linesDisplayed[cursor.lineIndex.current].text.split(' ');
+          setTypingState((oldState) => ({
+            ...oldState,
+            userInput: '',
+            currWord: nextLine[0],
+          }));
         }
         
-        event.preventDefault();
         break;
   
       case 'Tab':
@@ -197,7 +189,6 @@ export default function TextArea (props) {
           letterIndex.current = userInput.length;
           typingProgress.current += '\t';
         }
-        event.preventDefault();
         break;
   
       case 'Backspace':
@@ -209,12 +200,12 @@ export default function TextArea (props) {
           }));
           numDel.current++;
         }
-        event.preventDefault();
         break;
   
       default:
         break;
     }
+    event.preventDefault();
   };
 
   // handles all characters that are displayed
@@ -240,6 +231,7 @@ export default function TextArea (props) {
   
   const hi = Math.min(LINES_DISPLAYED + lineIndex.current, linesDisplayed.length)
   const lo = hi - LINES_DISPLAYED 
+  
   const renderedlinesDisplayed = linesDisplayed
     .slice(lo, hi)
     .map((line, secondaryIndex) => {
@@ -252,8 +244,6 @@ export default function TextArea (props) {
           lineIsActive={cursor.lineIndex.current === line.index}
         />
   })
-  console.log(lo, hi)
-  console.log(renderedlinesDisplayed)
 
   return (
     <>
