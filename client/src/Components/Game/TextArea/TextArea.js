@@ -81,6 +81,7 @@ const Word = (props) => {
 const Line = (props) => {
   const { line, typingState, cursor, lineIsActive, lineIndex } = props;
   const { currWord, userInput } = typingState;
+
   const words = line.split(' ').map((word, index) => (
     <Word
       key={index}
@@ -119,7 +120,7 @@ export default function TextArea (props) {
     setGameFinished
   } = props
   
-  const [linesDisplayed, setLinesDisplayed] = useState(lines);
+  const [linesDisplayed, setLinesDisplayed] = useState(lines.map((line, i) => ({ text: line, index: i })));
 
   const { lineIndex, wordIndex, letterIndex } = cursor 
   
@@ -139,12 +140,14 @@ export default function TextArea (props) {
     })
   }
 
+  // console.log(typingState)
 
   const handleSpecialKey = (event) => {
     const isAtEndOfWord = atEndOfWord(currWord, userInput) 
-    const isAtEndOfLine = atEndOfLine(wordIndex, linesDisplayed[cursor.lineIndex.current].split(' '))
+    const isAtEndOfLine = atEndOfLine(wordIndex, linesDisplayed[cursor.lineIndex.current].text.split(' '))
     const madeMistake = currWordHasMistake(currWord, userInput)
-
+    // console.log(isAtEndOfWord, isAtEndOfLine, madeMistake)
+    // console.log(currWord, userInput)
     switch (event.key) {
       case ' ':
         if (isAtEndOfWord && !isAtEndOfLine && !madeMistake) {
@@ -154,7 +157,7 @@ export default function TextArea (props) {
           setTypingState((oldState) => ({
             ...oldState,
             userInput: '',
-            currWord: linesDisplayed[cursor.lineIndex.current].split(' ')[cursor.wordIndex.current],
+            currWord: linesDisplayed[cursor.lineIndex.current].text.split(' ')[cursor.wordIndex.current],
           }));
         }
         event.preventDefault();
@@ -166,17 +169,14 @@ export default function TextArea (props) {
             setGameFinished(true);
           } else {
             let offset;
-            if (lineIndex.current < LINES_DISPLAYED/2 || lineIndex.current > lines.length - LINES_DISPLAYED - 1) {
-              offset = 0;
-              lineIndex.current++;
-            } else {
-              offset = 1
-              setLinesDisplayed(linesDisplayed.slice(1));
-            }
+            // console.log(lineIndex.current + " < " + LINES_DISPLAYED/2 + " or " +  lineIndex.current + " > " +  lines.length + " - " + LINES_DISPLAYED + " - 1")
+            // console.log(lineIndex.current < LINES_DISPLAYED/2, " or ", lineIndex.current > lines.length - LINES_DISPLAYED - 1)
+            
+            lineIndex.current++;
             wordIndex.current = 0;
             letterIndex.current = -1;
             typingProgress.current += '\n';
-            const nextLine = linesDisplayed[cursor.lineIndex.current + offset].split(' ');
+            const nextLine = linesDisplayed[cursor.lineIndex.current].text.split(' ');
             setTypingState((oldState) => ({
               ...oldState,
               userInput: '',
@@ -237,18 +237,23 @@ export default function TextArea (props) {
     }
   }
 
-  const renderedlinesDisplayed = linesDisplayed.map((line, index) => {
-    return index < LINES_DISPLAYED ? (
-      <Line
-        typingState={typingState}
-        key={index}
-        lineIndex={index}
-        line={line}
-        cursor={cursor}
-        lineIsActive={cursor.lineIndex.current === index}
-      />
-    ) : (<></>)
+  
+  const hi = Math.min(LINES_DISPLAYED + lineIndex.current, linesDisplayed.length)
+  const lo = hi - LINES_DISPLAYED 
+  const renderedlinesDisplayed = linesDisplayed
+    .slice(lo, hi)
+    .map((line, secondaryIndex) => {
+      return <Line
+          typingState={typingState}
+          key={line.index}
+          lineIndex={line.index}
+          line={line.text}
+          cursor={cursor}
+          lineIsActive={cursor.lineIndex.current === line.index}
+        />
   })
+  console.log(lo, hi)
+  console.log(renderedlinesDisplayed)
 
   return (
     <>
