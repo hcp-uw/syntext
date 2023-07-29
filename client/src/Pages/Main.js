@@ -21,12 +21,14 @@ const Main = () => {
     '}'
   ]
 
+  
   const defaultSnippet = {
-    id: -1,
+    id: 1,
     SnippetType: "FOR_LOOP",
     length: "LONG",
-    data: ["meow", "\ti like dogs"],
-    //  data: someData
+    // data: ["meow", "\ti like dogs"],
+    //  data: someData,
+    data: ['1','2','3','4','5','6','7','8','9']
   };
 
   return (

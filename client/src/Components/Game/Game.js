@@ -54,6 +54,14 @@ const Game = ({ defaultSnippet }) => {
     [currSnippet.data]
   )
 
+  // use to integrate gameService
+  useEffect(() => {
+    if (gameFinished) {
+      // calculate game object
+      // createGame(game).then(res => console.log(res));
+    }
+  }, [gameFinished])
+
   const tickTime = () => {
     snapshot.current[time.current + 1] = typingProgress.current
     dataTyped.current[time.current] =
@@ -101,19 +109,21 @@ const Game = ({ defaultSnippet }) => {
             startGame={startGame}
           />
         </>
-        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} currSnippet={currSnippet}/>
+        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
       }
-      <RestartShortcut restartGame={restartGame} />
-      <RestartButton restartGame={restartGame} />
-      <GameOptions
-        restartGame={() => restartGame()}
-        selectedLength={selectedLength}
-        setSelectedLength={setSelectedLength}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-        currSnippet={currSnippet}
-        setCurrSnippet={setCurrSnippet}
-      />
+      <div className="control-center">
+        <RestartShortcut restartGame={restartGame} />
+        <RestartButton restartGame={restartGame} />
+        <GameOptions
+          restartGame={() => restartGame()}
+          selectedLength={selectedLength}
+          setSelectedLength={setSelectedLength}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+          currSnippet={currSnippet}
+          setCurrSnippet={setCurrSnippet}
+        />
+      </div>
     </div>
   )
 }

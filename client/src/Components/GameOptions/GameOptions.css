@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    bottom: 0;
+    bottom: 10%;
+    /* position: absolute; */
 }
 
 .game-options-container .btn-newSnippet {

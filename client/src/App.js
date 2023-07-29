@@ -22,11 +22,11 @@ const App = () => {
     const userID = window.localStorage.getItem('userID')
     if (!token || !userID) return
     const fetchData = async () => {
-      const result = await getCurrentUser(userID)
-      if (result && result.success) {
-        dispatch(setUserID(result.user.userID))
+      const u = await getCurrentUser(userID)
+      if (u && u.success) {
+        dispatch(setUserID(u.userID))
         dispatch(setLoggedIn(true))
-      } else if (result && result.error && result.error.name === 'TokenExpired') {
+      } else if (u && u.error === 'TokenExpired') {
         const refresh = await refreshCurrentSession(token, userID)
         if (refresh.success) {
           window.localStorage.setItem('authToken', refresh.token)

@@ -21,8 +21,7 @@ const createSnippet = async (snippet) => {
       snippet
     )
     
-    return res.data
-
+    if (res.status === 201) return {success: true}
   } catch (error) {
     console.error(error);
     return {success: false}
@@ -36,10 +35,11 @@ const getSnippet = async (len, type) => {
       `${baseURL}/get/lengthandtype?length=${len}&type=${type}`
     )
   
-    return (res.data.success && res.data.result.length !== 0) ? res.data.result : [errSnippet];
+    return (res.status === 200 && res.data.length !== 0) ? res.data : [errSnippet];
   } catch (error) {
-    console.error(error)
-    return {success: false}
+    console.log('hi from error')
+    // console.error(error)
+    return [errSnippet]
   }
 }
 

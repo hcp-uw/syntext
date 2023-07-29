@@ -11,6 +11,10 @@
   margin-left: 5%;
 }
 
+.line-container {
+  max-width:80%
+}
+
 .user-input {
   position:absolute;
   width: 90%;
@@ -53,3 +57,4 @@
 /* .active {
   background-color: lightblue;
 } */
+
