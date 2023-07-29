@@ -252,8 +252,7 @@ export default function TextArea (props) {
           lineIsActive={cursor.lineIndex.current === line.index}
         />
   })
-  console.log(lo, hi)
-  console.log(renderedlinesDisplayed)
+
 
   return (
     <>
