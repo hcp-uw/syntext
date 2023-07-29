@@ -30,6 +30,7 @@ const CreateAccount = () => {
     const createResult = await createUser(username, password)
 
     if (createResult.success) {
+      console.log(createResult)
       alert('Created user ' + username)
       setErrorMessage(null)
       window.localStorage.setItem('authToken', createResult.token)

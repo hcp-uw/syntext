@@ -18,7 +18,7 @@ const createUser = async (username, password) => {
     return {
       ...res.data,
       success: true,
-      userID: res.data.userID,
+      userID: res.data.result,
       token: res.headers['authorization']
     }
   } catch (error) {
@@ -43,7 +43,7 @@ const authenticate = async (username, password) => {
 
     return {
       ...res.data,
-      userID: res.data.userID,
+      userID: res.data.result,
       token: res.headers['authorization']
     }
   } catch (error) {
@@ -69,7 +69,7 @@ const getUserID = async username => {
     const res = await axios.get(`${baseURL}/id`, {
       data: { username: username }
     })
-    if (res.status === 200) return res.data.userID
+    if (res.status === 200) return res.data.result
   } catch (error) {
     console.error(error)
     return false
