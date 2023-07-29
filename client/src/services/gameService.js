@@ -2,7 +2,7 @@ import axios from 'axios'
 // const axios = require('axios');
 
 const baseURL = 'http://localhost:3001/api/game';
-let authToken = window.localStorage.getItem('authToken');
+
 
 /*
     send POST request to /api/game/create endpoint with 
@@ -13,13 +13,17 @@ const createGame = async game => {
     success: false,
     error: "invalid game data"
   };
+  let authToken = window.localStorage.getItem('authToken');
+  console.log(authToken)
+  console.log(game)
   try {
-    const res = await axios.post(`${baseURL}/create`, {
-      headers: {
-        Authorization: authToken
-      },
-      data: game
-    });
+    const res = await axios.post(`${baseURL}/create`, game,
+      {
+        headers: {
+          Authorization: authToken
+        }
+      }
+    );
     return {
       success: true
     };
@@ -32,6 +36,8 @@ const getAllGames = async userID => {
     success: false,
     error: "invalid userID"
   };
+  let authToken = window.localStorage.getItem('authToken');
+  console.log(authToken)
   try {
     const res = await axios.get(`${baseURL}/games`, {
       data: {
@@ -55,6 +61,8 @@ const deleteAllGames = async userID => {
     success: false,
     error: "invalid userID"
   };
+  let authToken = window.localStorage.getItem('authToken');
+  console.log(authToken)
   try {
     const res = await axios.delete(`${baseURL}/games`, {
       headers: {
@@ -89,6 +97,7 @@ const verifyGameData = game => {
     accuracy,
     num_mistakes
   } = game;
+  
   return typeof userID !== undefined && typeof snippet_id !== undefined && typeof total_time !== undefined && typeof total_characters !== undefined && typeof wpm_avg !== undefined && typeof accuracy !== undefined && typeof num_mistakes !== undefined && wpm_data;
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import ReactDOM from 'react-dom/client'
 import TextArea from './TextArea/TextArea'
 import RestartButton from '../RestartButton/RestartButton'
 import GameOptions from '../GameOptions/GameOptions'
@@ -55,13 +54,7 @@ const Game = ({ defaultSnippet }) => {
     [currSnippet.data]
   )
 
-  // use to integrate gameService
-  useEffect(() => {
-    if (gameFinished) {
-      // calculate game object
-      // createGame(game).then(res => console.log(res));
-    }
-  }, [gameFinished])
+
 
   const tickTime = () => {
     snapshot.current[time.current + 1] = typingProgress.current
@@ -110,7 +103,7 @@ const Game = ({ defaultSnippet }) => {
             startGame={startGame}
           />
         </>
-        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} />
+        : <GameSummary gameFinished={gameFinished} gameRecorder={gameRecorder} snippet_id={currSnippet.id} />
       }
       <div className="control-center">
         <RestartShortcut restartGame={restartGame} />

@@ -1,18 +1,19 @@
 import './GameSummary.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Data } from './Data'
 import { CategoryScale } from 'chart.js'
 import Chart from 'chart.js/auto'
 import LineChart from './LineChart'
+import { createGame } from '../../services/gameService'
 const smoothen = require('./smoothen')
 
-export default function GameSummary ({ gameRecorder }) {
+export default function GameSummary ({ gameRecorder, snippet_id }) {
   const { time, typingTarget, snapshot } = gameRecorder
 
   const dataTyped = gameRecorder.dataTyped.current
   const numDel = gameRecorder.numDel.current
 
-
+  const posted = useRef(false);
   dataTyped[time.current] =
     typingTarget.split('').length - snapshot.current[time.current].length
   
@@ -31,6 +32,23 @@ export default function GameSummary ({ gameRecorder }) {
     );
     document.querySelector('#acc span').innerHTML = accuracy + '%'
     document.querySelector('#wpm span').innerHTML = averageWpm
+
+    const game = {
+      userID: Number(localStorage.getItem("userID")),
+      snippet_id: snippet_id,
+      total_time: gameRecorder.time.current,
+      total_characters: totalPresses - numDel,
+      wpm_data: data,
+      wpm_avg: averageWpm,
+      accuracy: accuracy,
+      num_mistakes: gameRecorder.numDel.current
+    }
+
+    if (!posted.current) {
+      createGame(game).then(res => console.log(res))
+      posted.current = true;
+    }
+    console.log("game: ", game)
   }, [])
 
   const [chartData, setChartData] = useState({
