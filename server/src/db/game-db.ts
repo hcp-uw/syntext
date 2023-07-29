@@ -78,6 +78,20 @@ export const getGameEntries = async (userID: number): Result<Array<GameSummary>>
   } 
 }
 
+export const getAllGame = async (): Result<Array<GameSummary>> => {
+  try {
+    const query = `
+      SELECT * FROM games;
+    `
+    const result: any = await pool.query(query)
+
+    return { success: true, result: result[0] }
+  } catch (error) {
+    console.error(error)
+    return { success: false, error: error }
+  } 
+}
+
 // FIXME
 export const clearGameEntries = async (userID: number): Result<undefined> => {
   try {

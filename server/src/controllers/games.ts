@@ -1,6 +1,6 @@
 import { verifyAccessToken, extractToken, handleAuth } from '../utils/auth'
 import { getUserID } from '../db/user-db'
-import { getGameEntries, createGameEntry, clearGameEntries } from '../db/game-db'
+import { getGameEntries, createGameEntry, clearGameEntries, getAllGame } from '../db/game-db'
 
 import bodyParser from 'body-parser'
 const jsonParser = bodyParser.json()
@@ -36,13 +36,11 @@ gameRouter.post('/create', [jsonParser, handleAuth], async (req: Request, res: R
 gameRouter.get('/games', jsonParser, async (req: Request, res: Response) => {
   let { userID } = req.query
 
-  if (!userID)
-    return res
-      .status(400)
-      .send({ success: false, error: 'Bad Request: Missing data in request body' })
 
   try {
-    const entries = await getGameEntries(Number(userID))
+    const entries = userID  
+      ? await getGameEntries(Number(userID))
+      : await getAllGame();
 
     if (!entries.success || !entries.result)
       res
@@ -56,6 +54,7 @@ gameRouter.get('/games', jsonParser, async (req: Request, res: Response) => {
     res.status(500).send({ success: false, error: 'Internal Server Error' })
   }
 })
+
 
 gameRouter.delete('/games', [jsonParser, handleAuth], async (req: Request, res: Response) => {
   let { userID } = req.query
