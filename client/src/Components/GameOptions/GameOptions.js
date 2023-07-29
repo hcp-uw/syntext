@@ -31,12 +31,14 @@ const GameOptions = props => {
 
   const onNewSnippetClick = () => {
     if (!selectedLength || !selectedType) return
+
     let nextIndex = currSnippets.findIndex(
       snippet => currSnippet.id === snippet.id
     )
     nextIndex = (nextIndex + 1) % currSnippets.length
-
+    console.log("curr Snippets: ", currSnippets)
     setCurrSnippet(currSnippets[nextIndex])
+    console.log("next index: ", nextIndex)
     restartGame()
   }
 

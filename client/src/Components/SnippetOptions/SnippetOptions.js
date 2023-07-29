@@ -25,7 +25,8 @@ const SnippetOptions = props => {
 
   const loadNewSnippets = async (len, type) => {
     const snippets = await getSnippet(len, type);
-    setCurrSnippets(snippets);
+    if (snippets.success)
+      setCurrSnippets(snippets.result);
   }
 
 

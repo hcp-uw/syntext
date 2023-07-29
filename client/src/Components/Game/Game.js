@@ -14,6 +14,7 @@ const Game = ({ defaultSnippet }) => {
 
   const [currSnippet, setCurrSnippet] = useState(defaultSnippet)
 
+  console.log("curr Snippet: ", currSnippet)
   const [selectedLength, setSelectedLength] = useState()
 
   const [selectedType, setSelectedType] = useState()

@@ -119,9 +119,10 @@ export default function TextArea (props) {
     lines,
     setGameFinished
   } = props
-  
-  const [linesDisplayed, setLinesDisplayed] = useState(lines.map((line, i) => ({ text: line, index: i })));
+  console.log("lines: ", lines)  
+  const linesDisplayed = lines.map((line, i) => ({ text: line, index: i }))
 
+  console.log("linesDisplayed: ", linesDisplayed)
   const { lineIndex, wordIndex, letterIndex } = cursor 
   
   const { currWord, userInput } = typingState
