@@ -13,7 +13,6 @@ const gameRouter = require('express').Router()
 // need to make sure userID is sent in req.body or req.query for handleAuth
 gameRouter.post('/create', [jsonParser, handleAuth], async (req: Request, res: Response) => {
   const gameObject = await extractGame(req)
-  console.log(gameObject)
   if (!gameObject.success || !gameObject.result) 
     return res
       .status(400)

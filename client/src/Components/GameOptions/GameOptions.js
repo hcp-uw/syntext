@@ -36,9 +36,9 @@ const GameOptions = props => {
       snippet => currSnippet.id === snippet.id
     )
     nextIndex = (nextIndex + 1) % currSnippets.length
-    console.log("curr Snippets: ", currSnippets)
+
     setCurrSnippet(currSnippets[nextIndex])
-    console.log("next index: ", nextIndex)
+  
     restartGame()
   }
 

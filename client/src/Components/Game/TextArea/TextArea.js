@@ -119,7 +119,7 @@ export default function TextArea (props) {
     lines,
     setGameFinished
   } = props
-  console.log("lines: ", lines)  
+
   const linesDisplayed = lines.map((line, i) => ({ text: line, index: i }))
 
   console.log("linesDisplayed: ", linesDisplayed)

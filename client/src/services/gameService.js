@@ -14,8 +14,6 @@ const createGame = async game => {
     error: "invalid game data"
   };
   let authToken = window.localStorage.getItem('authToken');
-  console.log(authToken)
-  console.log(game)
   try {
     const res = await axios.post(`${baseURL}/create`, game,
       {
@@ -37,7 +35,6 @@ const getAllGames = async userID => {
     error: "invalid userID"
   };
   let authToken = window.localStorage.getItem('authToken');
-  console.log(authToken)
   try {
     const res = await axios.get(`${baseURL}/games`, {
       data: {
@@ -62,7 +59,7 @@ const deleteAllGames = async userID => {
     error: "invalid userID"
   };
   let authToken = window.localStorage.getItem('authToken');
-  console.log(authToken)
+
   try {
     const res = await axios.delete(`${baseURL}/games`, {
       headers: {

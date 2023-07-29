@@ -48,7 +48,6 @@ export default function GameSummary ({ gameRecorder, snippet_id }) {
       createGame(game).then(res => console.log(res))
       posted.current = true;
     }
-    console.log("game: ", game)
   }, [])
 
   const [chartData, setChartData] = useState({

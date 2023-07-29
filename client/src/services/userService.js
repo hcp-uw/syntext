@@ -43,7 +43,8 @@ const authenticate = async (username, password) => {
 
     return {
       ...res.data,
-      userID: res.data.result,
+      userID: res.data.result
+      ,
       token: res.headers['authorization']
     }
   } catch (error) {
