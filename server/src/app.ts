@@ -15,7 +15,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // provides middlewares for node server to serve front-end build files
-app.use(express.static(path.join(__dirname, "..", "client", "build")));
+app.use("/", express.static(path.join(__dirname, "..", "..", "client", "build")));
 
 // routers
 app.use('/api/snippet', snippetRouter);
