@@ -131,7 +131,6 @@ const extractUserID = (req: Request): number => {
 export const handleAuth = async (req: IdentifiedRequest, res: Response, next: NextFunction) => {
   const userID = extractUserID(req)
   const token = extractToken(req)
-  
   //=============================================
   // console.log('in handleAuth', userID, token)
   //=============================================
