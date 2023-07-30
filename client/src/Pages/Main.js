@@ -28,7 +28,7 @@ const Main = () => {
     length: "LONG",
     // data: ["meow", "\ti like dogs"],
     //  data: someData,
-    data: ['1','2','3','4','5','6','7','8','9']
+    data: ['select a snippet type and length to get started']
   };
 
   return (
