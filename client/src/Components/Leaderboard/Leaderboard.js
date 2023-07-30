@@ -3,9 +3,9 @@ import "rc-tooltip/assets/bootstrap.css";
 import Tooltip from "rc-tooltip";
 import React, {useState} from 'react';
 
-const Leaderboard = ({ data }) => {
+const Leaderboard = ({ data, sortedField, setSortedField }) => {
 
-    const [sortedField, setSortedField] = useState('wpm');
+    
 
     const handleClick = (colName) => {
         setSortedField(colName);
@@ -13,7 +13,7 @@ const Leaderboard = ({ data }) => {
 
     return (
         <div className="leaderboard-container">
-            <h className="title-text">leaderboard</h>
+            <h1 className="title-text">leaderboard</h1>
             <table className="leaderboard-table"> 
                 <thead>
 
@@ -75,9 +75,9 @@ const Leaderboard = ({ data }) => {
                         <tr key={index}>
                             <td style={{borderTopLeftRadius: "5px", borderBottomLeftRadius: "5px"}}>{index + 1}</td>
                             <td>{user.username}</td>
-                            <td>{user.wpm}</td>
-                            <td>{user.time}</td>
-                            <td>{user.typed}</td>
+                            <td>{Number(user.wpm)}</td>
+                            <td>{Number(user.time)}</td>
+                            <td>{Number(user.typed)}</td>
                             <td style={{borderTopRightRadius: "5px", borderBottomRightRadius: "5px"}}>{user.accuracy*100}</td>
                         </tr>
                     ))}

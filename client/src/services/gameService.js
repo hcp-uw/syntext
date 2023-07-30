@@ -29,18 +29,12 @@ const createGame = async game => {
     console.error(error);
   }
 };
-const getAllGames = async userID => {
-  if (!userID) return {
-    success: false,
-    error: "invalid userID"
-  };
+const getGames = async (userID = undefined) => {
+
   let authToken = window.localStorage.getItem('authToken');
   try {
-    const res = await axios.get(`${baseURL}/games`, {
-      data: {
-        userID: userID
-      }
-    });
+    const query = userID ? `?userID=${userID}` : ""
+    const res = await axios.get(`${baseURL}/games${query}`);
     if (res.status === 200) return res.data;else return {
       success: false,
       error: res.status
@@ -53,6 +47,32 @@ const getAllGames = async userID => {
     };
   }
 };
+
+const getLeaderboardData = async (sort =  undefined) => {
+
+  try {
+    const query = sort ? `?sort=${sort}` : ""
+    const res = await axios.get(`${baseURL}/leaderboard${query}`);
+    if (res.status === 200) 
+      return {
+        result: res.data.result,
+        success: true
+      }
+    else 
+      return {
+        success: false,
+        error: res.status
+      };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: error
+    };
+  }
+}
+
+
 const deleteAllGames = async userID => {
   if (!userID) return {
     success: false,
@@ -99,7 +119,9 @@ const verifyGameData = game => {
 };
 
 export {
-  createGame
+  createGame,
+  getGames,
+  getLeaderboardData
 }
 // exports.createGame = createGame;
 // exports.deleteAllGames = deleteAllGames;

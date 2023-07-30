@@ -78,7 +78,8 @@ export const getGameEntries = async (userID: number): Result<Array<GameSummary>>
   } 
 }
 
-export const getAllGame = async (): Result<Array<GameSummary>> => {
+
+export const getAllGames = async (): Result<Array<GameSummary>> => {
   try {
     const query = `
       SELECT * FROM games;

@@ -1,6 +1,6 @@
 import { verifyAccessToken, extractToken, handleAuth } from '../utils/auth'
 import { getUserID } from '../db/user-db'
-import { getGameEntries, createGameEntry, clearGameEntries, getAllGame } from '../db/game-db'
+import { getGameEntries, createGameEntry, clearGameEntries, getAllGames } from '../db/game-db'
 
 import bodyParser from 'body-parser'
 const jsonParser = bodyParser.json()
@@ -8,6 +8,7 @@ const jsonParser = bodyParser.json()
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { GameSummary, Result } from '../types'
+import { getLeaderboardData } from '../db/leaderboard-db'
 const gameRouter = require('express').Router()
 
 // need to make sure userID is sent in req.body or req.query for handleAuth
@@ -40,7 +41,33 @@ gameRouter.get('/games', jsonParser, async (req: Request, res: Response) => {
   try {
     const entries = userID  
       ? await getGameEntries(Number(userID))
-      : await getAllGame();
+      : await getAllGames();
+
+    if (!entries.success || !entries.result)
+      res
+        .status(404)
+        .json({ success: false, error: entries.error })
+    
+    res
+      .status(200)
+      .send({ success: true, result: entries.result })
+  } catch (error) {
+    res.status(500).send({ success: false, error: 'Internal Server Error' })
+  }
+})
+
+gameRouter.get('/leaderboard', jsonParser, async (req: Request, res: Response) => {
+  let sort: string = req.query.sort as string
+  if (!sort)
+    sort = "wpm"
+
+  if ("wpm" != sort && "time" != sort && "accuracy" != sort && "typed" != sort)
+    return res
+      .status(400)
+      .json({ success: false, error: "Invalid sort param" })
+
+  try {
+    const entries = await getLeaderboardData(sort)
 
     if (!entries.success || !entries.result)
       res
