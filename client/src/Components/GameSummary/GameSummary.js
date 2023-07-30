@@ -45,7 +45,7 @@ export default function GameSummary ({ gameRecorder, snippet_id }) {
     }
 
     if (!posted.current) {
-      createGame(game).then(res => console.log(res))
+      createGame(game)
       posted.current = true;
     }
   }, [])

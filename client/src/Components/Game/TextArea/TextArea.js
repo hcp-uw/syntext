@@ -122,7 +122,6 @@ export default function TextArea (props) {
 
   const linesDisplayed = lines.map((line, i) => ({ text: line, index: i }))
 
-  console.log("linesDisplayed: ", linesDisplayed)
   const { lineIndex, wordIndex, letterIndex } = cursor 
   
   const { currWord, userInput } = typingState
