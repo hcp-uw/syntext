@@ -140,12 +140,12 @@ export default function TextArea (props) {
     })
   }
 
+  const isAtEndOfWord = atEndOfWord(currWord, userInput) 
+  const isAtEndOfLine = atEndOfLine(wordIndex, linesDisplayed[cursor.lineIndex.current].text.split(' '))
+  const madeMistake = currWordHasMistake(currWord, userInput)
   // console.log(typingState)
 
   const handleSpecialKey = (event) => {
-    const isAtEndOfWord = atEndOfWord(currWord, userInput) 
-    const isAtEndOfLine = atEndOfLine(wordIndex, linesDisplayed[cursor.lineIndex.current].text.split(' '))
-    const madeMistake = currWordHasMistake(currWord, userInput)
     // console.log(isAtEndOfWord, isAtEndOfLine, madeMistake)
     // console.log(currWord, userInput)
     switch (event.key) {
@@ -225,7 +225,7 @@ export default function TextArea (props) {
     const typedCorrectKey = 
       typingTarget.charAt(typingProgress.current.length) === keyTyped
 
-    if (typedCorrectKey && !currWordHasMistake(currWord, userInput)) 
+    if (typedCorrectKey && !madeMistake) 
       typingProgress.current += keyTyped
 
     if (allowedToOverflow(currWord, event.target.value)) {
@@ -235,11 +235,14 @@ export default function TextArea (props) {
         userInput: event.target.value
       }))
     }
+    console.log(typedCorrectKey,!madeMistake,cursor.lineIndex.current + 1 === lines.length,isAtEndOfLine,isAtEndOfWord)
+    if (typedCorrectKey && !madeMistake && cursor.lineIndex.current + 1 === lines.length && isAtEndOfLine && currWord.length === letterIndex.current + 1) {
+      setGameFinished(true)
+    }
   }
-
   
   const hi = Math.min(LINES_DISPLAYED + lineIndex.current, linesDisplayed.length)
-  const lo = hi - LINES_DISPLAYED 
+  const lo = Math.max(hi - LINES_DISPLAYED, 0) 
   const renderedlinesDisplayed = linesDisplayed
     .slice(lo, hi)
     .map((line, secondaryIndex) => {
