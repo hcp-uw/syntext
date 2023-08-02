@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'http://localhost:3001/api/snippet'
+const baseURL = 'https://syntext.herokuapp.com/api/snippet'
 
 const errSnippet = {
   id: -1,

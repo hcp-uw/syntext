@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'http://localhost:3001/api/game';
+const baseURL = 'https://syntext.herokuapp.com/api/game';
 
 
 /*
