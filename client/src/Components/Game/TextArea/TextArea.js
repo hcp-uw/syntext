@@ -166,7 +166,7 @@ export default function TextArea (props) {
       case 'Enter':
         if (isAtEndOfWord && isAtEndOfLine && !madeMistake) {
           if (linesDisplayed.length === lineIndex.current + 1) {
-            setGameFinished(true);
+            setGameFinished(true); //this is never called. functionality in handleChange
           } else {
             let offset;
             // console.log(lineIndex.current + " < " + LINES_DISPLAYED/2 + " or " +  lineIndex.current + " > " +  lines.length + " - " + LINES_DISPLAYED + " - 1")
