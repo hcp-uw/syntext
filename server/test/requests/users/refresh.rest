@@ -1,0 +1,3 @@
+POST http://localhost:3001/api/user/refresh?userID=6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjYsImlhdCI6MTY4OTUwNjI3NiwiZXhwIjoxNjg5NTEzNDc2fQ.IcfUXcar_t9rUkcwIQTKlcjcJnEPt334U4ovDz9rFKQ
+Content-Type: application/json

@@ -1,6 +1,0 @@
-int[] numbers = {1, 5, 3, 2, 4};
-int sum = 0;
-for (int number : numbers) {
-	sum += number;
-}
-double average = (double) sum / numbers.length;

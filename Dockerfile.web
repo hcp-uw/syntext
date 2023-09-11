@@ -26,6 +26,7 @@ RUN npm run build
 # copy over server code and build it
 WORKDIR /app/server
 COPY ./server /app/server
+RUN npm run build
 
 # required for docker desktop port mapping
 EXPOSE 3001

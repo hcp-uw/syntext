@@ -1,7 +1,7 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'http://localhost:3001/api/snippet'
+const baseURL = 'https://syntext.herokuapp.com/api/snippet'
 
 const errSnippet = {
   id: -1,
@@ -37,8 +37,8 @@ const getSnippet = async (len, type) => {
   
     return (res.status === 200 && res.data.length !== 0) ? res.data : [errSnippet];
   } catch (error) {
-    console.error(error)
-    return {success: false}
+    // console.error(error)
+    return [errSnippet]
   }
 }
 

@@ -1,8 +1,8 @@
 import axios from 'axios'
 // const axios = require('axios');
 
-const baseURL = 'http://localhost:3001/api/game';
-let authToken = window.localStorage.getItem('authToken');
+const baseURL = 'https://syntext.herokuapp.com/api/game';
+
 
 /*
     send POST request to /api/game/create endpoint with 
@@ -13,13 +13,15 @@ const createGame = async game => {
     success: false,
     error: "invalid game data"
   };
+  let authToken = window.localStorage.getItem('authToken');
   try {
-    const res = await axios.post(`${baseURL}/create`, {
-      headers: {
-        Authorization: authToken
-      },
-      data: game
-    });
+    const res = await axios.post(`${baseURL}/create`, game,
+      {
+        headers: {
+          Authorization: authToken
+        }
+      }
+    );
     return {
       success: true
     };
@@ -27,17 +29,12 @@ const createGame = async game => {
     console.error(error);
   }
 };
-const getAllGames = async userID => {
-  if (!userID) return {
-    success: false,
-    error: "invalid userID"
-  };
+const getGames = async (userID = undefined) => {
+
+  let authToken = window.localStorage.getItem('authToken');
   try {
-    const res = await axios.get(`${baseURL}/games`, {
-      data: {
-        userID: userID
-      }
-    });
+    const query = userID ? `?userID=${userID}` : ""
+    const res = await axios.get(`${baseURL}/games${query}`);
     if (res.status === 200) return res.data;else return {
       success: false,
       error: res.status
@@ -50,11 +47,39 @@ const getAllGames = async userID => {
     };
   }
 };
+
+const getLeaderboardData = async (sort =  undefined) => {
+
+  try {
+    const query = sort ? `?sort=${sort}` : ""
+    const res = await axios.get(`${baseURL}/leaderboard${query}`);
+    if (res.status === 200) 
+      return {
+        result: res.data.result,
+        success: true
+      }
+    else 
+      return {
+        success: false,
+        error: res.status
+      };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: error
+    };
+  }
+}
+
+
 const deleteAllGames = async userID => {
   if (!userID) return {
     success: false,
     error: "invalid userID"
   };
+  let authToken = window.localStorage.getItem('authToken');
+
   try {
     const res = await axios.delete(`${baseURL}/games`, {
       headers: {
@@ -89,11 +114,14 @@ const verifyGameData = game => {
     accuracy,
     num_mistakes
   } = game;
+  
   return typeof userID !== undefined && typeof snippet_id !== undefined && typeof total_time !== undefined && typeof total_characters !== undefined && typeof wpm_avg !== undefined && typeof accuracy !== undefined && typeof num_mistakes !== undefined && wpm_data;
 };
 
 export {
-  createGame
+  createGame,
+  getGames,
+  getLeaderboardData
 }
 // exports.createGame = createGame;
 // exports.deleteAllGames = deleteAllGames;

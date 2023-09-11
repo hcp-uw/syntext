@@ -1,9 +1,0 @@
-POST http://localhost:3001/api/edit/mksnippet HTTP/1.1
-Content-Type: application/json
-
-{
-    "id": 6969, 
-    "type": "NOT WHILE LOOP", 
-    "length": "NOT SHORT", 
-    "data": ["THIS IS TESTING DATA", "\tSystem.out.println(i);"]
-}

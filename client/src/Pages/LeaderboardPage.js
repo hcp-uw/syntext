@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+import { getLeaderboardData } from '../services/gameService';
 import Leaderboard from '../Components/Leaderboard/Leaderboard';
 
 
@@ -40,13 +42,17 @@ const mock = [
 ]
 
 
+
 const LeaderboardPage = () => {
-
-
+    const [result, setResult] = useState([]);
+    const [sortedField, setSortedField] = useState("wpm")
+    useEffect(() => {
+        getLeaderboardData(sortedField).then(res => setResult(res.result))
+    }, [sortedField])
 
     return (
         <div className="page-container">
-            <Leaderboard data={mock}/>
+            <Leaderboard data={result} sortedField={sortedField} setSortedField={setSortedField}/>
         </div>
     )
 }

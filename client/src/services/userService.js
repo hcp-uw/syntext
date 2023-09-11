@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseURL = 'http://localhost:3001/api/user'
+const baseURL = 'https://syntext.herokuapp.com/api/user'
 
 let authToken = window.localStorage.getItem('authToken')
 
@@ -9,17 +9,22 @@ let authToken = window.localStorage.getItem('authToken')
     reject with error message if request fails.
 */
 const createUser = async (username, password) => {
-
   try {
     const res = await axios.post(`${baseURL}/create`, {
       username: username,
       password: password
     })
 
-    return { ...res.data, success: true, token: res.headers['authorization'] }
+    return {
+      ...res.data,
+      success: true,
+      userID: res.data.result,
+      token: res.headers['authorization']
+    }
   } catch (error) {
-    console.error(error);
-    if (error.response.status === 409) return { success: false, error: `user ${username} already exists` } 
+    console.error(error)
+    if (error.response.status === 409)
+      return { success: false, error: `user ${username} already exists` }
     return { success: false, error: 'Error creating account' }
   }
 }
@@ -36,20 +41,39 @@ const authenticate = async (username, password) => {
       password: password
     })
 
-    return { ...res.data, token: res.headers['authorization'] }
+    return {
+      ...res.data,
+      userID: res.data.result
+      ,
+      token: res.headers['authorization']
+    }
   } catch (error) {
-    console.error(error);
+    console.error(error)
     return { success: false }
   }
 }
 
-const getUserID = async (username) => {
+const refreshCurrentSession = async (token, userID) => {
   try {
-    const res = await axios.get(`${baseURL}/id`, {data: {username: username}})
-    if (res.status === 200) return res.data.userID;
+    const res = await axios.post(`${baseURL}/refresh?userID=${userID}`, {
+      headers: { Authorization: token }
+    })
+
+    return { ...res.data, success: true, token: res.headers['authorization'] }
+  } catch (error) {
+    return { success: false }
+  }
+}
+
+const getUserID = async username => {
+  try {
+    const res = await axios.get(`${baseURL}/id`, {
+      data: { username: username }
+    })
+    if (res.status === 200) return res.data.result
   } catch (error) {
     console.error(error)
-    return false;
+    return false
   }
 }
 
@@ -58,14 +82,17 @@ const getUserID = async (username) => {
     returns promise that resolves to current user's info if successful,
     rejects with error message if request fails or if token is invalid.
 */
-const getCurrentUser = async () => {
+const getCurrentUser = async userID => {
   try {
-    const res = await axios.get(`${baseURL}/account`, {
+    const res = await axios.get(`${baseURL}/account?userID=${userID}`, {
       headers: { Authorization: authToken }
     })
     return res.data
   } catch (error) {
-    console.error(error);
+    console.error(error)
+    if (error.response && error.response.data.error === 'TokenExpired')
+      return { success: false, error: 'TokenExpired' }
+    else return { success: false }
   }
 }
 
@@ -94,5 +121,6 @@ export {
   getCurrentUser,
   updateCurrentUser,
   deleteCurrentUser,
-  getUserID
+  getUserID,
+  refreshCurrentSession
 }
