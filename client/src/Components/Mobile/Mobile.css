@@ -1,0 +1,49 @@
+html { overflow-y: scroll; }
+body { position: absolute; }
+
+.mobile-header {
+    color: rgba(125, 97, 95, 1);
+    font-size: 250%;
+    text-decoration: none;
+    margin: 0;
+    padding-left: 0.5em;
+}
+
+.mobile-header2 {
+    font-size: 1.2em;
+    color: #ffff;
+    text-align: center;
+    background-color: #BC8785;   
+    border-radius: 10px;
+    padding: 10px;
+    width: 80%;
+    margin: auto;
+}
+
+.popup {
+    padding-top: 1.2em;
+    padding-bottom: 1em;
+}
+
+.mobile-body {
+    padding-top: 0.7em;
+    padding-left: 2em;
+    padding-right: 2em;
+    font-size: 1em;
+    color: rgba(125, 97, 95, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* .footer {
+    background-color: #ffff;
+} */
+
+.footer-container {
+    background-color: #BC8785;
+    padding-left: 10%;
+    color: #ffff;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    border-top: 5px;
+}
