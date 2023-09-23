@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/syntext/static/css/main.25ce21ac.css",
+    "main.js": "/syntext/static/js/main.9bdcf8c0.js",
+    "index.html": "/syntext/index.html",
+    "static/media/nextArrow": "/syntext/static/media/nextArrow.82611a41ea5f500b9da0",
+    "main.25ce21ac.css.map": "/syntext/static/css/main.25ce21ac.css.map",
+    "main.9bdcf8c0.js.map": "/syntext/static/js/main.9bdcf8c0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.25ce21ac.css",
+    "static/js/main.9bdcf8c0.js"
+  ]
+}
