@@ -1,8 +1,110 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './AccountManager.css'
 import { useDispatch } from 'react-redux'
 import { setLoggedIn, setUserID } from '../../redux/user/userStateActions'
 import { useNavigate } from 'react-router-dom'
+import { getGames } from '../../services/gameService'
+import GameChart from '../GameSummary/GameChart'
+import Game from '../Game/Game'
+
+
+const GameChartModal = ({ displayedData, onClose }) => {
+  return (
+    <div className='game-chart-modal'>
+      <GameChart displayedData={displayedData} />
+      <button className="close-button" onClick={onClose}>Close</button>
+    </div>
+  );
+};
+
+const GameViewer = ({ date, dataTyped, accuracy, averageWPM, setDisplayedData, displayedData }) => {
+  const [showChartModal, setShowChartModal] = useState(false);
+
+  const handleExpand = () => {
+    setShowChartModal(true);
+    setDisplayedData(null);
+    setDisplayedData(dataTyped);
+  };
+
+  return (
+    <>
+      <td>{date}</td>
+      <td>{accuracy}</td>
+      <td>{averageWPM}</td>
+      <td>
+        {displayedData === null && <button onClick={() => handleExpand(dataTyped)}>
+          View
+        </button>}
+      </td>
+    </>
+  );
+};
+
+const ViewGames = (props) => {
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const g = await getGames();
+      if (g && g.success) {
+        setGames(g.result);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const [displayedData, setDisplayedData] = useState(null);
+
+  return (
+    <div className='view-games'>
+      <h2>View Games</h2>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className='games-list'>
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Accuracy</th>
+                <th>Average WPM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {games.map((game, i) => (
+                <tr key={i}>
+                  <GameViewer
+                    date={new Date(game.time_stamp).toLocaleDateString()}
+                    dataTyped={game.wpm_data
+                      ?.split(',')
+                      .map((p) => parseInt(p))}
+                    accuracy={game.accuracy}
+                    averageWPM={game.wpm_avg}
+                    setDisplayedData={setDisplayedData}
+                    displayedData={displayedData}
+                  />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {displayedData !== null && (
+        <GameChartModal
+          displayedData={displayedData}
+          onClose={() => {
+            setDisplayedData(null);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
 
 const AccountManager = (props) => {
   const dispatch = useDispatch()
@@ -31,6 +133,7 @@ const AccountManager = (props) => {
 
   return (
     <div className='account-manager'>
+      <ViewGames />
       <h2>Account Manager</h2>
       <div className='input-wrapper'>
         <label htmlFor='username-input'>Username:</label>

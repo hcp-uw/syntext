@@ -62,3 +62,52 @@
     background-color: #830e03;
   }
   
+
+
+/* ==================== */
+
+
+/* Styling for the table */
+.games-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+}
+
+.games-list th,
+.games-list td {
+  padding: 8px 12px;
+  text-align: left;
+
+}
+
+
+.close-button {
+  background-color: #ccc;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  float: right;
+}
+
+/* Additional styling for the table container */
+.view-games {
+  padding: 20px;
+}
+
+/* Styling for buttons */
+button {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: button;
+}
+
+button:hover {
+  background-color: #261826;
+}
+
+
+
