@@ -13,13 +13,19 @@ import PopUpController from './Components/PopupController/PopUpController'
 import { getCurrentUser, refreshCurrentSession } from './services/userService'
 
 const App = () => {
-const dispatch = useDispatch()
-const isLoggedIn = useSelector(s => s.userState.isLoggedIn)
-const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const [settingsFocus, setSettingsFocus] = useState(false)
-const [refresh, setRefresh] = useState(false) //just a dummy variable...will fix later
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector((s) => s.userState.isLoggedIn)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+
+    handleResize()
+
+    window.addEventListener('resize', handleResize)
+
     const token = window.localStorage.getItem('authToken')
     const userID = window.localStorage.getItem('userID')
     if (!token || !userID) return
@@ -34,7 +40,7 @@ const [refresh, setRefresh] = useState(false) //just a dummy variable...will fix
           window.localStorage.setItem('authToken', refresh.token)
           dispatch(setUserID(refresh.userID))
           dispatch(setLoggedIn(true))
-          setRefresh(refresh => !refresh)
+          setRefresh((refresh) => !refresh)
         } else {
           dispatch(setUserID(undefined))
           dispatch(setLoggedIn(false))
@@ -42,14 +48,28 @@ const [refresh, setRefresh] = useState(false) //just a dummy variable...will fix
       }
     }
     fetchData()
-  }, [])
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+
+  }, []) 
+
+  const [settingsFocus, setSettingsFocus] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
   return (
     <div className='app-container'>
       {isMobile ? null : <NavBar setSettingsFocus={setSettingsFocus} />}
       <Routes>
-        <Route path='/' element={isMobile ? <MobilePage /> : <Main />} />
-        <Route path='/account' element={isLoggedIn ? <AccountPage /> : <LoginPage/>} />
+        <Route
+          path='/'
+          element={isMobile ? <MobilePage /> : <Main />}
+        />
+        <Route
+          path='/account'
+          element={isLoggedIn ? <AccountPage /> : <LoginPage />}
+        />
         <Route path='/join' element={<SignUpPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/leaderboard' element={<LeaderboardPage />} />
