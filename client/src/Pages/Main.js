@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap-grid.min.css";
 import "../index.css";
 import MainPopupController from "../Components/PopupController/PopUpController";
 
-const Main = () => {
+const Main = ({ defaultSnippet, setDefaultSnippet }) => {
   
   
   const someData = [
@@ -20,16 +20,6 @@ const Main = () => {
     '	j -= 1;',
     '}'
   ]
-
-  
-  const defaultSnippet = {
-    id: 1,
-    SnippetType: "FOR_LOOP",
-    length: "LONG",
-    // data: ["meow", "\ti like dogs"],
-    //  data: someData,
-    data: ['select a snippet type and length to get started']
-  };
 
   return (
     <div className="page-container">

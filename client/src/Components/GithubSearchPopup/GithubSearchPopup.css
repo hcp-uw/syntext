@@ -1,0 +1,84 @@
+div.github-search-container {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: 5vh;
+    width: 750px;
+    /* height: 700px; */
+    /* background-color: rgb(42, 42, 42); */
+    background-color: #ead1d0;
+    border-radius: 3%/4.5%;
+    color: rgba(125, 97, 95, 1);
+    /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
+    filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
+    animation: fadeIn 0.1s;
+  }
+
+  .search-input-container input {
+    width: 90%;
+    height: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(125, 97, 95, 1);
+    padding-left: 10px;
+    font-size: 15pt;
+    color: rgba(125, 97, 95, 1);
+    outline: none;
+  }
+
+  .search-result div {
+    margin-left: 5%;
+  }
+
+  .search-button-container button, .use-result-container button {
+    width: 90%;
+    height: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(125, 97, 95, 1);
+    padding-left: 10px;
+    font-size: 15pt;
+    outline: none;
+  }
+  
+  @keyframes fadeInShade {
+    0% { opacity: 0; }
+    100% { opacity: 55%; }
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .black-shade {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 55%;
+    cursor: default;
+    animation: fadeInShade 0.3s;
+  }
+  
+  h1 {
+    font-size: 25pt;
+    margin-left: 40px;
+    margin-top: 20px;
+  }
+  
+  hr {
+    background-color: rgb(255, 253, 219);
+    height: 3px;
+    width: 90%;
+    margin: auto;
+  }
