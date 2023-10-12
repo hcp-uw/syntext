@@ -70,10 +70,17 @@ div.github-search-container {
     animation: fadeInShade 0.3s;
   }
   
-  h1 {
-    font-size: 25pt;
+  h1, p {
     margin-left: 40px;
     margin-top: 20px;
+  }
+
+  h1 {
+    font-size: 25pt;
+  }
+
+  p {
+    font-size: 8pt;
   }
   
   hr {

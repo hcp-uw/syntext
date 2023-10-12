@@ -15,7 +15,7 @@ const SearchResult = props => {
 
     return (
         <div className='search-result'>
-            {result.split('\r\n').slice(0, 4).map((line, i) =>
+            {result.replace('\r\n', '\n').split('\n').slice(0, 4).map((line, i) =>
                 line === ""
                     ? (
                     <div key={i} className='search-result-line'>
@@ -33,10 +33,61 @@ const SearchResult = props => {
     )
 }
 
-const parseSearchResult = result => {
-    const lineSeperator = result.indexOf('\r\n') !== -1 ? '\r\n' : '\n'
+const estimateTabWidth = (inputCode) => {
+    const lines = inputCode.split(/\r\n|\r|\n/);
 
-    return result.split(lineSeperator);
+    // Count the frequency of different space widths at the beginning of lines
+    const spaceWidthsCount = {};
+    lines.forEach(line => {
+        const leadingSpaces = line.match(/^ +/);
+        if (leadingSpaces) {
+            const spacesCount = leadingSpaces[0].length;
+            if (spaceWidthsCount[spacesCount]) {
+                spaceWidthsCount[spacesCount]++;
+            } else {
+                spaceWidthsCount[spacesCount] = 1;
+            }
+        }
+    });
+
+    // Find the most common space width
+    let maxCount = 0;
+    let mostCommonWidth = 0;
+    Object.keys(spaceWidthsCount).forEach(width => {
+        const count = spaceWidthsCount[width];
+        if (count > maxCount) {
+            maxCount = count;
+            mostCommonWidth = parseInt(width);
+        }
+    });
+
+    return mostCommonWidth;
+}
+
+const parseSearchResult = inputCode => {
+    // Detect the existing line separator
+    const lineSeparator = inputCode.includes('\r\n') ? '\r\n' : '\n';
+
+    // Replace line separators with '\n'
+    let formattedCode = inputCode.replace(/\r\n|\r|\n/g, '\n');
+
+    // Detect the width of spaces (number of spaces until the first non-space character)
+    const spaceWidth = (line) => {
+        const leadingSpaces = line.match(/^ */)[0];
+        return leadingSpaces.length;
+    };
+
+    const tabWidth = estimateTabWidth(inputCode);
+
+    // Convert spaces to tabs based on the detected width
+    return formattedCode.split('\n').map(line => {
+        const spaces = spaceWidth(line);
+        const tabsCount = Math.floor(spaces / tabWidth);
+        const remainingSpaces = spaces % tabWidth;
+        const tabs = '\t'.repeat(tabsCount);
+        const spacesString = ' '.repeat(remainingSpaces);
+        return tabs + spacesString + line.trim();
+    });
 }
 
 const GithubSearchPopup = props => {
@@ -75,6 +126,7 @@ const GithubSearchPopup = props => {
       ></div>
       <div className='github-search-container'>
         <h1>search for a file on github</h1>
+        <p>This will not be a ranked game. This feature is experimental and may not properly parse user generated code.</p>
         <div className='search-input-container'>
             <input
                 type='text'
