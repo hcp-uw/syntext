@@ -7,24 +7,32 @@ import { getGames } from '../../services/gameService'
 import GameChart from '../GameSummary/GameChart'
 import Game from '../Game/Game'
 
-
 const GameChartModal = ({ displayedData, onClose }) => {
   return (
     <div className='game-chart-modal'>
       <GameChart displayedData={displayedData} />
-      <button className="close-button" onClick={onClose}>Close</button>
+      <button className='close-button' onClick={onClose}>
+        Close
+      </button>
     </div>
-  );
-};
+  )
+}
 
-const GameViewer = ({ date, dataTyped, accuracy, averageWPM, setDisplayedData, displayedData }) => {
-  const [showChartModal, setShowChartModal] = useState(false);
+const GameViewer = ({
+  date,
+  dataTyped,
+  accuracy,
+  averageWPM,
+  setDisplayedData,
+  displayedData
+}) => {
+  const [showChartModal, setShowChartModal] = useState(false)
 
   const handleExpand = () => {
-    setShowChartModal(true);
-    setDisplayedData(null);
-    setDisplayedData(dataTyped);
-  };
+    setShowChartModal(true)
+    setDisplayedData(null)
+    setDisplayedData(dataTyped)
+  }
 
   return (
     <>
@@ -32,33 +40,33 @@ const GameViewer = ({ date, dataTyped, accuracy, averageWPM, setDisplayedData, d
       <td>{accuracy}</td>
       <td>{averageWPM}</td>
       <td>
-        {displayedData === null && <button onClick={() => handleExpand(dataTyped)}>
-          View
-        </button>}
+        {displayedData === null && (
+          <button onClick={() => handleExpand(dataTyped)}>View</button>
+        )}
       </td>
     </>
-  );
-};
+  )
+}
 
-const ViewGames = (props) => {
-  const [games, setGames] = useState([]);
-  const [loading, setLoading] = useState(false);
+const ViewGames = props => {
+  const [games, setGames] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  const userID = useSelector(s => s.userState.userID);
+  const userID = useSelector(s => s.userState.userID)
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const g = await getGames(userID);
+      setLoading(true)
+      const g = await getGames(userID)
       if (g && g.success) {
-        setGames(g.result);
+        setGames(g.result)
       }
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+      setLoading(false)
+    }
+    fetchData()
+  }, [])
 
-  const [displayedData, setDisplayedData] = useState(null);
+  const [displayedData, setDisplayedData] = useState(null)
 
   return (
     <div className='view-games'>
@@ -68,6 +76,14 @@ const ViewGames = (props) => {
         <p>Loading...</p>
       ) : (
         <div className='games-list'>
+          {displayedData !== null && (
+            <GameChartModal
+              displayedData={displayedData}
+              onClose={() => {
+                setDisplayedData(null)
+              }}
+            />
+          )}
           <table>
             <thead>
               <tr>
@@ -81,9 +97,7 @@ const ViewGames = (props) => {
                 <tr key={i}>
                   <GameViewer
                     date={new Date(game.time_stamp).toLocaleDateString()}
-                    dataTyped={game.wpm_data
-                      ?.split(',')
-                      .map((p) => parseInt(p))}
+                    dataTyped={game.wpm_data?.split(',').map(p => parseInt(p))}
                     accuracy={game.accuracy}
                     averageWPM={game.wpm_avg}
                     setDisplayedData={setDisplayedData}
@@ -95,20 +109,11 @@ const ViewGames = (props) => {
           </table>
         </div>
       )}
-      {displayedData !== null && (
-        <GameChartModal
-          displayedData={displayedData}
-          onClose={() => {
-            setDisplayedData(null);
-          }}
-        />
-      )}
     </div>
-  );
-};
+  )
+}
 
-
-const AccountManager = (props) => {
+const AccountManager = props => {
   const dispatch = useDispatch()
   //   const [username, setUsername] = useState(user.username);
   //   const [profilePic, setProfilePic] = useState(user.profilePic);
@@ -176,10 +181,7 @@ const AccountManager = (props) => {
       <button className='save-button' onClick={handleSave}>
         Save Changes
       </button> */}
-      <button
-        className='logout-button'
-        onClick={handleLogout}
-      >
+      <button className='logout-button' onClick={handleLogout}>
         Log Out
       </button>
     </div>
