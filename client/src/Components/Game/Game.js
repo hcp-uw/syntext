@@ -53,6 +53,9 @@ const Game = ({ defaultSnippet }) => {
     [currSnippet.data]
   )
 
+  useEffect(() => {
+    setCurrSnippet(defaultSnippet)
+  }, [defaultSnippet])
 
 
   const tickTime = () => {
