@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import './AccountManager.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLoggedIn, setUserID } from '../../redux/user/userStateActions'
 import { useNavigate } from 'react-router-dom'
 import { getGames } from '../../services/gameService'
@@ -44,10 +44,12 @@ const ViewGames = (props) => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const userID = useSelector(s => s.userState.userID);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const g = await getGames();
+      const g = await getGames(userID);
       if (g && g.success) {
         setGames(g.result);
       }
@@ -114,13 +116,13 @@ const AccountManager = (props) => {
   //   const [resetHistory, setResetHistory] = useState(false);
 
   const navivate = useNavigate()
-  const handleUsernameChange = event => {}
+  // const handleUsernameChange = event => {}
 
-  const handleProfilePicChange = event => {}
+  // const handleProfilePicChange = event => {}
 
-  const handlePrivateChange = event => {}
+  // const handlePrivateChange = event => {}
 
-  const handleResetHistoryChange = event => {}
+  // const handleResetHistoryChange = event => {}
 
   const handleSave = () => {}
 
@@ -134,7 +136,7 @@ const AccountManager = (props) => {
   return (
     <div className='account-manager'>
       <ViewGames />
-      <h2>Account Manager</h2>
+      {/* <h2>Account Manager</h2>
       <div className='input-wrapper'>
         <label htmlFor='username-input'>Username:</label>
         <input
@@ -173,7 +175,7 @@ const AccountManager = (props) => {
       </div>
       <button className='save-button' onClick={handleSave}>
         Save Changes
-      </button>
+      </button> */}
       <button
         className='logout-button'
         onClick={handleLogout}
