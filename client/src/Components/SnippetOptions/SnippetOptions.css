@@ -6,7 +6,7 @@
 }
 
 .snippet-options-container .btn-custom {
-    background-color: #BC8785;
+    background-color: #BC8785 !important;
     color: white;
     border-radius: 18px;
     border-top-right-radius: 0px !important;
@@ -16,14 +16,30 @@
 }
 
 .snippet-options-container .btn-sides {
-    background-color: #BC8785;
+    background-color: #bc8785 !important;
     color: #E5CDCD;
     border-radius: 18px;
+    border-width: 0px;
 }
 
-.snippet-options-container .toggled-button {
-    color: white;
-    
+.snippet-options-container .btn-sides:focus-visible {
+    background-color: #2a0b0a !important;
+    color: #803535 !important;
 }
             
+.snippet-options-container .btn:hover {
+    background-color: #b3807f !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+.snippet-options-container .btn-check {
+    background-color: #451817 !important;
+    border-color: transparent !important;
+    color: white !important;
+}
+
+.btn-group > .btn-check:checked + .btn {
+    background-color: #BC8785 !important;
+}
 
