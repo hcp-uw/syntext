@@ -22,16 +22,11 @@
   }
   
   .leaderboard-table th {
-    /* background-color: #f7bfbf; */
-    /* background-color: rgb(239, 177, 177); */
     background-color: #fcdfdf;
     padding: 10px;
-    /* color: #999696; */
     color: rgba(125, 97, 95, 1);
     font-size: 100%;
     font-weight: 500;
-    /* text-transform: uppercase; */
-
   }
   
   .leaderboard-table td {
@@ -82,11 +77,15 @@
   display: flexbox;
   max-height: 2px;
   /* line-height: 6px; */
-  border-radius: 15px;
+  border-radius: 14px;
 }
 
 .header {
-  border-color: transparent;
   background-color: #fcdfdf;
   color: rgba(125, 97, 95, 1);
+  border-radius: 10px;
+}
+
+.header:hover {
+  background-color: #e9c9c8;
 }
