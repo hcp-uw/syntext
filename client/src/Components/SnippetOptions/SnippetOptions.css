@@ -6,7 +6,7 @@
 }
 
 .snippet-options-container .btn-custom {
-    background-color: #BC8785;
+    background-color: #BC8785 !important;
     color: white;
     border-radius: 18px;
     border-top-right-radius: 0px !important;
@@ -16,14 +16,18 @@
 }
 
 .snippet-options-container .btn-sides {
-    background-color: #BC8785;
+    background-color: #bc8785 ;
     color: #E5CDCD;
     border-radius: 18px;
+    border-width: 0px;
+}
+  
+.snippet-options-container .btn:hover {
+    background-color: #b3807f !important;
+    border-color: transparent !important;
+    color: white !important;
 }
 
-.snippet-options-container .toggled-button {
-    color: white;
-    
+.hihi.active {
+    background-color: #501311 !important;
 }
-            
-

@@ -139,7 +139,8 @@ const RestartShortcut = ({ restartGame }) => {
     }
   }, [])
 
-  return <p className='shortcut-text'>ctrl + enter to restart</p>
+  // return <p className='shortcut-text'>ctrl + enter to restart</p>
+  return <></>
 }
 
 export default Game
