@@ -10,8 +10,7 @@ export default function GameChart (props) {
   const { displayedData } = props
 
   const dataTyped = displayedData ? displayedData : []
-
-  const data = smoothen(dataTyped)
+  const data = smoothen(dataTyped).map((value) => value / 10)
 
   const [chartData, setChartData] = useState({
     labels: data.map((pList, i) => i),
