@@ -125,7 +125,7 @@ const GithubSearchPopup = props => {
         onClick={() => setGithubFocus(false)}
       ></div>
       <div className='github-search-container'>
-        <h1>search for a file on github</h1>
+        <h1 style={{paddingTop: '0.1em'}}>search for a file on github</h1>
         <p>This will not be a ranked game. This feature is experimental and may not properly parse user generated code.</p>
         <div className='search-input-container'>
             <input

@@ -34,10 +34,10 @@ const Login = () => {
 
   return (
     <div className='login-container' style={{ margin: 'auto' }}>
-      <h2 style={{ fontSize: '2em', color: '#7D615F' }}>log in</h2>
-      <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'right' }}>
+      <h2 style={{ fontSize: '2em', color: '#7D615F', paddingBottom: '0.5em'}}>log in</h2>
+      {/* <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'right' }}>
         forgot password?
-      </p>
+      </p> */}
       <form onSubmit={handleLogin}>
         <div className='input-container'>
           <input
@@ -65,9 +65,7 @@ const Login = () => {
           </button>
         </div>
         <div>
-          <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'center' }}>
-            - OR -
-          </p>
+          <p style={{ fontSize: '1em', color: '#7D615F', textAlign: 'center', margin: 'auto', paddingTop: '0.5em', paddingBottom: '0.8em'}}>- OR -</p>
         </div>
         <div style={{ width: '100%', textAlign: 'center' }}>
           <Link className='create-account-button' type='submit' to={'/join'}>

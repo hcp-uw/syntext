@@ -12,7 +12,7 @@ div.github-search-container {
     border-radius: 3%/4.5%;
     color: #7d615f;
     /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
-    filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
+    /* filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2)); */
     animation: fadeIn 0.1s;
   }
 
