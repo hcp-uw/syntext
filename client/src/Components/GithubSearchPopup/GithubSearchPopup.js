@@ -9,7 +9,7 @@ const SearchResult = props => {
     let result = searchResult.result
     if (result === undefined) return (
         <div className='search-result'>
-            <h1>no results found</h1>
+            <h1 className='no-results'>no results found</h1>
         </div>
     )
 

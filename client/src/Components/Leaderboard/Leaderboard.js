@@ -73,10 +73,10 @@ const Leaderboard = ({ data, sortedField, setSortedField }) => {
                         <tr key={index}>
                             <td style={{borderTopLeftRadius: "5px", borderBottomLeftRadius: "5px"}}>{index + 1}</td>
                             <td>{user.username}</td>
-                            <td>{Number(user.wpm)}</td>
-                            <td>{Number(user.time)}</td>
-                            <td>{Number(user.typed)}</td>
-                            <td style={{borderTopRightRadius: "5px", borderBottomRightRadius: "5px"}}>{user.accuracy*100}</td>
+                            <td>{Math.floor(Number(user.wpm))}</td>
+                            <td>{Math.floor(Number(user.time))}</td>
+                            <td>{Math.floor(Number(user.typed))}</td>
+                            <td style={{borderTopRightRadius: "5px", borderBottomRightRadius: "5px"}}>{Math.floor(user.accuracy)}</td>
                         </tr>
                     ))}
                 </tbody>
