@@ -37,4 +37,5 @@
 .btn-check:checked + .btn {
     background-color: #b3807f !important;
     color: white !important;
+    z-index: 0 !important;
 }
