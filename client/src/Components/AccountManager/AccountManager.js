@@ -132,10 +132,11 @@ const AccountManager = props => {
   const handleSave = () => {}
 
   const handleLogout = () => {
-    window.localStorage.removeItem(`authToken`)
-    dispatch(setUserID(undefined))
-    dispatch(setLoggedIn(false))
-    navivate('/')
+    window.localStorage.removeItem(`authToken`);
+    window.localStorage.removeItem(`userID`);
+    dispatch(setUserID(undefined));
+    dispatch(setLoggedIn(false));
+    navivate('/');
   }
 
   return (
