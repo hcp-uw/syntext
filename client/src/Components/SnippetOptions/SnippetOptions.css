@@ -11,19 +11,30 @@
     border-radius: 18px;
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
+    border-color: transparent !important;
     border-right-color: #E5CDCD;
     margin-right: 1px;
 }
 
+.btn-custom:hover, .btn.show {
+    background-color: #b3807f !important;
+    color: white !important;
+}
+
 .snippet-options-container .btn-sides {
-    background-color: #BC8785;
+    background-color: #bc8785;
     color: #E5CDCD;
     border-radius: 18px;
+    border-width: 0px;
 }
 
-.snippet-options-container .toggled-button {
-    color: white;
-    
+.snippet-options-container .btn:hover {
+    background-color: #b3807f !important;
+    border-color: transparent !important;
+    color: white !important;
 }
-            
 
+.btn-check:checked + .btn {
+    background-color: #b3807f !important;
+    color: white !important;
+}
