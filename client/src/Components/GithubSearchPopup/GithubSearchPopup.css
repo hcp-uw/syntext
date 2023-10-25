@@ -5,12 +5,12 @@ div.github-search-container {
     left: 0;
     right: 0;
     top: 5vh;
-    width: 750px;
+    width: 800px;
     /* height: 700px; */
     /* background-color: rgb(42, 42, 42); */
-    background-color: #ead1d0;
+    background-color: #fcdfe0;
     border-radius: 3%/4.5%;
-    color: rgba(125, 97, 95, 1);
+    color: #7d615f;
     /*box-shadow: 0 0 50px 0px rgba(0, 0, 0, 0.3);*/
     filter: drop-shadow(10px 15px 4px rgba(0, 0, 0, 0.2));
     animation: fadeIn 0.1s;
@@ -24,10 +24,12 @@ div.github-search-container {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
-    border: 1px solid rgba(125, 97, 95, 1);
+    /* border: 0px solid rgba(125, 97, 95, 1); */
+    border-color: transparent;
     padding-left: 10px;
     font-size: 15pt;
-    color: rgba(125, 97, 95, 1);
+    color: white;
+    background-color: #bc8785;
     outline: none;
   }
 
@@ -43,10 +45,16 @@ div.github-search-container {
     margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
-    border: 1px solid rgba(125, 97, 95, 1);
+    border: transparent;
     padding-left: 10px;
     font-size: 15pt;
     outline: none;
+    background-color: #ebc6c6;
+    color: #7d615f;
+  }
+
+  ::placeholder {
+    color: #e3cccb;
   }
   
   @keyframes fadeInShade {
@@ -88,4 +96,9 @@ div.github-search-container {
     height: 3px;
     width: 90%;
     margin: auto;
+  }
+
+  .no-results {
+    font-size: 15pt;
+    color: red;
   }
