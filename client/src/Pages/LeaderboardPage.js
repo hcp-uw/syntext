@@ -47,7 +47,8 @@ const LeaderboardPage = () => {
     const [result, setResult] = useState([]);
     const [sortedField, setSortedField] = useState("wpm")
     useEffect(() => {
-        getLeaderboardData(sortedField).then(res => setResult(res.result))
+        getLeaderboardData(sortedField).then(res =>
+            setResult(res.resul.slice(0, Math.min(10, res.length))))
     }, [sortedField])
 
     return (

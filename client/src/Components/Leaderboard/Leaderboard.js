@@ -5,8 +5,6 @@ import React, {useState} from 'react';
 
 const Leaderboard = ({ data, sortedField, setSortedField }) => {
 
-    
-
     const handleClick = (colName) => {
         setSortedField(colName);
     }
