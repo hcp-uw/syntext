@@ -169,8 +169,11 @@ export const authenticate = async (username: string, password: string): Result<b
     const rows: any = result[0]
 
     if (rows.length > 0) {
-      const authResult = await verifyHash(password, rows[0].hash_password)
-      return { success: true, result: rows[0].hash_password }
+      const authResult: boolean = await verifyHash(password, rows[0].hash_password)
+      if (!authResult)
+        return { success: false, error: `Invalid password for user ${username}` }
+      else
+        return { success: true, result: rows[0].hash_password }
     } else 
       return { 
         success: false, 
